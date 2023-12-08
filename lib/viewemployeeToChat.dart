@@ -72,6 +72,35 @@ class _TestPageState extends State<TestPage> {
       'message': 'اخر مسج',
       'image': 'images/person2.png'
     },
+     {
+      'date': 'أمس',
+      'name': 'ساره خالد وليد حنو',
+      'message': 'اخر مسج',
+      'image': 'images/person2.png'
+    },
+     {
+      'date': 'أمس',
+      'name': 'ساره خالد وليد حنو',
+      'message': 'اخر مسج',
+      'image': 'images/person2.png'
+    },
+     {
+      'date': 'أمس',
+      'name': 'ساره خالد وليد حنو',
+      'message': 'اخر مسج',
+      'image': 'images/person2.png'
+    }, {
+      'date': 'أمس',
+      'name': 'ساره خالد وليد حنو',
+      'message': 'اخر مسج',
+      'image': 'images/person2.png'
+    }, {
+      'date': 'أمس',
+      'name': 'ساره خالد وليد حنو',
+      'message': 'اخر مسج',
+      'image': 'images/person2.png'
+    },
+    
     // Add more data as needed
   ];
   @override
@@ -86,47 +115,8 @@ class _TestPageState extends State<TestPage> {
         scrollDirection: Axis.vertical,
         child: Column(
           children: <Widget>[
-            Container(
-              height: 50,
-              child: Card(
-                color: Color.fromARGB(255, 237, 234, 240),
-                child: Padding(
-                  padding: const EdgeInsets.all(0.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Expanded(
-                        child: Container(
-                          color: Color.fromARGB(255, 237, 234, 240),
-                          padding: EdgeInsets.only(top: 0),
-                          child: TextField(
-                            textAlign: TextAlign.end,
-                            cursorColor: Color(0xff6f35a5),
-                            decoration: InputDecoration(
-                              hintText: 'بـــحـــث',
-                              hintStyle: TextStyle(
-                                  fontSize: 15.0,
-                                  fontFamily: 'myfont',
-                                  fontWeight: FontWeight.bold),
-                              border: InputBorder.none,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 10.0),
-                      Icon(Icons.search, size: 30, color: Color(0xff6f35a5)),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Divider(
-              height: 1.0,
-              thickness: 1.0,
-              color: Color(0xff6f35a5),
-              indent: 0.0, // Set the starting padding
-              endIndent: 60.0, // Set the ending padding
-            ),
+           SizedBox(height: 20,child: Container( color: Color.fromARGB(255, 237, 234, 240))),
+           
             ListView.builder(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
