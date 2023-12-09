@@ -70,6 +70,9 @@ flutter:
      - images/tester.png
      - images/id.jpg
      - images/profileImage.jpg
+     - images/image1.png
+
+
 
   fonts:
     - family : myfont

@@ -123,3 +123,21 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+// Card(
+             
+//                 child: Row(
+//                   mainAxisAlignment: MainAxisAlignment.end,
+//                   children: <Widget>[
+//                     Text('الاسـم الـربـاعـي',
+//                         textAlign: TextAlign.end,
+//                         style: TextStyle(
+                          
+//                           fontFamily: 'myfont',
+//                           fontSize: 18,
+//                           fontWeight: FontWeight.bold,
+//                         )),
+//                     SizedBox(width: 10),
+//                     Icon(Icons.person),
+//                   ],
+//                 ),
+//               ),
