@@ -26,82 +26,48 @@ class _TestPageState extends State<TestPage> {
   List<Map<String, String>> Freinds = [
     {
       'date': 'أمس',
-      'name': 'ساره خالد وليد حنو',
-      'message': 'اخر مسج',
-      'image': 'images/person2.png'
+      'name': '   فـطـوم دريـنـي',
+      'message': ' اوك',
+      'image': 'images/person4.png'
     },
     {
       'date': 'أمس',
-      'name': 'لميس خالد وليد حنو',
-      'message': 'اخر مسج',
-      'image': 'images/person2.png'
+      'name': '   نـغـم دريـنـي',
+      'message': ' تـمـام',
+      'image': 'images/person5.png'
+    },
+    {
+      'date': '13/12',
+      'name': ' شـام دريـنـي  ',
+      'message': ' الجلسة',
+      'image': 'images/person22.png'
+    },
+    {
+      'date': '13/12',
+      'name': '   مـيـس دريـنـي',
+      'message': ' نفس الموعد',
+      'image': 'images/person11.png'
+    },
+    {
+      'date': '12/12',
+      'name': '   لـولـو دريـنـي',
+      'message': 'الاحد  ',
+      'image': 'images/person6.png'
+    },
+    {
+      'date': '5/12',
+      'name': ' رنـا دريـنـي  ',
+      'message': ' مسج',
+      'image': 'images/person8.png'
     },
     {
       'date': 'أمس',
-      'name': 'مجد خالد وليد حنو',
-      'message': 'اخر مسج',
-      'image': 'images/person2.png'
+      'name': 'أحـمـد أحـمـد',
+      'message': ' بكرا',
+      'image': 'images/person3.png'
     },
-    {
-      'date': 'أمس',
-      'name': 'وليد خالد وليد حنو',
-      'message': 'اخر مسج',
-      'image': 'images/person2.png'
-    },
-    {
-      'date': 'أمس',
-      'name': 'ساره خالد وليد حنو',
-      'message': 'اخر مسج',
-      'image': 'images/person2.png'
-    },
-    {
-      'date': 'أمس',
-      'name': 'ساره خالد وليد حنو',
-      'message': 'اخر مسج',
-      'image': 'images/person2.png'
-    },
-    {
-      'date': 'أمس',
-      'name': 'ساره خالد وليد حنو',
-      'message': 'اخر مسج',
-      'image': 'images/person2.png'
-    },
-    {
-      'date': 'أمس',
-      'name': 'ساره خالد وليد حنو',
-      'message': 'اخر مسج',
-      'image': 'images/person2.png'
-    },
-     {
-      'date': 'أمس',
-      'name': 'ساره خالد وليد حنو',
-      'message': 'اخر مسج',
-      'image': 'images/person2.png'
-    },
-     {
-      'date': 'أمس',
-      'name': 'ساره خالد وليد حنو',
-      'message': 'اخر مسج',
-      'image': 'images/person2.png'
-    },
-     {
-      'date': 'أمس',
-      'name': 'ساره خالد وليد حنو',
-      'message': 'اخر مسج',
-      'image': 'images/person2.png'
-    }, {
-      'date': 'أمس',
-      'name': 'ساره خالد وليد حنو',
-      'message': 'اخر مسج',
-      'image': 'images/person2.png'
-    }, {
-      'date': 'أمس',
-      'name': 'ساره خالد وليد حنو',
-      'message': 'اخر مسج',
-      'image': 'images/person2.png'
-    },
-    
-    // Add more data as needed
+   
+  
   ];
   @override
   Widget build(BuildContext context) {
