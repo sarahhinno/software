@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:software/addNewChild.dart';
+import 'package:software/DetailsPageOfEmployee.dart'; // Import the file where SpDetailsPage is defined
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  late String id;
+   
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -14,74 +17,35 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  DateTime selectedDate = DateTime.now();
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
-      builder: (BuildContext context, Widget? child) {
-        return Theme(
-          data: ThemeData.light().copyWith(
-            primaryColor:
-                Color(0xff6f35a5), // Change this to your desired calendar color
-            hintColor:
-                Color(0xff6f35a5), // Change this to your desired calendar color
-            colorScheme: ColorScheme.light(primary: Color(0xff6f35a5)),
-            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
-          ),
-          child: child!,
-        );
-      },
-    );
-
-    if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked;
-      });
-    }
-  }
-
+class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    String formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
-
     return Scaffold(
       appBar: AppBar(
-        title: Text('Date Picker Example'),
+        title: Text('Main Page'),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Selected Date: $formattedDate',
-              style: TextStyle(fontSize: 20),
-            ),
-            SizedBox(height: 20),
+        child:Column(
+          children:<Widget> [
             ElevatedButton(
-              onPressed: () => _selectDate(context),
-              style: ElevatedButton.styleFrom(
-                primary: Color(0xff6f35a5),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(
-                      29.0), // Adjust the value for rounded corners
-                  // Change this to your desired border color
-                ), // Change this to your desired button color
-              ),
-              child: Text('Select Date'),
-            ),
-          ],
+           onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context){return newChild();}));
+            },
+          child: Text('add new child'),
         ),
+        SizedBox(height: 10),
+           ElevatedButton(
+           onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context){return spDetailsPage(name: '',);}));
+            },
+          child: Text('page of emp'),
+        ),
+          ],
+        )
+        
       ),
     );
   }
 }
+
+
