@@ -62,6 +62,10 @@ class _childProfileState extends State<childProfile> {
         scrollDirection: Axis.vertical,
         child: Column(
           children: <Widget>[
+            Center(
+              child: Image.asset('images/person1.png'),
+            ),
+            SizedBox(height: 10),
             Container(
               child: Card(
                 child: Padding(
