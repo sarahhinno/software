@@ -1,33 +1,33 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
+import 'package:software/completeChildProfile.dart';
 
-void main() {
-  runApp(MyApp());
-}
+// void main() {
+//   runApp(MyApp());
+// }
 
-class MyApp extends StatelessWidget {
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       home: TestPage(),
+//       debugShowCheckedModeBanner: false,
+//     );
+//   }
+// }
+
+class profile extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: TestPage(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
+  profileState createState() => profileState();
 }
 
-class TestPage extends StatefulWidget {
-  @override
-  _TestPageState createState() => _TestPageState();
-}
-
-class _TestPageState extends State<TestPage> {
+class profileState extends State<profile> {
   TextEditingController _textEditingControllername = TextEditingController();
   TextEditingController _textEditingControllerphone = TextEditingController();
   final TextEditingController _textFieldController = TextEditingController();
   TextEditingController _textEditingControlleremail = TextEditingController();
-  TextEditingController _textEditingControlleridd = TextEditingController();
-  TextEditingController _textEditingControllerstartDate =
-      TextEditingController();
-  TextEditingController _textEditingControllersp = TextEditingController();
+  
   bool pressed = false;
   String name = 'ساره خالد وليد حنو';
   String phone = '0593085764';
@@ -49,10 +49,15 @@ class _TestPageState extends State<TestPage> {
         ),
       ),
       drawer: Drawer(),
-      body: SingleChildScrollView(
+      body:
+       SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
           children: <Widget>[
+            Center(
+              child: Image.asset('images/person1.png'),
+            ),
+            SizedBox(height: 10),
             Container(
               child: Card(
                 child: Padding(
@@ -65,18 +70,10 @@ class _TestPageState extends State<TestPage> {
                         children: [
                           Expanded(
                             child: TextField(
-                              controller: _textFieldController,
-                              enabled: _isTextFieldEnabled,
-                              onTap: () {
-                                if (!_isTextFieldEnabled) {
-                                  _textFieldController.clear();
-                                }
-                              },
-                              onChanged: (text) {
-                                setState(() {
-                                  name = _textFieldController.text;
-                                });
-                              },
+                            
+                              enabled:false,
+                              
+                            
                               decoration: InputDecoration(
                                 labelText: name,
                                 labelStyle: TextStyle(
@@ -191,18 +188,10 @@ class _TestPageState extends State<TestPage> {
                         children: [
                           Expanded(
                             child: TextField(
-                              controller: _textEditingControlleridd,
-                              enabled: _isTextFieldEnabled,
-                              onTap: () {
-                                if (!_isTextFieldEnabled) {
-                                  _textEditingControlleridd.clear();
-                                }
-                              },
-                              onChanged: (text) {
-                                setState(() {
-                                  idd = _textEditingControlleridd.text;
-                                });
-                              },
+                             
+                              enabled: false,
+                              
+                           
                               decoration: InputDecoration(
                                 labelText: idd,
                                 labelStyle: TextStyle(
@@ -233,19 +222,9 @@ class _TestPageState extends State<TestPage> {
                         children: [
                           Expanded(
                             child: TextField(
-                              controller: _textEditingControllerstartDate,
-                              enabled: _isTextFieldEnabled,
-                              onTap: () {
-                                if (!_isTextFieldEnabled) {
-                                  _textEditingControllerstartDate.clear();
-                                }
-                              },
-                              onChanged: (text) {
-                                setState(() {
-                                  startDate =
-                                      _textEditingControllerstartDate.text;
-                                });
-                              },
+                              enabled: false,
+                            
+                            
                               decoration: InputDecoration(
                                 labelText: startDate,
                                 labelStyle: TextStyle(
@@ -276,18 +255,8 @@ class _TestPageState extends State<TestPage> {
                         children: [
                           Expanded(
                             child: TextField(
-                              controller: _textEditingControllersp,
-                              enabled: _isTextFieldEnabled,
-                              onTap: () {
-                                if (!_isTextFieldEnabled) {
-                                  _textEditingControllersp.clear();
-                                }
-                              },
-                              onChanged: (text) {
-                                setState(() {
-                                  sp = _textEditingControllersp.text;
-                                });
-                              },
+                              enabled: false,
+                          
                               decoration: InputDecoration(
                                 labelText: sp,
                                 labelStyle: TextStyle(
@@ -319,6 +288,10 @@ class _TestPageState extends State<TestPage> {
                                 pressed = true;
                                 setState(() {
                                   _isTextFieldEnabled = !_isTextFieldEnabled;
+                                  // Navigator.push(context,
+                                  //     MaterialPageRoute(builder: (context) {
+                                  //   return edit();
+                                  // }));
                                 });
                               },
                               style: ElevatedButton.styleFrom(
@@ -346,18 +319,14 @@ class _TestPageState extends State<TestPage> {
                                   pressed = false;
                                   setState(() {
                                     _isTextFieldEnabled = !_isTextFieldEnabled;
-                                    _textFieldController.text =
-                                        _textEditingControllername.text;
+                                  
                                     _textEditingControllerphone.text =
                                         _textEditingControllername.text;
                                     _textEditingControlleremail.text =
                                         _textEditingControllername.text;
-                                    _textEditingControlleridd.text =
-                                        _textEditingControllername.text;
-                                    _textEditingControllerstartDate.text =
-                                        _textEditingControllername.text;
-                                    _textEditingControllersp.text =
-                                        _textEditingControllername.text;
+                                   
+                                   
+                               
                                   });
                                 },
                                 style: ElevatedButton.styleFrom(
