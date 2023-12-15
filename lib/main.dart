@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:software/addNewChild.dart';
 import 'package:software/DetailsPageOfEmployee.dart'; // Import the file where SpDetailsPage is defined
 import 'package:software/empPersonalInformation.dart'; // Import the file where SpDetailsPage is defined
+import 'package:software/empVications.dart'; // Import the file where SpDetailsPage is defined
 
 void main() {
   runApp(MyApp());
@@ -46,7 +47,14 @@ class MyHomePage extends StatelessWidget {
            onPressed: () {
                     Navigator.push(context, MaterialPageRoute(builder: (context){return profile();}));
             },
-          child: Text('page of emp'),
+          child: Text('profile'),
+        ),
+          SizedBox(height: 10),
+           ElevatedButton(
+           onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context){return vications();}));
+            },
+          child: Text('vications'),
         ),
           ],
         )

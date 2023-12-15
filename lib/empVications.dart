@@ -1,26 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:software/theme.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
+class vications extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: TestPage(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
+  _vicationsState createState() => _vicationsState();
 }
 
-class TestPage extends StatefulWidget {
-  @override
-  _TestPageState createState() => _TestPageState();
-}
-
-class _TestPageState extends State<TestPage> {
+class _vicationsState extends State<vications> {
   List<Map<String, String>> tableData = [
     {"date": "20/10/2018", "reason": "مـرضـية"},
     {"date": "16/03/2019", "reason": "مـرضـية"},
@@ -93,7 +80,7 @@ class _TestPageState extends State<TestPage> {
                 SizedBox(width: 10),
                 Text(
                   'سـبـب الإجـازة    ',
-                  style: TextStyle(fontFamily: 'myfamily', fontSize: 20),
+                  style: TextStyle(fontFamily: 'myfont', fontSize: 20),
                 ),
                 Expanded(
                   child: TextField(
@@ -111,7 +98,7 @@ class _TestPageState extends State<TestPage> {
                 SizedBox(height: 20),
                 Text(
                   'تـاريـخ الإجـازة',
-                  style: TextStyle(fontFamily: 'myfamily', fontSize: 20),
+                  style: TextStyle(fontFamily: 'myfont', fontSize: 20),
                 ),
                 Row(
                   //      crossAxisAlignment: CrossAxisAlignment.end,
@@ -183,7 +170,7 @@ class _TestPageState extends State<TestPage> {
                     ),
                     child: Text(
                       'تـأكـيـد الـطـلـب',
-                      style: TextStyle(fontFamily: 'myfamily', fontSize: 20),
+                      style: TextStyle(fontFamily: 'myfont', fontSize: 20),
                     ),
                   ),
                 )
@@ -196,7 +183,7 @@ class _TestPageState extends State<TestPage> {
               child: Text(
                 'تــم',
                 style: TextStyle(
-                    fontFamily: 'myfamily',
+                    fontFamily: 'myfont',
                     fontSize: 20,
                     color: Color(0xff6f35a5)),
               ),
@@ -230,7 +217,7 @@ class _TestPageState extends State<TestPage> {
                     Text(
                       '10',
                       style: TextStyle(
-                          fontFamily: 'myfamily',
+                          fontFamily: 'myfont',
                           fontSize: 20,
                           fontWeight: FontWeight.bold),
                     ),
@@ -238,7 +225,7 @@ class _TestPageState extends State<TestPage> {
                     Text(
                       'عـدد الإجـازات الـكـلـي',
                       style: TextStyle(
-                          fontFamily: 'myfamily',
+                          fontFamily: 'myfont',
                           fontSize: 20,
                           fontWeight: FontWeight.w100),
                     ),
@@ -257,7 +244,7 @@ class _TestPageState extends State<TestPage> {
                     Text(
                       '10',
                       style: TextStyle(
-                          fontFamily: 'myfamily',
+                          fontFamily: 'myfont',
                           fontSize: 20,
                           fontWeight: FontWeight.bold),
                     ),
@@ -265,7 +252,7 @@ class _TestPageState extends State<TestPage> {
                     Text(
                       'عـدد الإجـازات الـمـترحـلـة',
                       style: TextStyle(
-                          fontFamily: 'myfamily',
+                          fontFamily: 'myfont',
                           fontSize: 20,
                           fontWeight: FontWeight.w100),
                     ),
@@ -284,7 +271,7 @@ class _TestPageState extends State<TestPage> {
                     Text(
                       '10',
                       style: TextStyle(
-                          fontFamily: 'myfamily',
+                          fontFamily: 'myfont',
                           fontSize: 20,
                           fontWeight: FontWeight.bold),
                     ),
@@ -292,7 +279,7 @@ class _TestPageState extends State<TestPage> {
                     Text(
                       'عـدد الإجـازات الـمـبـقـيـة',
                       style: TextStyle(
-                          fontFamily: 'myfamily',
+                          fontFamily: 'myfont',
                           fontSize: 20,
                           fontWeight: FontWeight.w100),
                     ),
@@ -315,43 +302,47 @@ class _TestPageState extends State<TestPage> {
                 ),
                 child: Text('تـقـديـم طـلـب إجـازة ',
                     style: TextStyle(
-                        fontFamily: 'myfamily',
+                        fontFamily: 'myfont',
                         fontSize: 20,
                         fontWeight: FontWeight.w100)),
               ),
               SizedBox(height: 30),
               Text('تـفـاصـيـل الإجـازات',
                   style: TextStyle(
-                      fontFamily: 'myfamily',
+                      fontFamily: 'myfont',
                       fontSize: 20,
                       fontWeight: FontWeight.bold)),
               DataTable(
                 decoration: BoxDecoration(
                   color: Color(0xFFF1E6FF),
+                  
                 ),
                 border: TableBorder.all(
-                  color: Color(0xff6f35a5), // Change this to your desired color
+                  color: Color(0xff6f35a5), 
                 ),
                 columns: [
                   DataColumn(
                       label: Text('تاريخ الإجازة',
                           style:
-                              TextStyle(fontFamily: 'myfamily', fontSize: 20))),
+                              TextStyle(fontFamily: 'myfont', fontSize: 20),textAlign:TextAlign.center)),
                   DataColumn(
                       label: Text('سبب الإجازة',
                           style:
-                              TextStyle(fontFamily: 'myfamily', fontSize: 20))),
+                              TextStyle(fontFamily: 'myfont', fontSize: 20),textAlign:TextAlign.center)),
                 ],
                 rows: tableData
                     .map(
                       (data) => DataRow(
                         cells: [
                           DataCell(Text(data['date'] ?? '',
-                              style: TextStyle(
-                                  fontFamily: 'myfamily', fontSize: 20))),
-                          DataCell(Text(data['reason'] ?? '',
-                              style: TextStyle(
-                                  fontFamily: 'myfamily', fontSize: 20))),
+                              style:
+                                  TextStyle(fontFamily: 'myfont', fontSize: 20),
+                              textAlign: TextAlign.center)),
+                          DataCell(
+                            Text(data['reason'] ?? '',
+                              style:
+                                  TextStyle(fontFamily: 'myfont', fontSize: 20),
+                              textAlign: TextAlign.center)),
                         ],
                       ),
                     )
