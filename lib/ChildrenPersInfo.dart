@@ -1,38 +1,33 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(MyApp());
-}
+// void main() {
+//   runApp(MyApp());
+// }
 
-class MyApp extends StatelessWidget {
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       home: TestPage(),
+//       debugShowCheckedModeBanner: false,
+//     );
+//   }
+// }
+
+class childProfile extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: TestPage(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
+  _childProfileState createState() => _childProfileState();
 }
 
-class TestPage extends StatefulWidget {
-  @override
-  _TestPageState createState() => _TestPageState();
-}
-
-class _TestPageState extends State<TestPage> {
+class _childProfileState extends State<childProfile> {
   TextEditingController _textEditingControllername = TextEditingController();
   TextEditingController _textEditingControllermotherphone =
       TextEditingController();
-  final TextEditingController _textFieldController = TextEditingController();
+ 
   TextEditingController _textEditingControlleradress = TextEditingController();
-  TextEditingController _textEditingControlleridd = TextEditingController();
-  TextEditingController _textEditingControllerstartbirthDate =
-      TextEditingController();
+ 
   TextEditingController _textEditingControllerfatherphone = TextEditingController();
-  TextEditingController _textEditingControllerstartDate =
-      TextEditingController();
-  TextEditingController _textEditingControllerfirstsessionDate =
-      TextEditingController();
+ 
 
 
   bool pressed = false;
@@ -79,18 +74,9 @@ class _TestPageState extends State<TestPage> {
                         children: [
                           Expanded(
                             child: TextField(
-                              controller: _textFieldController,
-                              enabled: _isTextFieldEnabled,
-                              onTap: () {
-                                if (!_isTextFieldEnabled) {
-                                  _textFieldController.clear();
-                                }
-                              },
-                              onChanged: (text) {
-                                setState(() {
-                                  name = _textFieldController.text;
-                                });
-                              },
+                            
+                              enabled: false,
+                           
                               decoration: InputDecoration(
                                 labelText: name,
                                 labelStyle: TextStyle(
@@ -121,18 +107,8 @@ class _TestPageState extends State<TestPage> {
                         children: [
                           Expanded(
                             child: TextField(
-                              controller: _textEditingControlleridd,
-                              enabled: _isTextFieldEnabled,
-                              onTap: () {
-                                if (!_isTextFieldEnabled) {
-                                  _textEditingControlleridd.clear();
-                                }
-                              },
-                              onChanged: (text) {
-                                setState(() {
-                                  idd = _textEditingControlleridd.text;
-                                });
-                              },
+                              enabled: false,
+                          
                               decoration: InputDecoration(
                                 labelText: idd,
                                 labelStyle: TextStyle(
@@ -163,19 +139,8 @@ class _TestPageState extends State<TestPage> {
                         children: [
                           Expanded(
                             child: TextField(
-                              controller: _textEditingControllerstartbirthDate,
-                              enabled: _isTextFieldEnabled,
-                              onTap: () {
-                                if (!_isTextFieldEnabled) {
-                                  _textEditingControllerstartbirthDate.clear();
-                                }
-                              },
-                              onChanged: (text) {
-                                setState(() {
-                                  birthDate =
-                                      _textEditingControllerstartbirthDate.text;
-                                });
-                              },
+                              enabled: false,
+                         
                               decoration: InputDecoration(
                                 labelText: birthDate,
                                 labelStyle: TextStyle(
@@ -335,19 +300,8 @@ class _TestPageState extends State<TestPage> {
                         children: [
                           Expanded(
                             child: TextField(
-                              controller: _textEditingControllerstartDate,
-                              enabled: _isTextFieldEnabled,
-                              onTap: () {
-                                if (!_isTextFieldEnabled) {
-                                  _textEditingControllerstartDate.clear();
-                                }
-                              },
-                              onChanged: (text) {
-                                setState(() {
-                                  startDate =
-                                      _textEditingControllerstartDate.text;
-                                });
-                              },
+                              enabled: false,
+                            
                               decoration: InputDecoration(
                                 labelText: startDate,
                                 labelStyle: TextStyle(
@@ -378,19 +332,8 @@ class _TestPageState extends State<TestPage> {
                         children: [
                           Expanded(
                             child: TextField(
-                              controller: _textEditingControllerfirstsessionDate,
-                              enabled: _isTextFieldEnabled,
-                              onTap: () {
-                                if (!_isTextFieldEnabled) {
-                                  _textEditingControllerfirstsessionDate.clear();
-                                }
-                              },
-                              onChanged: (text) {
-                                setState(() {
-                                  firstsessionDate =
-                                      _textEditingControllerfirstsessionDate.text;
-                                });
-                              },
+                              enabled: false,
+                             
                               decoration: InputDecoration(
                                 labelText: firstsessionDate,
                                 labelStyle: TextStyle(
@@ -449,22 +392,18 @@ class _TestPageState extends State<TestPage> {
                                   pressed = false;
                                   setState(() {
                                     _isTextFieldEnabled = !_isTextFieldEnabled;
-                                    _textFieldController.text =
-                                        _textEditingControllername.text;
+                                   
                                     _textEditingControllermotherphone.text =
                                         _textEditingControllername.text;
+
                                     _textEditingControlleradress.text =
                                         _textEditingControllername.text;
-                                    _textEditingControlleridd.text =
-                                        _textEditingControllername.text;
-                                    _textEditingControllerstartbirthDate.text =
-                                        _textEditingControllername.text;
+                                   
+                                    
                                     _textEditingControllerfatherphone.text =
                                         _textEditingControllername.text;
-                                        _textEditingControllerstartDate.text =
-                                        _textEditingControllername.text;
-                                        _textEditingControllerfirstsessionDate.text =
-                                        _textEditingControllername.text;
+                                        
+                                    
 
                                   });
                                 },
