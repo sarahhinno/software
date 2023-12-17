@@ -76,7 +76,6 @@ class _TestPageState extends State<TestPage> {
         backgroundColor: Color(0xff6f35a5),
         title: Text('الـدردشـات',style: TextStyle(fontFamily: 'myfont'),),
       ),
-      drawer: Drawer(),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(

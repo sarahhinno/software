@@ -79,7 +79,6 @@ class _TestPageState extends State<TestPage> {
       appBar: AppBar(
         backgroundColor: Color(0xff6f35a5),
       ),
-      drawer: Drawer(),
       body: ListView.builder(
         itemCount: EMP.length,
         itemBuilder: (context, index) {

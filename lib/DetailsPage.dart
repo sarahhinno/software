@@ -33,7 +33,6 @@ class _TestPageState extends State<TestPage> {
           style: TextStyle(fontFamily: 'myfont'),
         ),
       ),
-      drawer: Drawer(),
       body: Container(
         child: Text('data'),
       )

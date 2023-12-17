@@ -38,7 +38,6 @@ class _TestPageState extends State<TestPage> {
           style: TextStyle(fontFamily: 'myfont'),
         ),
       ),
-      drawer: Drawer(),
       body: Padding(
         padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
         child: SingleChildScrollView(

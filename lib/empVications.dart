@@ -204,7 +204,6 @@ class _vicationsState extends State<vications> {
           style: TextStyle(fontFamily: 'myfont'),
         ),
       ),
-      drawer: Drawer(),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Container(

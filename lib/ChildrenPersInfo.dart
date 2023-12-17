@@ -23,25 +23,22 @@ class _childProfileState extends State<childProfile> {
   TextEditingController _textEditingControllername = TextEditingController();
   TextEditingController _textEditingControllermotherphone =
       TextEditingController();
- 
-  TextEditingController _textEditingControlleradress = TextEditingController();
- 
-  TextEditingController _textEditingControllerfatherphone = TextEditingController();
- 
 
+  TextEditingController _textEditingControlleradress = TextEditingController();
+
+  TextEditingController _textEditingControllerfatherphone =
+      TextEditingController();
 
   bool pressed = false;
-
 
   String name = 'ساره خالد وليد حنو';
   String motherphone = '0593085764';
   String fatherphone = '0598598388';
-    String addr = 'نابلس';
+  String addr = 'نابلس';
 
- 
   String idd = '1234567890';
   String birthDate = '09/12/2023';
-  
+
   String startDate = '09/12/2023';
   String firstsessionDate = '09/12/2023';
 
@@ -57,7 +54,6 @@ class _childProfileState extends State<childProfile> {
           style: TextStyle(fontFamily: 'myfont'),
         ),
       ),
-      drawer: Drawer(),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
@@ -78,9 +74,7 @@ class _childProfileState extends State<childProfile> {
                         children: [
                           Expanded(
                             child: TextField(
-                            
                               enabled: false,
-                           
                               decoration: InputDecoration(
                                 labelText: name,
                                 labelStyle: TextStyle(
@@ -103,7 +97,7 @@ class _childProfileState extends State<childProfile> {
                           SizedBox(width: 5),
                         ],
                       ),
-                       SizedBox(
+                      SizedBox(
                         height: 16.0,
                       ),
                       Row(
@@ -112,7 +106,6 @@ class _childProfileState extends State<childProfile> {
                           Expanded(
                             child: TextField(
                               enabled: false,
-                          
                               decoration: InputDecoration(
                                 labelText: idd,
                                 labelStyle: TextStyle(
@@ -135,7 +128,7 @@ class _childProfileState extends State<childProfile> {
                           SizedBox(width: 5),
                         ],
                       ),
-                        SizedBox(
+                      SizedBox(
                         height: 16.0,
                       ),
                       Row(
@@ -144,7 +137,6 @@ class _childProfileState extends State<childProfile> {
                           Expanded(
                             child: TextField(
                               enabled: false,
-                         
                               decoration: InputDecoration(
                                 labelText: birthDate,
                                 labelStyle: TextStyle(
@@ -167,7 +159,6 @@ class _childProfileState extends State<childProfile> {
                           SizedBox(width: 5),
                         ],
                       ),
-                    
                       SizedBox(
                         height: 16.0,
                       ),
@@ -210,7 +201,7 @@ class _childProfileState extends State<childProfile> {
                           SizedBox(width: 5),
                         ],
                       ),
-                       SizedBox(
+                      SizedBox(
                         height: 16.0,
                       ),
                       Row(
@@ -253,7 +244,6 @@ class _childProfileState extends State<childProfile> {
                           SizedBox(width: 5),
                         ],
                       ),
-                    
                       SizedBox(
                         height: 16.0,
                       ),
@@ -271,7 +261,8 @@ class _childProfileState extends State<childProfile> {
                               },
                               onChanged: (text) {
                                 setState(() {
-                                  fatherphone = _textEditingControllerfatherphone.text;
+                                  fatherphone =
+                                      _textEditingControllerfatherphone.text;
                                 });
                               },
                               decoration: InputDecoration(
@@ -296,7 +287,7 @@ class _childProfileState extends State<childProfile> {
                           SizedBox(width: 5),
                         ],
                       ),
-                        SizedBox(
+                      SizedBox(
                         height: 16.0,
                       ),
                       Row(
@@ -305,7 +296,6 @@ class _childProfileState extends State<childProfile> {
                           Expanded(
                             child: TextField(
                               enabled: false,
-                            
                               decoration: InputDecoration(
                                 labelText: startDate,
                                 labelStyle: TextStyle(
@@ -328,7 +318,7 @@ class _childProfileState extends State<childProfile> {
                           SizedBox(width: 5),
                         ],
                       ),
-                        SizedBox(
+                      SizedBox(
                         height: 16.0,
                       ),
                       Row(
@@ -337,7 +327,6 @@ class _childProfileState extends State<childProfile> {
                           Expanded(
                             child: TextField(
                               enabled: false,
-                             
                               decoration: InputDecoration(
                                 labelText: firstsessionDate,
                                 labelStyle: TextStyle(
@@ -396,19 +385,15 @@ class _childProfileState extends State<childProfile> {
                                   pressed = false;
                                   setState(() {
                                     _isTextFieldEnabled = !_isTextFieldEnabled;
-                                   
+
                                     _textEditingControllermotherphone.text =
                                         _textEditingControllername.text;
 
                                     _textEditingControlleradress.text =
                                         _textEditingControllername.text;
-                                   
-                                    
+
                                     _textEditingControllerfatherphone.text =
                                         _textEditingControllername.text;
-                                        
-                                    
-
                                   });
                                 },
                                 style: ElevatedButton.styleFrom(

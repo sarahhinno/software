@@ -48,7 +48,6 @@ class profileState extends State<profile> {
           style: TextStyle(fontFamily: 'myfont'),
         ),
       ),
-      drawer: Drawer(),
       body:
        SingleChildScrollView(
         scrollDirection: Axis.vertical,
