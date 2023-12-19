@@ -14,6 +14,7 @@ class _adminPostsState extends State<adminPosts> {
   int lines = 3;
   int s = 5;
   bool less = false;
+
   List<Map<String, String>> dynamicposts = [
     {
       'date': '17/12/2023',
@@ -65,6 +66,8 @@ class _adminPostsState extends State<adminPosts> {
   ];
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
@@ -76,113 +79,117 @@ class _adminPostsState extends State<adminPosts> {
               fontWeight: FontWeight.bold),
         ),
       ),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
-          children: <Widget>[
-            for (int i = 0; i < dynamicposts.length; i++)
-              Card(
-                color: Colors.white,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: <Widget>[
-                    Divider(
-                      height: 0.0,
-                      thickness: 3.0,
-                      color: Color(0xff6f35a5),
-                      indent: 0.0, // Set the starting padding
-                      endIndent: 0.0, // Set the ending padding
-                    ),
-                    Card(
-                      color: Colors.white,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: <Widget>[
-                          Container(
-                            height: isExpanded ? null : 100,
-                            child: Text(
-                              dynamicposts[i]['data'] ?? '',
-                              style:
-                                  TextStyle(fontFamily: 'myfont', fontSize: 17),
-                              maxLines: !isExpanded ? lines : lines + 10,
-                              textAlign: TextAlign.end,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          if (!isExpanded)
-                            TextButton(
-                              onPressed: () {
-                                setState(() {
-                                  isExpanded = true;
-                                  lines = lines + 20;
-                                });
-                              },
+      body: Container(
+        width: size.width,
+        height: size.height,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            children: <Widget>[
+              for (int i = 0; i < dynamicposts.length; i++)
+                Card(
+                  color: Colors.white,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: <Widget>[
+                      Divider(
+                        height: 0.0,
+                        thickness: 3.0,
+                        color: Color(0xff6f35a5),
+                        indent: 0.0, // Set the starting padding
+                        endIndent: 0.0, // Set the ending padding
+                      ),
+                      Card(
+                        color: Colors.white,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: <Widget>[
+                            Container(
+                              height: isExpanded ? null : 100,
                               child: Text(
-                                'قـراءة الـمـزيـد',
+                                dynamicposts[i]['data'] ?? '',
                                 style: TextStyle(
-                                    color: primaryColor,
-                                    fontFamily: 'myfont',
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w100),
+                                    fontFamily: 'myfont', fontSize: 17),
+                                maxLines: !isExpanded ? lines : lines + 10,
                                 textAlign: TextAlign.end,
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                          Visibility(
-                            visible: isExpanded,
-                            child: TextButton(
-                              onPressed: () {
-                                setState(() {
-                                  less = true;
-                                  isExpanded = false;
-                                  lines = lines - 20;
-                                });
-                              },
-                              child: Text(' عـرض أقـل',
+                            if (!isExpanded)
+                              TextButton(
+                                onPressed: () {
+                                  setState(() {
+                                    isExpanded = true;
+                                    lines = lines + 20;
+                                  });
+                                },
+                                child: Text(
+                                  'قـراءة الـمـزيـد',
                                   style: TextStyle(
                                       color: primaryColor,
                                       fontFamily: 'myfont',
                                       fontSize: 15,
                                       fontWeight: FontWeight.w100),
-                                  textAlign: TextAlign.end),
-                            ),
-                          )
+                                  textAlign: TextAlign.end,
+                                ),
+                              ),
+                            Visibility(
+                              visible: isExpanded,
+                              child: TextButton(
+                                onPressed: () {
+                                  setState(() {
+                                    less = true;
+                                    isExpanded = false;
+                                    lines = lines - 20;
+                                  });
+                                },
+                                child: Text(' عـرض أقـل',
+                                    style: TextStyle(
+                                        color: primaryColor,
+                                        fontFamily: 'myfont',
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w100),
+                                    textAlign: TextAlign.end),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      // SizedBox(height: 5),
+                      Image.asset(
+                        dynamicposts[i]['image'] ?? '',
+                      ),
+                      Row(
+                        //  crossAxisAlignment: CrossAxisAlignment.end,
+                        children: <Widget>[
+                          Text(dynamicposts[i]['date'] ?? '',
+                              style: TextStyle(
+                                  fontFamily: 'myfont',
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.end),
+                          SizedBox(width: 240),
+                          Text(dynamicposts[i]['time'] ?? '',
+                              style: TextStyle(
+                                  fontFamily: 'myfont',
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.start),
                         ],
                       ),
-                    ),
-                    // SizedBox(height: 5),
-                    Image.asset(
-                      dynamicposts[i]['image'] ?? '',
-                    ),
-                    Row(
-                      //  crossAxisAlignment: CrossAxisAlignment.end,
-                      children: <Widget>[
-                        Text(dynamicposts[i]['date'] ?? '',
-                            style: TextStyle(
-                                fontFamily: 'myfont',
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.end),
-                        SizedBox(width: 240),
-                        Text(dynamicposts[i]['time'] ?? '',
-                            style: TextStyle(
-                                fontFamily: 'myfont',
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.start),
-                      ],
-                    ),
-                    Divider(
-                      height: 0.0,
-                      thickness: 3.0,
-                      color: Color(0xff6f35a5),
-                      indent: 0.0, // Set the starting padding
-                      endIndent: 0.0, // Set the ending padding
-                    ),
-                    //   SizedBox(height: 10),
-                  ],
+                      Divider(
+                        height: 0.0,
+                        thickness: 3.0,
+                        color: Color(0xff6f35a5),
+                        indent: 0.0, // Set the starting padding
+                        endIndent: 0.0, // Set the ending padding
+                      ),
+                      //   SizedBox(height: 10),
+                    ],
+                  ),
                 ),
-              ),
-          ],
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(

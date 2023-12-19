@@ -196,6 +196,8 @@ class _vicationsState extends State<vications> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xff6f35a5),
@@ -204,150 +206,154 @@ class _vicationsState extends State<vications> {
           style: TextStyle(fontFamily: 'myfont'),
         ),
       ),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Container(
-          child: Column(
-            children: <Widget>[
-              SizedBox(height: 20),
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      '10',
-                      style: TextStyle(
-                          fontFamily: 'myfont',
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(width: 100),
-                    Text(
-                      'عـدد الإجـازات الـكـلـي',
-                      style: TextStyle(
-                          fontFamily: 'myfont',
-                          fontSize: 20,
-                          fontWeight: FontWeight.w100),
-                    ),
-                  ]),
-              Divider(
-                height: 1.0,
-                thickness: 1.0,
-                color: Color(0xff6f35a5),
-                indent: 50.0, // Set the starting padding
-                endIndent: 50.0, // Set the ending padding
-              ),
-              SizedBox(height: 5),
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      '10',
-                      style: TextStyle(
-                          fontFamily: 'myfont',
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(width: 80),
-                    Text(
-                      'عـدد الإجـازات الـمـترحـلـة',
-                      style: TextStyle(
-                          fontFamily: 'myfont',
-                          fontSize: 20,
-                          fontWeight: FontWeight.w100),
-                    ),
-                  ]),
-              Divider(
-                height: 1.0,
-                thickness: 1.0,
-                color: Color(0xff6f35a5),
-                indent: 50.0,
-                endIndent: 50.0,
-              ),
-              SizedBox(height: 5),
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      '10',
-                      style: TextStyle(
-                          fontFamily: 'myfont',
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(width: 90),
-                    Text(
-                      'عـدد الإجـازات الـمـبـقـيـة',
-                      style: TextStyle(
-                          fontFamily: 'myfont',
-                          fontSize: 20,
-                          fontWeight: FontWeight.w100),
-                    ),
-                  ]),
-              Divider(
-                height: 1.0,
-                thickness: 1.0,
-                color: Color(0xff6f35a5),
-                indent: 50.0, // Set the starting padding
-                endIndent: 50.0, // Set the ending padding
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () => _showDialog(context),
-                style: ElevatedButton.styleFrom(
-                  primary: Color(0xff6f35a5),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(29.0),
-                  ),
+      body: Container(
+        width: size.width,
+        height: size.height,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Container(
+            child: Column(
+              children: <Widget>[
+                SizedBox(height: 20),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        '10',
+                        style: TextStyle(
+                            fontFamily: 'myfont',
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(width: 100),
+                      Text(
+                        'عـدد الإجـازات الـكـلـي',
+                        style: TextStyle(
+                            fontFamily: 'myfont',
+                            fontSize: 20,
+                            fontWeight: FontWeight.w100),
+                      ),
+                    ]),
+                Divider(
+                  height: 1.0,
+                  thickness: 1.0,
+                  color: Color(0xff6f35a5),
+                  indent: 50.0, // Set the starting padding
+                  endIndent: 50.0, // Set the ending padding
                 ),
-                child: Text('تـقـديـم طـلـب إجـازة ',
+                SizedBox(height: 5),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        '10',
+                        style: TextStyle(
+                            fontFamily: 'myfont',
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(width: 80),
+                      Text(
+                        'عـدد الإجـازات الـمـترحـلـة',
+                        style: TextStyle(
+                            fontFamily: 'myfont',
+                            fontSize: 20,
+                            fontWeight: FontWeight.w100),
+                      ),
+                    ]),
+                Divider(
+                  height: 1.0,
+                  thickness: 1.0,
+                  color: Color(0xff6f35a5),
+                  indent: 50.0,
+                  endIndent: 50.0,
+                ),
+                SizedBox(height: 5),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        '10',
+                        style: TextStyle(
+                            fontFamily: 'myfont',
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(width: 90),
+                      Text(
+                        'عـدد الإجـازات الـمـبـقـيـة',
+                        style: TextStyle(
+                            fontFamily: 'myfont',
+                            fontSize: 20,
+                            fontWeight: FontWeight.w100),
+                      ),
+                    ]),
+                Divider(
+                  height: 1.0,
+                  thickness: 1.0,
+                  color: Color(0xff6f35a5),
+                  indent: 50.0, // Set the starting padding
+                  endIndent: 50.0, // Set the ending padding
+                ),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () => _showDialog(context),
+                  style: ElevatedButton.styleFrom(
+                    primary: Color(0xff6f35a5),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(29.0),
+                    ),
+                  ),
+                  child: Text('تـقـديـم طـلـب إجـازة ',
+                      style: TextStyle(
+                          fontFamily: 'myfont',
+                          fontSize: 20,
+                          fontWeight: FontWeight.w100)),
+                ),
+                SizedBox(height: 30),
+                Text('تـفـاصـيـل الإجـازات',
                     style: TextStyle(
                         fontFamily: 'myfont',
                         fontSize: 20,
-                        fontWeight: FontWeight.w100)),
-              ),
-              SizedBox(height: 30),
-              Text('تـفـاصـيـل الإجـازات',
-                  style: TextStyle(
-                      fontFamily: 'myfont',
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold)),
-              DataTable(
-                decoration: BoxDecoration(
-                  color: Color(0xFFF1E6FF),
-                  
+                        fontWeight: FontWeight.bold)),
+                DataTable(
+                  decoration: BoxDecoration(
+                    color: Color(0xFFF1E6FF),
+                  ),
+                  border: TableBorder.all(
+                    color: Color(0xff6f35a5),
+                  ),
+                  columns: [
+                    DataColumn(
+                        label: Text('تاريخ الإجازة',
+                            style:
+                                TextStyle(fontFamily: 'myfont', fontSize: 20),
+                            textAlign: TextAlign.center)),
+                    DataColumn(
+                        label: Text('سبب الإجازة',
+                            style:
+                                TextStyle(fontFamily: 'myfont', fontSize: 20),
+                            textAlign: TextAlign.center)),
+                  ],
+                  rows: tableData
+                      .map(
+                        (data) => DataRow(
+                          cells: [
+                            DataCell(Text(data['date'] ?? '',
+                                style: TextStyle(
+                                    fontFamily: 'myfont', fontSize: 20),
+                                textAlign: TextAlign.center)),
+                            DataCell(Text(data['reason'] ?? '',
+                                style: TextStyle(
+                                    fontFamily: 'myfont', fontSize: 20),
+                                textAlign: TextAlign.center)),
+                          ],
+                        ),
+                      )
+                      .toList(),
                 ),
-                border: TableBorder.all(
-                  color: Color(0xff6f35a5), 
-                ),
-                columns: [
-                  DataColumn(
-                      label: Text('تاريخ الإجازة',
-                          style:
-                              TextStyle(fontFamily: 'myfont', fontSize: 20),textAlign:TextAlign.center)),
-                  DataColumn(
-                      label: Text('سبب الإجازة',
-                          style:
-                              TextStyle(fontFamily: 'myfont', fontSize: 20),textAlign:TextAlign.center)),
-                ],
-                rows: tableData
-                    .map(
-                      (data) => DataRow(
-                        cells: [
-                          DataCell(Text(data['date'] ?? '',
-                              style:
-                                  TextStyle(fontFamily: 'myfont', fontSize: 20),
-                              textAlign: TextAlign.center)),
-                          DataCell(
-                            Text(data['reason'] ?? '',
-                              style:
-                                  TextStyle(fontFamily: 'myfont', fontSize: 20),
-                              textAlign: TextAlign.center)),
-                        ],
-                      ),
-                    )
-                    .toList(),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

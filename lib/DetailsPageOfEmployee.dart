@@ -226,7 +226,7 @@ class _DetailsPageState extends State<spDetailsPage> {
       ),
       body: Container(
         width: size.width,
-        //height: size.height,
+        height: size.height,
         child: Stack(
           children: <Widget>[
             Positioned.fill(

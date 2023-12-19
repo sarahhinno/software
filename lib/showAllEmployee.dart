@@ -75,61 +75,67 @@ class _TestPageState extends State<TestPage> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xff6f35a5),
       ),
-      body: ListView.builder(
-        itemCount: EMP.length,
-        itemBuilder: (context, index) {
-          String employee = EMP[index];
-          return Card(
-            margin: EdgeInsets.all(16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    ElevatedButton(
-                      onPressed: () {
-                        id = data[index]['id'];
-                        print(index);
-                        print(id);
-                        _onPressed(context, id);
-                      },
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Color(0xFF6F35A5)),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(29.0),
+      body: Container(
+        width: size.width,
+        height: size.height,
+        child: ListView.builder(
+          itemCount: EMP.length,
+          itemBuilder: (context, index) {
+            String employee = EMP[index];
+            return Card(
+              margin: EdgeInsets.all(16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      ElevatedButton(
+                        onPressed: () {
+                          id = data[index]['id'];
+                          print(index);
+                          print(id);
+                          _onPressed(context, id);
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              Color(0xFF6F35A5)),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(29.0),
+                            ),
                           ),
                         ),
+                        child: Text(
+                          "رؤيـة كـافـة الـتـفـاصـيـل",
+                          style: TextStyle(fontFamily: 'myfont'),
+                        ),
                       ),
-                      child: Text(
-                        "رؤيـة كـافـة الـتـفـاصـيـل",
-                        style: TextStyle(fontFamily: 'myfont'),
-                      ),
-                    ),
-                  ],
-                ),
-                Spacer(),
-                Text(
-                  employee,
-                  style: TextStyle(fontSize: 18, fontFamily: 'myfont'),
-                ),
-                Spacer(),
-                Image.asset(
-                  img,
-                  width: 60,
-                  height: 60,
-                ),
-              ],
-            ),
-          );
-        },
+                    ],
+                  ),
+                  Spacer(),
+                  Text(
+                    employee,
+                    style: TextStyle(fontSize: 18, fontFamily: 'myfont'),
+                  ),
+                  Spacer(),
+                  Image.asset(
+                    img,
+                    width: 60,
+                    height: 60,
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }

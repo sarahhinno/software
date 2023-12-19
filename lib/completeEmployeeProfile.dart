@@ -31,6 +31,8 @@ class _TestPageState extends State<TestPage> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xff6f35a5),
@@ -39,7 +41,9 @@ class _TestPageState extends State<TestPage> {
           style: TextStyle(fontFamily: 'myfont'),
         ),
       ),
-      body: Padding(
+      body: Container(
+        width: size.width,
+        height: size.height,
         padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
         child: SingleChildScrollView(
           child: Column(
@@ -86,7 +90,6 @@ class _TestPageState extends State<TestPage> {
                   ),
                 ],
               ),
-
               SizedBox(height: 70),
               Container(
                 height: 50,
@@ -148,7 +151,7 @@ class _TestPageState extends State<TestPage> {
                   ],
                 ),
               ),
-                SizedBox(height: 40),
+              SizedBox(height: 40),
               Container(
                 height: 50,
                 width: 310,
@@ -202,62 +205,61 @@ class _TestPageState extends State<TestPage> {
                   ],
                 ),
               ),
-                  SizedBox(height: 80),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Color(0xff6f35a5),
-                      minimumSize: Size(50, 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                            29), 
-                      ), 
-                    ),
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Row(
-                              children: [
-                                Text(
-                                  'تـم تـخـزيـن الـمـعـلومـات بـنـجـاح',
-                                  style: TextStyle(
-                                    fontFamily: 'myfont',
-                                    color: Color(0xff6f35a5),
-                                  ),
-                                ),
-                                SizedBox(width: 8),
-                                Icon(
-                                  Icons.check_circle,
-                                  color: Color(0xff6f35a5),
-                                ),
-                              ],
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Text(
-                                  'تـم',
-                                  style: TextStyle(
-                                    fontFamily: 'myfont',
-                                    color: Color(0xff6f35a5),
-                                  ),
-                                ),
+              SizedBox(height: 80),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Color(0xff6f35a5),
+                  minimumSize: Size(50, 50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(29),
+                  ),
+                ),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Row(
+                          children: [
+                            Text(
+                              'تـم تـخـزيـن الـمـعـلومـات بـنـجـاح',
+                              style: TextStyle(
+                                fontFamily: 'myfont',
+                                color: Color(0xff6f35a5),
                               ),
-                            ],
-                          );
-                        },
+                            ),
+                            SizedBox(width: 8),
+                            Icon(
+                              Icons.check_circle,
+                              color: Color(0xff6f35a5),
+                            ),
+                          ],
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text(
+                              'تـم',
+                              style: TextStyle(
+                                fontFamily: 'myfont',
+                                color: Color(0xff6f35a5),
+                              ),
+                            ),
+                          ),
+                        ],
                       );
-
-                      print('Button Pressed');
                     },
-                    child: Text(
-                      'تـخـزيـن',
-                      style: TextStyle(fontFamily: 'myfont', fontSize: 20),
-                    ),
-                  )
+                  );
+
+                  print('Button Pressed');
+                },
+                child: Text(
+                  'تـخـزيـن',
+                  style: TextStyle(fontFamily: 'myfont', fontSize: 20),
+                ),
+              )
             ],
           ),
         ),

@@ -16,14 +16,15 @@ class _wSessionState extends State<wSession> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>
-            detailsOfSession(buttonText: buttonTextt),
+        builder: (context) => detailsOfSession(buttonText: buttonTextt),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
@@ -35,75 +36,79 @@ class _wSessionState extends State<wSession> {
               fontWeight: FontWeight.bold),
         ),
       ),
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: Image.asset(
-              'images/backSessions.png',
-              fit: BoxFit.cover,
+      body: Container(
+        width: size.width,
+        height: size.height,
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: Image.asset(
+                'images/backSessions.png',
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                RoundedButton(
-                  color: primaryLightColor,
-                  text: "ســلــوكــي",
-                  textColor: primaryColor,
-                  press: () {
-                    selectedButton = 1;
-                    _onPressed(context, "ســلــوكــي");
-                  },
-                ),
-                // SizedBox(height: 5),
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  RoundedButton(
+                    color: primaryLightColor,
+                    text: "ســلــوكــي",
+                    textColor: primaryColor,
+                    press: () {
+                      selectedButton = 1;
+                      _onPressed(context, "ســلــوكــي");
+                    },
+                  ),
+                  // SizedBox(height: 5),
 
-                RoundedButton(
-                  color: primaryLightColor,
-                  text: "وظــيــفــي",
-                  textColor: primaryColor,
-                  press: () {
-                    selectedButton = 2;
-                    _onPressed(context, "وظــيــفــي");
-                  },
-                ),
-                //   SizedBox(height: 5),
+                  RoundedButton(
+                    color: primaryLightColor,
+                    text: "وظــيــفــي",
+                    textColor: primaryColor,
+                    press: () {
+                      selectedButton = 2;
+                      _onPressed(context, "وظــيــفــي");
+                    },
+                  ),
+                  //   SizedBox(height: 5),
 
-                RoundedButton(
-                  color: primaryLightColor,
-                  text: "تــربـيـة خـاصـة",
-                  textColor: primaryColor,
-                  press: () {
-                    selectedButton = 3;
-                    _onPressed(context, "تــربـيـة خـاصـة");
-                  },
-                ),
-                //     SizedBox(height: 5),
+                  RoundedButton(
+                    color: primaryLightColor,
+                    text: "تــربـيـة خـاصـة",
+                    textColor: primaryColor,
+                    press: () {
+                      selectedButton = 3;
+                      _onPressed(context, "تــربـيـة خـاصـة");
+                    },
+                  ),
+                  //     SizedBox(height: 5),
 
-                RoundedButton(
-                  color: primaryLightColor,
-                  text: "عــلاج طــبـيـعي",
-                  textColor: primaryColor,
-                  press: () {
-                    selectedButton = 4;
-                    _onPressed(context, "عــلاج طــبـيـعي");
-                  },
-                ),
-                //  SizedBox(height: 1),
+                  RoundedButton(
+                    color: primaryLightColor,
+                    text: "عــلاج طــبـيـعي",
+                    textColor: primaryColor,
+                    press: () {
+                      selectedButton = 4;
+                      _onPressed(context, "عــلاج طــبـيـعي");
+                    },
+                  ),
+                  //  SizedBox(height: 1),
 
-                RoundedButton(
-                  color: primaryLightColor,
-                  text: "الـلغـة و نــطــق",
-                  textColor: primaryColor,
-                  press: () {
-                    selectedButton = 5;
-                    _onPressed(context, "الـلغـة و نــطــق");
-                  },
-                ),
-              ],
+                  RoundedButton(
+                    color: primaryLightColor,
+                    text: "الـلغـة و نــطــق",
+                    textColor: primaryColor,
+                    press: () {
+                      selectedButton = 5;
+                      _onPressed(context, "الـلغـة و نــطــق");
+                    },
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
