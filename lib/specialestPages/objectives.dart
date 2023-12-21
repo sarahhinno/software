@@ -1,26 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:software/specialestPages/addNewGoals.dart';
+import 'package:software/specialestPages/evaluatingGoals.dart';
+import 'package:software/specialestPages/objectivesSp.dart';
 import 'package:software/theme.dart';
 import 'package:software/components/rounded_button.dart';
-import 'package:software/detailsOfSessions.dart';
+import 'package:software/parentPages/detailsOfSessions.dart';
 
-class wSession extends StatefulWidget {
+class goals extends StatefulWidget {
   @override
-  _wSessionState createState() => _wSessionState();
+  _goalsState createState() => _goalsState();
 }
 
-class _wSessionState extends State<wSession> {
-  int selectedButton = 0;
-
-  int num = 0;
-  void _onPressed(BuildContext context, String buttonTextt) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => detailsOfSession(buttonText: buttonTextt),
-      ),
-    );
-  }
-
+class _goalsState extends State<goals> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -29,7 +20,7 @@ class _wSessionState extends State<wSession> {
       appBar: AppBar(
         backgroundColor: primaryColor,
         title: Text(
-          "الـجـلـسـات الأسـبـوعـيـة",
+          " الأهـداف",
           style: TextStyle(
               color: Colors.white,
               fontFamily: 'myFont',
@@ -53,55 +44,54 @@ class _wSessionState extends State<wSession> {
                 children: [
                   RoundedButton(
                     color: primaryLightColor,
-                    text: "ســلــوكــي",
+                    text: "الأهـداف الـحـالـيـة",
                     textColor: primaryColor,
                     press: () {
-                      selectedButton = 1;
-                      _onPressed(context, "ســلــوكــي");
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => objectives(),
+                        ),
+                      );
                     },
                   ),
-                  // SizedBox(height: 5),
-
                   RoundedButton(
                     color: primaryLightColor,
-                    text: "وظــيــفــي",
+                    text: "الأهـداف الـمنـجـزة بـالـكـامـل",
                     textColor: primaryColor,
                     press: () {
-                      selectedButton = 2;
-                      _onPressed(context, "وظــيــفــي");
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => objectives(),
+                        ),
+                      );
                     },
                   ),
-                  //   SizedBox(height: 5),
-
                   RoundedButton(
                     color: primaryLightColor,
-                    text: "تــربـيـة خـاصـة",
+                    text: "تـقـيـيـم الأهـداف",
                     textColor: primaryColor,
                     press: () {
-                      selectedButton = 3;
-                      _onPressed(context, "تــربـيـة خـاصـة");
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => evalobjec(),
+                        ),
+                      );
                     },
                   ),
-                  //     SizedBox(height: 5),
-
                   RoundedButton(
                     color: primaryLightColor,
-                    text: "عــلاج طــبـيـعي",
+                    text: "إضافـة أهـداف جـديـدة",
                     textColor: primaryColor,
                     press: () {
-                      selectedButton = 4;
-                      _onPressed(context, "عــلاج طــبـيـعي");
-                    },
-                  ),
-                  //  SizedBox(height: 1),
-
-                  RoundedButton(
-                    color: primaryLightColor,
-                    text: "الـلغـة و نــطــق",
-                    textColor: primaryColor,
-                    press: () {
-                      selectedButton = 5;
-                      _onPressed(context, "الـلغـة و نــطــق");
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => newGoals(),
+                        ),
+                      );
                     },
                   ),
                 ],

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:software/ChildrenPersInfo.dart';
-import 'package:software/addNewChild.dart';
-import 'package:software/DetailsPageOfEmployee.dart'; // Import the file where SpDetailsPage is defined
-import 'package:software/empPersonalInformation.dart'; // Import the file where SpDetailsPage is defined
-import 'package:software/empVications.dart'; // Import the file where SpDetailsPage is defined
-import 'package:software/weeklySessions.dart'; // Import the file where SpDetailsPage is defined
-import 'package:software/adminPosts.dart'; // Import the file where SpDetailsPage is defined
-import 'package:software/viewPosts.dart'; // Import the file where SpDetailsPage is defined
+import 'package:software/parentPages/ChildrenPersInfo.dart';
+import 'package:software/adminPages/addNewChild.dart';
+import 'package:software/adminPages/DetailsPageOfEmployee.dart'; // Import the file where SpDetailsPage is defined
+import 'package:software/specialestPages/empPersonalInformation.dart'; // Import the file where SpDetailsPage is defined
+import 'package:software/specialestPages/empVications.dart'; // Import the file where SpDetailsPage is defined
+import 'package:software/specialestPages/objectives.dart';
+import 'package:software/specialestPages/objectivesSp.dart';
+import 'package:software/parentPages/weeklySessions.dart'; // Import the file where SpDetailsPage is defined
+import 'package:software/adminPages/adminPosts.dart'; // Import the file where SpDetailsPage is defined
+import 'package:software/parentPages/viewPosts.dart'; // Import the file where SpDetailsPage is defined
 
 void main() {
   runApp(MyApp());
@@ -106,6 +108,15 @@ class MyHomePage extends StatelessWidget {
               }));
             },
             child: Text('view Posts'),
+          ),
+               SizedBox(height: 10),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return goals();
+              }));
+            },
+            child: Text('objectives'),
           ),
         ],
       )),

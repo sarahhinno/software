@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:software/completeChildProfile.dart';
+import 'package:software/parentPages/completeChildProfile.dart';
 
 // void main() {
 //   runApp(MyApp());
