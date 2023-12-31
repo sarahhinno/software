@@ -5,23 +5,23 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
 
-void main() {
-  runApp(MyApp());
-}
+// void main() {
+//   runApp(MyApp());
+// }
 
-class MyApp extends StatelessWidget {
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(home: TestPage(), debugShowCheckedModeBanner: false);
+//   }
+// }
+
+class completeProfilesp extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(home: TestPage(), debugShowCheckedModeBanner: false);
-  }
+  _completeProfilespState createState() => _completeProfilespState();
 }
 
-class TestPage extends StatefulWidget {
-  @override
-  _TestPageState createState() => _TestPageState();
-}
-
-class _TestPageState extends State<TestPage> {
+class _completeProfilespState extends State<completeProfilesp> {
   Uint8List? _imageBytes;
   bool isExpanded = false;
 

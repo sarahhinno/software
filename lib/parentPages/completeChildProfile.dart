@@ -4,23 +4,23 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-void main() {
-  runApp(MyApp());
-}
+// void main() {
+//   runApp(MyApp());
+// }
 
-class MyApp extends StatelessWidget {
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(home: TestPage(), debugShowCheckedModeBanner: false);
+//   }
+// }
+
+class completeProfileCh extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(home: TestPage(), debugShowCheckedModeBanner: false);
-  }
+  _completeProfileChState createState() => _completeProfileChState();
 }
 
-class TestPage extends StatefulWidget {
-  @override
-  _TestPageState createState() => _TestPageState();
-}
-
-class _TestPageState extends State<TestPage> {
+class _completeProfileChState extends State<completeProfileCh> {
   Uint8List? _imageBytes;
   final String defaultImage = 'assets/default_image.png';
   FilePickerResult? result;

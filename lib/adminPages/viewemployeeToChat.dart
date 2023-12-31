@@ -3,26 +3,26 @@ import 'package:software/DetailsPage.dart';
 import 'package:software/theme.dart';
 import 'package:http/http.dart' as http;
 
-void main() {
-  runApp(MyApp());
-}
+// void main() {
+//   runApp(MyApp());
+// }
 
-class MyApp extends StatelessWidget {
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       home: TestPage(),
+//       debugShowCheckedModeBanner: false,
+//     );
+//   }
+// }
+
+class adminChat extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: TestPage(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
+  _adminChatState createState() => _adminChatState();
 }
 
-class TestPage extends StatefulWidget {
-  @override
-  _TestPageState createState() => _TestPageState();
-}
-
-class _TestPageState extends State<TestPage> {
+class _adminChatState extends State<adminChat> {
   List<Map<String, String>> Freinds = [
     {
       'date': 'أمس',
