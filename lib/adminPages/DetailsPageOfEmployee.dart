@@ -8,7 +8,7 @@ import 'dart:convert';
 import 'package:flutter/widgets.dart';
 import 'package:software/theme.dart';
 
-import '../main.dart';
+import '../mains.dart';
 
 class spDetailsPage extends StatefulWidget {
   final String name;

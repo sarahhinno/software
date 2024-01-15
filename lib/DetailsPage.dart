@@ -1,59 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:software/DetailsPage.dart';
 import 'package:software/theme.dart';
+import 'package:http/http.dart' as http;
+import 'package:syncfusion_flutter_charts/charts.dart';
 
-void main() {
-  runApp(MyApp());
-}
 
-class MyApp extends StatelessWidget {
+class charts extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: TestPage(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
+  _chartsState createState() => _chartsState();
 }
+   class ChartData {
+      ChartData(this.x, this.y);
+        final String x;
+        final double y;
+    }
+class _chartsState extends State<charts> {
+ @override
+    Widget build(BuildContext context) {
+        final List<ChartData> chartData = [
+            ChartData('David', 25),
+            ChartData('Steve', 38),
+            ChartData('Jack', 34),
+            ChartData('Others', 52)
+        ];
+        return Scaffold(
+            body: Center(
+                child: Container(
+                    child: SfCircularChart(series: <CircularSeries>[
+                        // Render pie chart
+                        PieSeries<ChartData, String>(
+                            dataSource: chartData,
+                            xValueMapper: (ChartData data, _) => data.x,
+                            yValueMapper: (ChartData data, _) => data.y
+                        )
+                    ])
+                )
+            )
+        );
+    }
 
-class TestPage extends StatefulWidget {
-  @override
-  _TestPageState createState() => _TestPageState();
-}
-
-class _TestPageState extends State<TestPage> {
  
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color(0xff6f35a5),
-        title: Text(
-          'ٍساره حنو ',
-          style: TextStyle(fontFamily: 'myfont'),
-        ),
-      ),
-      body: Container(
-        child: Text('data'),
-      )
-    );
-  }
-}
-
-class DetailsPage extends StatelessWidget {
-  final String name;
-  final String message;
-  final String image;
-
-  DetailsPage({required this.name, required this.message, required this.image});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Details Page'),
-      ),
-     
-    );
-  }
 }

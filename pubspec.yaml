@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.1.3 <4.0.0'
+  sdk: '3.1.3'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -28,17 +28,28 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  fl_chart: ^0.65.0 
+  
   flutter:
     sdk: flutter
-  file_picker: ^6.1.1  
+ 
   http: ^1.1.0
-  dropdown_button2: ^2.3.9
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  calendar_view: ^1.0.4
+  syncfusion_flutter_calendar: ^23.1.41
   intl: ^0.18.1
+  dropdown_button2: ^2.3.9
+  image_picker: ^1.0.4
+  file_picker: ^6.1.1
+  path: ^1.8.3
+  http_parser: ^4.0.2
+  firebase_core: ^2.23.0
+  firebase_auth: ^4.14.1
+  cloud_firestore: ^4.13.2
+  path_provider: ^2.1.1
+  fl_chart: ^0.65.0
+  syncfusion_flutter_charts: ^23.2.7
+  syncfusion_localizations: ^23.2.7
+
 
 dev_dependencies:
   flutter_test:
@@ -80,7 +91,14 @@ flutter:
      - images/posts.jpg
      - images/post2.jpg
      - images/nurses.png
-
+     - images/welcome_bottom_right.png
+     - images/welcome_top_left.png
+     - images/welcomePicture.png
+     - images/admin.png
+     - images/girl.png
+     - images/login_bottom_left.png
+     - images/login_top_right.png
+     - images/nurse.png
 
 
   fonts:

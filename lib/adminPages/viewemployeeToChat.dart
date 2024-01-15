@@ -97,16 +97,16 @@ class _adminChatState extends State<adminChat> {
                   return GestureDetector(
                     onTap: () {
                       //    Navigate to a new page when card is tapped
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DetailsPage(
-                            name: Freinds[index]['name'] ?? '',
-                            message: Freinds[index]['message'] ?? '',
-                            image: Freinds[index]['image'] ?? '',
-                          ),
-                        ),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   // MaterialPageRoute(
+                      //   //   // builder: (context) => DetailsPage(
+                      //   //   //   name: Freinds[index]['name'] ?? '',
+                      //   //   //   message: Freinds[index]['message'] ?? '',
+                      //   //   //   image: Freinds[index]['image'] ?? '',
+                      //   //   // ),
+                      //   // ),
+                      // );
                     },
                     child: Column(
                       children: <Widget>[
