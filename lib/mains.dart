@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:software/DetailsPage.dart';
+import 'package:software/adminPages/chart1.dart';
+import 'package:software/adminPages/chart2.dart';
+import 'package:software/adminPages/chart3.dart';
 import 'package:software/adminPages/showAllChildren.dart';
 import 'package:software/adminPages/showAllEmployee.dart';
 import 'package:software/adminPages/view.dart';
+import 'package:software/parentPages/specialistEvaluation.dart';
 // Import the file where SpDetailsPage is defined
 import 'package:software/specialestPages/objectives.dart';
 import 'package:software/specialestPages/objectivesSp.dart';
@@ -37,14 +41,14 @@ class MyHomePage extends StatelessWidget {
           scrollDirection: Axis.vertical,
           child: Column(
             children: <Widget>[
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return charts();
-                  }));
-                },
-                child: Text('charts'),
-              ),
+              // ElevatedButton(
+              //   onPressed: () {
+              //     Navigator.push(context, MaterialPageRoute(builder: (context) {
+              //       return charts();
+              //     }));
+              //   },
+              //   child: Text('charts'),
+              // ),
               ElevatedButton(
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -93,6 +97,38 @@ class MyHomePage extends StatelessWidget {
                 },
                 child: Text('showEmp'),
               ),
+                ElevatedButton(
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return chartOne();
+              }));
+            },
+            child: Text('chartOne'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return chartTwo();
+              }));
+            },
+            child: Text('chartTwo'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return chartThree();
+              }));
+            },
+            child: Text('chartThree'),
+          ),
+            ElevatedButton(
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return spEvaluation();
+              }));
+            },
+            child: Text('spEvaluation'),
+          ),
             ],
           )),
     );
