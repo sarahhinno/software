@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:software/components/rounded_button.dart';
 import 'package:software/theme.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
@@ -27,8 +28,10 @@ class _spEvaluationState extends State<spEvaluation> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
+        title: Text('تـقـيـيـم الأخـصـائـيـن',style: TextStyle(fontFamily: 'myfont',fontWeight: FontWeight.bold),),
       ),
       body: SingleChildScrollView(
+          padding: EdgeInsets.fromLTRB(20, 5, 20, 20),
           scrollDirection: Axis.vertical,
           child: Column(
             children: <Widget>[
@@ -54,7 +57,7 @@ class _spEvaluationState extends State<spEvaluation> {
                         },
                         style: TextStyle(
                           color: primaryColor,
-                          fontSize: 15.0,
+                          fontSize: 17.0,
                           fontWeight: FontWeight.bold,
                         ),
                         dropdownColor: Colors.grey[200],
@@ -62,28 +65,33 @@ class _spEvaluationState extends State<spEvaluation> {
                       ),
                     ),
                   ),
-                  SizedBox(width: 10),
+                  SizedBox(width: 20),
                   Text(
                     'اخـتـيـار أخـصـائـي',
                     style: TextStyle(
                       fontFamily: 'myfont',
-                      fontSize: 20,
+                      fontSize: 22,
                       color: primaryColor,
                     ),
                   ),
                   SizedBox(width: 30),
                 ],
               ),
-              SizedBox(height: 100),
+              SizedBox(height: 70),
               Container(
+                //  height: 80,
                 width: double.infinity,
-                color: Color.fromARGB(255, 232, 223, 225),
+                padding: EdgeInsets.fromLTRB(20, 5, 20, 20),
+
+                color: Color.fromARGB(255, 243, 236, 238),
                 child: Column(
                   children: <Widget>[
                     Text(
                       ' كـيـف تـقـيـم تـواصـل الأخـصـائـي مـعـك ومـع طـفـلـك؟',
                       style: TextStyle(fontFamily: 'myfont', fontSize: 20),
                       textAlign: TextAlign.end,
+                      maxLines: 2, // Set the maximum number of lines
+                      overflow: TextOverflow.ellipsis,
                     ),
                     RatingBar.builder(
                       initialRating: _rating1,
@@ -105,15 +113,21 @@ class _spEvaluationState extends State<spEvaluation> {
                     ),
                   ],
                 ),
-              ),    SizedBox(height: 20),
+              ),
+              SizedBox(height: 20),
               Container(
+                padding: EdgeInsets.fromLTRB(20, 5, 20, 20),
                 width: double.infinity,
                 color: Color(0xffe6f6ff),
                 child: Column(
                   children: <Widget>[
-                    Text('إلـى أي مـدى الأخـصـائـي يـفـهـم احـتـيـاجـات طـفـلـك؟',
-                        style: TextStyle(fontFamily: 'myfont', fontSize: 20),
-                        textAlign: TextAlign.end),
+                    Text(
+                      'إلـى أي مـدى الأخـصـائـي يـفـهـم احـتـيـاجـات طـفـلـك؟',
+                      style: TextStyle(fontFamily: 'myfont', fontSize: 20),
+                      textAlign: TextAlign.end,
+                      maxLines: 2, // Set the maximum number of lines
+                      overflow: TextOverflow.ellipsis,
+                    ),
                     RatingBar.builder(
                       initialRating: _rating3,
                       minRating: 1,
@@ -137,13 +151,18 @@ class _spEvaluationState extends State<spEvaluation> {
               ),
               SizedBox(height: 20),
               Container(
+                padding: EdgeInsets.fromLTRB(20, 5, 20, 20),
                 width: double.infinity,
                 color: Color.fromARGB(255, 242, 239, 193),
                 child: Column(
                   children: <Widget>[
-                    Text('مـا مـدى فـعـالـيـةالأخـصـائـي فـي تـقـدم طـفـلـك؟',
-                        style: TextStyle(fontFamily: 'myfont', fontSize: 20),
-                        textAlign: TextAlign.end),
+                    Text(
+                      'مـا مـدى فـعـالـيـةالأخـصـائـي فـي تـقـدم طـفـلـك؟',
+                      style: TextStyle(fontFamily: 'myfont', fontSize: 20),
+                      textAlign: TextAlign.end,
+                      maxLines: 2, // Set the maximum number of lines
+                      overflow: TextOverflow.ellipsis,
+                    ),
                     RatingBar.builder(
                       initialRating: _rating2,
                       minRating: 1,
@@ -165,16 +184,20 @@ class _spEvaluationState extends State<spEvaluation> {
                   ],
                 ),
               ),
-          
               SizedBox(height: 20),
               Container(
+                padding: EdgeInsets.fromLTRB(20, 5, 20, 20),
                 width: double.infinity,
-                color:  Color(0xfffff9e6),
+                color: Color(0xfffff9e6),
                 child: Column(
                   children: <Widget>[
-                    Text('مـا مـدى جـودة تـنـظـيـم الأخـصـائـي الـجـلـسـات ؟',
-                        style: TextStyle(fontFamily: 'myfont', fontSize: 20),
-                        textAlign: TextAlign.end),
+                    Text(
+                      'مـا مـدى جـودة تـنـظـيـم الأخـصـائـي الـجـلـسـات ؟',
+                      style: TextStyle(fontFamily: 'myfont', fontSize: 20),
+                      textAlign: TextAlign.end,
+                      maxLines: 2, // Set the maximum number of lines
+                      overflow: TextOverflow.ellipsis,
+                    ),
                     RatingBar.builder(
                       initialRating: _rating4,
                       minRating: 1,
@@ -198,13 +221,18 @@ class _spEvaluationState extends State<spEvaluation> {
               ),
               SizedBox(height: 20),
               Container(
+                padding: EdgeInsets.fromLTRB(20, 5, 20, 20),
                 width: double.infinity,
                 color: Color(0xffebffe5),
                 child: Column(
                   children: <Widget>[
-                    Text('هــل تـوصـي بـهـذا الـمـتـخـصـص ؟',
-                        style: TextStyle(fontFamily: 'myfont', fontSize: 20),
-                        textAlign: TextAlign.end),
+                    Text(
+                      'هــل تـوصـي بـهـذا الـمـتـخـصـص ؟',
+                      style: TextStyle(fontFamily: 'myfont', fontSize: 20),
+                      textAlign: TextAlign.end,
+                      maxLines: 2, // Set the maximum number of lines
+                      overflow: TextOverflow.ellipsis,
+                    ),
                     RatingBar.builder(
                       initialRating: _rating5,
                       minRating: 1,
@@ -226,7 +254,13 @@ class _spEvaluationState extends State<spEvaluation> {
                   ],
                 ),
               ),
-              SizedBox(height: 5),
+              SizedBox(height: 20),
+              RoundedButton(
+                color: primaryColor,
+                text: "تـخـزيـن ",
+                textColor: Colors.white,
+                press: () {},
+              ),
             ],
           )),
     );

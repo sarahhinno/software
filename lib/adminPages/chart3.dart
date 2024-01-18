@@ -111,7 +111,7 @@ class _chartThreeState extends State<chartThree> {
               ),
               SizedBox(height: 40),
               Container(
-                width: 400,
+                width: 320,
                 height: 500,
                 child: BarChart(BarChartData(
                   borderData: FlBorderData(
@@ -151,6 +151,7 @@ class _chartThreeState extends State<chartThree> {
                           toY: double.parse(
                               dynamicEvaluation[index]['evaluation'] ?? '0'),
                           width: 20,
+                          borderRadius: BorderRadius.all(Radius.zero),
                           color: const Color.fromARGB(255, 241, 195, 54),
                         ),
                       ],
