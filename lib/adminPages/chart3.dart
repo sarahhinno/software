@@ -9,10 +9,13 @@ class chartThree extends StatefulWidget {
 }
 
 class _chartThreeState extends State<chartThree> {
-  String selectedValue = 'سـنـة دخـول الأخـصائـيـن';
+  String selectedValue = 'مـدى تـواصـل الأخـصـائـي مـع الأهـل والـطـفـل';
   List<String> options = [
-    'سـنـة دخـول الأخـصائـيـن',
-    'تـخـصـص الأخـصـائـي',
+    'مـدى تـواصـل الأخـصـائـي مـع الأهـل والـطـفـل',
+    'مـدى فـهـم الأخـصـائـي احـتـياجـات الـطـفـل',
+    'مـدى فـعـالـيـة الأخـصـائـي فـي تـقـدم الـطـفـل',
+    'مـدى جـودة الأخـصـائـي فـي تـنـظـيـم الـجـلـسـات',
+    'مـدى الـتوصـيـة بـهـذا الأخـصـائـي'
   ];
   List<Map<String, String>> dynamicEvaluation = [
     {
@@ -57,11 +60,11 @@ class _chartThreeState extends State<chartThree> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              SizedBox(height: 5),
+        //      SizedBox(height: 5),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  SizedBox(width: 10),
+            //      SizedBox(width: 10),
                   Expanded(
                     child: Center(
                       child: DropdownButton<String>(
@@ -79,7 +82,7 @@ class _chartThreeState extends State<chartThree> {
                         },
                         style: TextStyle(
                           color: primaryColor,
-                          fontSize: 15.0,
+                          fontSize: 13.0,
                           fontWeight: FontWeight.bold,
                         ),
                         dropdownColor: Colors.grey[200],
@@ -87,7 +90,7 @@ class _chartThreeState extends State<chartThree> {
                       ),
                     ),
                   ),
-                  SizedBox(width: 10),
+                 // SizedBox(width: 10),
                   Text(
                     ' عـرض حـسـب',
                     style: TextStyle(
@@ -96,7 +99,7 @@ class _chartThreeState extends State<chartThree> {
                       color: primaryColor,
                     ),
                   ),
-                  SizedBox(width: 30),
+                  SizedBox(width: 15),
                 ],
               ),
               SizedBox(height: 20),

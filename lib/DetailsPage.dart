@@ -1,43 +1,68 @@
-// import 'package:flutter/material.dart';
-// import 'package:software/DetailsPage.dart';
-// import 'package:software/theme.dart';
-// import 'package:http/http.dart' as http;
-// import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
 
+void main() {
+  runApp(MyApp());
+}
 
-// class charts extends StatefulWidget {
-//   @override
-//   _chartsState createState() => _chartsState();
-// }
-//    class ChartData {
-//       ChartData(this.x, this.y);
-//         final String x;
-//         final double y;
-//     }
-// class _chartsState extends State<charts> {
-//  @override
-//     Widget build(BuildContext context) {
-//         final List<ChartData> chartData = [
-//             ChartData('David', 25),
-//             ChartData('Steve', 38),
-//             ChartData('Jack', 34),
-//             ChartData('Others', 52)
-//         ];
-//         return Scaffold(
-//             body: Center(
-//                 child: Container(
-//                     child: SfCircularChart(series: <CircularSeries>[
-//                         // Render pie chart
-//                         PieSeries<ChartData, String>(
-//                             dataSource: chartData,
-//                             xValueMapper: (ChartData data, _) => data.x,
-//                             yValueMapper: (ChartData data, _) => data.y
-//                         )
-//                     ])
-//                 )
-//             )
-//         );
-//     }
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        body: MyChart(),
+      ),
+    );
+  }
+}
 
- 
-// }
+class MyChart extends StatelessWidget {
+  final List<List<int>> evaluationList = [
+    [1, 2, 3, 4, 5, 2],
+    [4, 5, 6, 2, 8, 1],
+    [7, 8, 9, 4, 2, 7],
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return LineChart(
+      LineChartData(
+        titlesData: FlTitlesData(
+          rightTitles: AxisTitles(sideTitles: SideTitles()),
+          topTitles: AxisTitles(sideTitles: SideTitles()),
+        ),
+        borderData: FlBorderData(show: false),
+        lineBarsData: generateLineBarsData(),
+      ),
+    );
+  }
+
+  List<LineChartBarData> generateLineBarsData() {
+    List<LineChartBarData> lineBarsData = [];
+
+    List<Color> lineColors = [
+      Colors.red,
+      Colors.green,
+      Colors.blue,
+    ];
+
+    for (int i = 0; i < evaluationList.length; i++) {
+      List<FlSpot> spots = [];
+
+      for (int j = 0; j < evaluationList[i].length; j++) {
+        spots.add(FlSpot(j.toDouble(), evaluationList[i][j].toDouble()));
+      }
+
+      LineChartBarData lineChartBarData = LineChartBarData(
+        spots: spots,
+        isCurved: true,
+        barWidth: 3,
+        color: lineColors[i],
+      );
+
+      lineBarsData.add(lineChartBarData);
+    }
+
+    return lineBarsData;
+  }
+}
