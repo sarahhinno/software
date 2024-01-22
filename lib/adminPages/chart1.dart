@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:software/theme.dart';
+import 'package:intl/intl.dart';
 
 class chartOne extends StatefulWidget {
   @override
@@ -44,7 +45,6 @@ class _chartOneState extends State<chartOne> {
     [7, 8, 9, 4, 2, 7],
     [4, 3, 8, 6, 2, 1],
     [7, 4, 9, 5, 7, 2],
-    
   ];
   List<Color> lineColors = [
     Colors.red,
@@ -200,12 +200,13 @@ class _chartOneState extends State<chartOne> {
                         rightTitles: AxisTitles(sideTitles: SideTitles()),
                         topTitles: AxisTitles(sideTitles: SideTitles()),
                         leftTitles: AxisTitles(sideTitles: SideTitles()),
-
+                        
                         // bottomTitles: AxisTitles(sideTitles(min:1,max:12))
                       ),
                       borderData: FlBorderData(show: false),
                       lineBarsData: generateLineBarsData(),
                     ),
+                    
                   )),
             ),
             Visibility(

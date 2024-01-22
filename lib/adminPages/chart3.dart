@@ -60,11 +60,11 @@ class _chartThreeState extends State<chartThree> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-        //      SizedBox(height: 5),
+              //      SizedBox(height: 5),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-            //      SizedBox(width: 10),
+                  //      SizedBox(width: 10),
                   Expanded(
                     child: Center(
                       child: DropdownButton<String>(
@@ -90,7 +90,7 @@ class _chartThreeState extends State<chartThree> {
                       ),
                     ),
                   ),
-                 // SizedBox(width: 10),
+                  // SizedBox(width: 10),
                   Text(
                     ' عـرض حـسـب',
                     style: TextStyle(
@@ -127,22 +127,6 @@ class _chartThreeState extends State<chartThree> {
                   titlesData: FlTitlesData(
                     rightTitles: AxisTitles(sideTitles: SideTitles()),
                     topTitles: AxisTitles(sideTitles: SideTitles()),
-                    // bottomTitles: AxisTitles(
-                    //     sideTitles: SideTitles(showTitles:t
-
-                    //   titlesData: List.generate(
-                    //     dynamicEvaluation.length,
-                    //     (index) => FlTitlesData(
-                    //       show: true,
-                    //       reservedSize: 22,
-                    //       margin: 10,
-                    //       getTitles: (double value) {
-                    //         // Use the 'name' from your data as the x-axis label
-                    //         return dynamicEvaluation[index]['name'] ?? '';
-                    //       },
-                    //     ),
-                    //   ),
-                    // )),
                   ),
                   groupsSpace: 5,
                   barGroups: List.generate(

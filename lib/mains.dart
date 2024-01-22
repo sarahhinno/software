@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:software/DetailsPage.dart';
 import 'package:software/adminPages/chart1.dart';
-import 'package:software/adminPages/chart2.dart';
 import 'package:software/adminPages/chart3.dart';
+import 'package:software/adminPages/report.dart';
 import 'package:software/adminPages/showAllChildren.dart';
 import 'package:software/adminPages/showAllEmployee.dart';
 import 'package:software/adminPages/view.dart';
@@ -73,7 +73,7 @@ class MyHomePage extends StatelessWidget {
                 },
                 child: Text('objectives'),
               ),
-                 ElevatedButton(
+              ElevatedButton(
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
                     return view();
@@ -81,7 +81,7 @@ class MyHomePage extends StatelessWidget {
                 },
                 child: Text('view'),
               ),
-                 ElevatedButton(
+              ElevatedButton(
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
                     return viewChildren();
@@ -89,7 +89,7 @@ class MyHomePage extends StatelessWidget {
                 },
                 child: Text('showChildren'),
               ),
-                 ElevatedButton(
+              ElevatedButton(
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
                     return viewSpecialest();
@@ -97,38 +97,39 @@ class MyHomePage extends StatelessWidget {
                 },
                 child: Text('showEmp'),
               ),
-                ElevatedButton(
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return chartOne();
-              }));
-            },
-            child: Text('chartOne'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return chartTwo();
-              }));
-            },
-            child: Text('chartTwo'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return chartThree();
-              }));
-            },
-            child: Text('chartThree'),
-          ),
-            ElevatedButton(
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return spEvaluation();
-              }));
-            },
-            child: Text('spEvaluation'),
-          ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return chartOne();
+                  }));
+                },
+                child: Text('chartOne'),
+              ),
+
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return chartThree();
+                  }));
+                },
+                child: Text('chartThree'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return spEvaluation();
+                  }));
+                },
+                child: Text('spEvaluation'),
+              ),
+               ElevatedButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return report();
+                  }));
+                },
+                child: Text('report'),
+              ),
             ],
           )),
     );
