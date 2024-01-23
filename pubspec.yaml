@@ -50,8 +50,12 @@ dependencies:
   flutter_rating_bar: ^4.0.0
   pdf: ^3.10.7
   google_fonts: ^6.1.0
-  downloads_path_provider: ^0.1.0
+  android_path_provider: ^0.3.0
+  document_file_save_plus: ^1.0.4
+  open_file: ^3.0.2
+  pdf_arabic: ^1.0.0
 
+  file: ^6.1.2
  
 
 

@@ -6,6 +6,12 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:path_provider/path_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:document_file_save_plus/document_file_save_plus.dart';
+import 'package:android_path_provider/android_path_provider.dart';
+import 'package:document_file_save_plus/document_file_save_plus.dart';
+import 'package:pdf/pdf.dart' as pdfLib;
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:open_file/open_file.dart';
 
 class report extends StatefulWidget {
   @override
@@ -47,23 +53,401 @@ class _reportState extends State<report> {
     '---------------------------------------------------------------------------------------------------------',
     '  **********************************************************************************************************',
   ];
-  Future<void> savePdf() async {
+  Future<void> saveFile() async {
     final pdf = pw.Document();
+  //  var data = await rootBundle.load("fonts/IRANSansWeb(FaNum)_Bold.ttf");
+  // final fontt = pw.Font.ttf(data);
+    final ByteData fontDatabold =
+        await rootBundle.load('fonts/Amiri-BoldItalic.ttf');
+    final pw.Font myfontbold = pw.Font.ttf(fontDatabold);
+    final ByteData fontData =
+        await rootBundle.load('fonts/Amiri-Italic.ttf');
+    final pw.Font myfont = pw.Font.ttf(fontData);
     pdf.addPage(
+      
       pw.Page(
-        build: (pw.Context context) => pw.Center(
-          child: pw.Text('Hello World!'),
-        ),
+         
+       
+      
+        build: (pw.Context context) {
+          return pw.Container(
+            child: pw.Column(
+              children: [
+                pw.SizedBox(height: 20),
+                pw.Row(
+                  //     crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    pw.Spacer(),
+                    pw.Text(
+                      date,
+                      style: pw.TextStyle(
+                        font: myfontbold,
+                        fontSize: 20,
+                        fontWeight: pw.FontWeight.bold,
+                      ),
+                    ),
+                    pw.SizedBox(width: 20),
+                    pw.Text(
+                      ' الـتـاريـخ',
+                      style: pw.TextStyle(
+                        font: myfontbold,
+                        fontSize: 20,
+                        fontWeight: pw.FontWeight.bold,
+                        //  TextDirection:  pw.TextDirection.rtl,
+                      ),
+                           textDirection:pw.TextDirection.rtl,
+                             textAlign: pw.TextAlign.right,
+
+
+                    ),
+                    pw.SizedBox(width: 20),
+                  ],
+                ),
+                pw.Row(
+                  //  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    pw.Spacer(),
+                    pw.Text(
+                      'جـمـعـيـة سـنـد لـذوي الاحـتـيـاجـات الـخـاصـة',
+                      style: pw.TextStyle(
+                        font: myfontbold,
+
+                        fontSize: 20,
+                        //    fontWeight:pw.FontWeight.w400 ,
+                      ),
+                       textDirection:pw.TextDirection.rtl,
+                             textAlign: pw.TextAlign.right,
+                    ),
+                    pw.SizedBox(width: 20),
+                    pw.Text(
+                      '    مــن ',
+                      style: pw.TextStyle(
+                        font: myfontbold,
+                        fontSize: 20,
+                        // fontWeight: FontWeight.bold,
+                      ),
+                       textDirection:pw.TextDirection.rtl,
+                             textAlign: pw.TextAlign.right,
+                    ),
+                    pw.SizedBox(width: 20),
+                  ],
+                ),
+                pw.Row(
+                  //   crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    pw.Spacer(),
+                    pw.Text(
+                      name,
+                      style: pw.TextStyle(
+                        font: myfontbold,
+                        fontSize: 20,
+                        // fontWeight: FontWeight.w200,
+                      ),
+                       textDirection:pw.TextDirection.rtl,
+                             textAlign: pw.TextAlign.right,
+                    ),
+                    pw.SizedBox(width: 20),
+                    pw.Text(
+                      '  الاســـم',
+                      style: pw.TextStyle(
+                        font: myfontbold,
+                        fontSize: 20,
+                        //  fontWeight: FontWeight.bold,
+                      ),
+                       textDirection:pw.TextDirection.rtl,
+                             textAlign: pw.TextAlign.right,
+                    ),
+                    pw.SizedBox(width: 20),
+                  ],
+                ),
+                pw.Row(
+                  //   crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    pw.Spacer(),
+                    pw.Text(
+                      age,
+                      style: pw.TextStyle(
+                        font: myfontbold,
+                        fontSize: 20,
+                        // fontWeight: FontWeight.w200,
+                      ),
+                    ),
+                    pw.SizedBox(width: 20),
+                    pw.Text(
+                      '   الـعـمــر',
+                      style: pw.TextStyle(
+                        font: myfontbold,
+                        fontSize: 20,
+                        //  fontWeight: FontWeight.bold,
+                      ),
+                       textDirection:pw.TextDirection.rtl,
+                             textAlign: pw.TextAlign.right,
+                    ),
+                    pw.SizedBox(width: 20),
+                  ],
+                ),
+                pw.SizedBox(height: 20),
+                pw.Center(
+                    child: pw.Text(
+                  'الـمـوضـوع تـقـريـر عـن حـالـة الـطـفـل',
+                  style: pw.TextStyle(
+                    font: myfontbold,
+                    fontSize: 20,
+                    //  fontWeight: FontWeight.bold,
+                  ),
+                   textDirection:pw.TextDirection.rtl,
+                             textAlign: pw.TextAlign.right,
+                )),
+                pw.Text(
+                  'تـحـيـة وبـعـد ',
+                  style: pw.TextStyle(
+                    font: myfontbold,
+                    fontSize: 20,
+                    //   fontWeight: FontWeight.bold,
+                  ),
+                   textDirection:pw.TextDirection.rtl,
+                             textAlign: pw.TextAlign.right,
+                  //  textAlign: TextAlign.end,
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
+    final directory = await getExternalStorageDirectory();
+    final file = File("${directory?.path}/$name.pdf");
 
-    final directory = await getApplicationDocumentsDirectory();
-    final filePath = '${directory.path}/example.pdf';
-    final file = File(filePath);
+    if (directory == null) {
+      // Handle the case where downloadsPath returns null
+      print('Error: Downloads directory is null.');
+      return;
+    }
 
-    Uint8List pdfBytes = await pdf.save();
-    await file.writeAsBytes(pdfBytes);
+    try {
+    final pdfBytes = await pdf.save();
+    await file.writeAsBytes(pdfBytes.toList());
+
+    print('PDF saved successfully at: ${file.path}');
+
+    // Check if the file exists after saving
+    if (await file.exists()) {
+      print('File exists at: ${file.path}');
+
+      // Open the saved PDF file
+      await OpenFile.open(file.path);
+    } else {
+      print('File does not exist.');
+    }
+  } catch (e) {
+    print('Error saving or opening PDF: $e');
   }
+  }
+  // Container(
+  //   padding: EdgeInsets.all(20),
+  //   child: Column(
+  //     children: <Widget>[
+  //       Text(
+  //         ' نـعـلـمـكـم بأن الـطـفـل $name الـبـالـغ مـن العـمـر $age   سـنـوات',
+  //         style: TextStyle(
+  //           fontFamily: 'myfont',
+  //           fontSize: 15,
+  //           fontWeight: FontWeight.w100,
+  //         ),
+  //         textAlign: TextAlign.end,
+  //       ),
+  //       Text(
+  //         '، قد حضر إلـى الـجـمـعـيـة لإجـراء تـقـيـيـم لـحـالـتـه وبـنـاء عـلـى ذلـك تـم ادراجـه فـي الـجـمـعـيـة لـلـعـمـل مـعـه عـلـى مـراحـل تـأهـيـلـيـة وتـربـويـة ضـمـن خـطـة الـعـمـل مـن قـبـل فـريـق مـتـخـصـص ',
+  //         style: TextStyle(
+  //           fontFamily: 'myfont',
+  //           fontSize: 15,
+  //           fontWeight: FontWeight.w100,
+  //         ),
+  //         textAlign: TextAlign.end,
+  //       ),
+  //       SizedBox(height: 10),
+  //       Text(
+  //         'وبـعـد مـتـابـعـة حـالـة الـطـفـل والـعـمـل مـعـه ضـمـن جـلـسـات فـرديـة مـتـخـصـصـة تـم الـوصـول مـعـه إلـى مـراحـل تـأهـيـلـيـة جـيـدة فـي الـنـواحـي الـتالـيـة ',
+  //         style: TextStyle(
+  //           fontFamily: 'myfont',
+  //           fontSize: 15,
+  //           fontWeight: FontWeight.w100,
+  //         ),
+  //         textAlign: TextAlign.end,
+  //       ),
+  //     ],
+  //   ),
+  // ),
+  // Container(
+  //   padding: EdgeInsets.all(10),
+  //   width: double.infinity,
+  //   child: Column(
+  //     crossAxisAlignment: CrossAxisAlignment.end,
+  //     children: <Widget>[
+  //       Card(
+  //         child: Column(
+  //           crossAxisAlignment: CrossAxisAlignment.end,
+  //           children: <Widget>[
+  //             Text(
+  //               'الـعـلاج الـوظـيـفـي',
+  //               style: TextStyle(
+  //                 fontFamily: 'myfont',
+  //                 fontSize: 20,
+  //                 fontWeight: FontWeight.bold,
+  //               ),
+  //               textAlign: TextAlign.end,
+  //             ),
+  //             for (int j = 0; j < options1.length; j++)
+  //               Column(
+  //                 crossAxisAlignment: CrossAxisAlignment.end,
+  //                 children: <Widget>[
+  //                   Text(
+  //                     options1[j],
+  //                     style: TextStyle(
+  //                         fontFamily: 'myfont',
+  //                         fontSize: 15,
+  //                         fontWeight: FontWeight.bold,
+  //                         color: Colors.red),
+  //                     textAlign: TextAlign.end,
+  //                   ),
+  //                   for (int k = 0; k < values.length; k++)
+  //                     Text(values[k]),
+  //                 ],
+  //               )
+  //           ],
+  //         ),
+  //       )
+  //     ],
+  //   ),
+  // ),
+  // Container(
+  //   padding: EdgeInsets.all(10),
+  //   width: double.infinity,
+  //   child: Column(
+  //     crossAxisAlignment: CrossAxisAlignment.end,
+  //     children: <Widget>[
+  //       Card(
+  //         child: Column(
+  //           crossAxisAlignment: CrossAxisAlignment.end,
+  //           children: <Widget>[
+  //             Text(
+  //               'عـلاج الـنـطـق والـلـغـة ',
+  //               style: TextStyle(
+  //                 fontFamily: 'myfont',
+  //                 fontSize: 20,
+  //                 fontWeight: FontWeight.bold,
+  //               ),
+  //               textAlign: TextAlign.end,
+  //             ),
+  //             for (int j = 0; j < options2.length; j++)
+  //               Column(
+  //                 crossAxisAlignment: CrossAxisAlignment.end,
+  //                 children: <Widget>[
+  //                   Text(
+  //                     options1[j],
+  //                     style: TextStyle(
+  //                         fontFamily: 'myfont',
+  //                         fontSize: 15,
+  //                         fontWeight: FontWeight.bold,
+  //                         color: Colors.red),
+  //                     textAlign: TextAlign.end,
+  //                   ),
+  //                   for (int k = 0; k < values.length; k++)
+  //                     Text(values[k]),
+  //                 ],
+  //               )
+  //           ],
+  //         ),
+  //       )
+  //     ],
+  //   ),
+  // ),
+  // Container(
+  //   padding: EdgeInsets.all(10),
+  //   width: double.infinity,
+  //   child: Column(
+  //     crossAxisAlignment: CrossAxisAlignment.end,
+  //     children: <Widget>[
+  //       Card(
+  //         child: Column(
+  //           crossAxisAlignment: CrossAxisAlignment.end,
+  //           children: <Widget>[
+  //             Text(
+  //               'الـعـلاج الـسـلـوكـي',
+  //               style: TextStyle(
+  //                 fontFamily: 'myfont',
+  //                 fontSize: 20,
+  //                 fontWeight: FontWeight.bold,
+  //               ),
+  //               textAlign: TextAlign.end,
+  //             ),
+  //             for (int j = 0; j < options3.length; j++)
+  //               Column(
+  //                 crossAxisAlignment: CrossAxisAlignment.end,
+  //                 children: <Widget>[
+  //                   Text(
+  //                     options1[j],
+  //                     style: TextStyle(
+  //                         fontFamily: 'myfont',
+  //                         fontSize: 15,
+  //                         fontWeight: FontWeight.bold,
+  //                         color: Colors.red),
+  //                     textAlign: TextAlign.end,
+  //                   ),
+  //                   for (int k = 0; k < values.length; k++)
+  //                     Text(values[k]),
+  //                 ],
+  //               )
+  //           ],
+  //         ),
+  //       )
+  //     ],
+  //   ),
+  // ),
+  // Container(
+  //   padding: EdgeInsets.all(10),
+  //   width: double.infinity,
+  //   child: Column(
+  //     crossAxisAlignment: CrossAxisAlignment.end,
+  //     children: <Widget>[
+  //       Text(
+  //         'الـتـوصـيـات',
+  //         style: TextStyle(
+  //           fontFamily: 'myfont',
+  //           fontSize: 20,
+  //           fontWeight: FontWeight.bold,
+  //         ),
+  //         textAlign: TextAlign.end,
+  //       ),
+  //       Text(
+  //           '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'),
+  //     ],
+  //   ),
+  // ),
+  // Container(
+  //   child: Column(
+  //     children: <Widget>[
+  //       Text(
+  //         'نـابـلـس - رفـيـديـا- عـمـارة أبـو الـروح كـلـبـونـة',
+  //         style: TextStyle(
+  //           fontFamily: 'myfont',
+  //           fontSize: 15,
+  //           // fontWeight: FontWeight.bold,
+  //         ),
+  //         textAlign: TextAlign.end,
+  //       ),
+  //       Text(
+  //         ' الـهـاتـف : 092342001/ جـوال :0595883338',
+  //         style: TextStyle(
+  //           fontFamily: 'myfont',
+  //           fontSize: 15,
+  //           // fontWeight: FontWeight.bold,
+  //         ),
+  //         textAlign: TextAlign.end,
+  //       ),
+  //     ],
+  //   ),
+  // ),
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +469,7 @@ class _reportState extends State<report> {
                 style: ElevatedButton.styleFrom(
                   primary: primaryColor, // Set the background color here
                 ),
-                onPressed: savePdf,
+                onPressed: saveFile,
                 child: Text(
                   'حـفـظ الـتـقـريـر ',
                   style: TextStyle(
@@ -393,6 +777,7 @@ class _reportState extends State<report> {
                         fontWeight: FontWeight.bold,
                       ),
                       textAlign: TextAlign.end,
+                      //textDirection:TextDirection.rtl ,
                     ),
                     Text(
                         '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'),
