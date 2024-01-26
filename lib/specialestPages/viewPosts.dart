@@ -155,8 +155,13 @@ class _postsState extends State<posts> {
                         ),
                       ),
                       // SizedBox(height: 5),
-                      Image.asset(
-                        dynamicposts[i]['image'] ?? '',
+                      Center(
+                      
+                          child:
+                           Image.asset(
+                            dynamicposts[i]['image'] ?? '',
+                          ),
+                        
                       ),
                       Row(
                         //  crossAxisAlignment: CrossAxisAlignment.end,
@@ -167,7 +172,7 @@ class _postsState extends State<posts> {
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold),
                               textAlign: TextAlign.end),
-                          SizedBox(width: 240),
+                          SizedBox(width: 100),
                           Text(dynamicposts[i]['time'] ?? '',
                               style: TextStyle(
                                   fontFamily: 'myfont',
@@ -183,7 +188,6 @@ class _postsState extends State<posts> {
                         indent: 0.0, // Set the starting padding
                         endIndent: 0.0, // Set the ending padding
                       ),
-                      //   SizedBox(height: 10),
                     ],
                   ),
                 ),

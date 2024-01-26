@@ -16,16 +16,16 @@ List<String> yourTableDataList = [
   // Add more rows as needed
 ];
 
-class DetailsPage extends StatefulWidget {
+class DetailsOfChild extends StatefulWidget {
   final String name;
 
-  DetailsPage({required this.name});
+  DetailsOfChild({required this.name});
 
   @override
-  _DetailsPageState createState() => _DetailsPageState();
+  _DetailsOfChildState createState() => _DetailsOfChildState();
 }
 
-class _DetailsPageState extends State<DetailsPage> {
+class _DetailsOfChildState extends State<DetailsOfChild> {
   Future<void> _openFile() async {
     String filePath = 'files/exp2.pdf';
     OpenResult result = await OpenFile.open(filePath);
@@ -63,20 +63,21 @@ class _DetailsPageState extends State<DetailsPage> {
         return AlertDialog(
           content: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            child: Padding(
+            child: Container(
+              height: 500,
               padding: EdgeInsets.all(16.0),
               child: Column(
                 children: <Widget>[
                   DataTable(
                     columns: [
-                      DataColumn(label: Text("نـوع الـجـلـسـة")),
-                      DataColumn(label: Text("رقـم الجـلـسـة")),
+                      DataColumn(label: Text("نـوع الـجـلـسـة",style: TextStyle(fontFamily: 'myfont'),)),
+                      DataColumn(label: Text("رقـم الجـلـسـة",style: TextStyle(fontFamily: 'myfont'),)),
                     ],
                     rows: List.generate(tableData.length, (index) {
                       return DataRow(
                         cells: [
-                          DataCell(Text(tableData[index]["date"]!)),
-                          DataCell(Text(tableData[index]["reason"]!)),
+                          DataCell(Text(tableData[index]["date"]!,style: TextStyle(fontFamily: 'myfont'),)),
+                          DataCell(Text(tableData[index]["reason"]!,style: TextStyle(fontFamily: 'myfont'))),
                         ],
                       );
                     }),
@@ -153,9 +154,9 @@ class _DetailsPageState extends State<DetailsPage> {
           style: TextStyle(fontFamily: 'myfont'),
         ),
       ),
-      body: Container(
-        width: size.width,
-        height: size.height,
+      body: Center(
+        // width: size.width,
+        // height: size.height,
         child: Stack(
           children: <Widget>[
             SingleChildScrollView(
@@ -163,12 +164,12 @@ class _DetailsPageState extends State<DetailsPage> {
                 children: <Widget>[
                   Stack(
                     children: <Widget>[
-                      Positioned(
-                        child: Image.asset(
-                          'images/tester.png',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                      // Positioned(
+                      //   child: Image.asset(
+                      //     'images/tester.png',
+                      //     fit: BoxFit.cover,
+                      //   ),
+                      // ),
                       Center(
                         child: Padding(
                           padding: EdgeInsets.all(20),
@@ -210,6 +211,7 @@ class _DetailsPageState extends State<DetailsPage> {
                               color: Colors.white,
                               child: Row(
                                 children: <Widget>[
+                                  Spacer(),
                                   Text('123456789',
                                       style: TextStyle(
                                           fontFamily: 'myfont',
@@ -225,7 +227,8 @@ class _DetailsPageState extends State<DetailsPage> {
                                   Icon(
                                     Icons.sd_card,
                                     color: Color.fromARGB(255, 111, 53, 165),
-                                  )
+                                  ),
+                                  Spacer(),
                                 ],
                               ),
                             ),
@@ -235,6 +238,7 @@ class _DetailsPageState extends State<DetailsPage> {
                               color: Colors.white,
                               child: Row(
                                 children: <Widget>[
+                                  Spacer(),
                                   Text('27/6/2015',
                                       style: TextStyle(
                                           fontFamily: 'myfont',
@@ -250,7 +254,8 @@ class _DetailsPageState extends State<DetailsPage> {
                                   Icon(
                                     Icons.date_range,
                                     color: Color.fromARGB(255, 111, 53, 165),
-                                  )
+                                  ),
+                                  Spacer(),
                                 ],
                               ),
                             ),
@@ -260,6 +265,7 @@ class _DetailsPageState extends State<DetailsPage> {
                               color: Colors.white,
                               child: Row(
                                 children: <Widget>[
+                                  Spacer(),
                                   Text('27/6/2015',
                                       style: TextStyle(
                                           fontFamily: 'myfont',
@@ -275,7 +281,8 @@ class _DetailsPageState extends State<DetailsPage> {
                                   Icon(
                                     Icons.date_range,
                                     color: Color.fromARGB(255, 111, 53, 165),
-                                  )
+                                  ),
+                                  Spacer(),
                                 ],
                               ),
                             ),
@@ -285,6 +292,7 @@ class _DetailsPageState extends State<DetailsPage> {
                               color: Colors.white,
                               child: Row(
                                 children: <Widget>[
+                                  Spacer(),
                                   Text('27/6/2015',
                                       style: TextStyle(
                                           fontFamily: 'myfont',
@@ -300,7 +308,8 @@ class _DetailsPageState extends State<DetailsPage> {
                                   Icon(
                                     Icons.date_range,
                                     color: Color.fromARGB(255, 111, 53, 165),
-                                  )
+                                  ),
+                                  Spacer(),
                                 ],
                               ),
                             ),
@@ -310,6 +319,7 @@ class _DetailsPageState extends State<DetailsPage> {
                               color: Colors.white,
                               child: Row(
                                 children: <Widget>[
+                                  Spacer(),
                                   Text('0598598388',
                                       style: TextStyle(
                                           fontFamily: 'myfont',
@@ -325,7 +335,8 @@ class _DetailsPageState extends State<DetailsPage> {
                                   Icon(
                                     Icons.phone,
                                     color: Color.fromARGB(255, 111, 53, 165),
-                                  )
+                                  ),
+                                  Spacer(),
                                 ],
                               ),
                             ),
@@ -335,6 +346,7 @@ class _DetailsPageState extends State<DetailsPage> {
                               color: Colors.white,
                               child: Row(
                                 children: <Widget>[
+                                  Spacer(),
                                   Text('0568507339',
                                       style: TextStyle(
                                           fontFamily: 'myfont',
@@ -350,7 +362,8 @@ class _DetailsPageState extends State<DetailsPage> {
                                   Icon(
                                     Icons.phone,
                                     color: Color.fromARGB(255, 111, 53, 165),
-                                  )
+                                  ),
+                                  Spacer(),
                                 ],
                               ),
                             ),
@@ -360,6 +373,7 @@ class _DetailsPageState extends State<DetailsPage> {
                               color: Colors.white,
                               child: Row(
                                 children: <Widget>[
+                                  Spacer(),
                                   Text('نابلس/المساكن الشعبية',
                                       style: TextStyle(
                                           fontFamily: 'myfont',
@@ -375,7 +389,8 @@ class _DetailsPageState extends State<DetailsPage> {
                                   Icon(
                                     Icons.location_pin,
                                     color: Color.fromARGB(255, 111, 53, 165),
-                                  )
+                                  ),
+                                  Spacer(),
                                 ],
                               ),
                             ),
@@ -385,6 +400,7 @@ class _DetailsPageState extends State<DetailsPage> {
                               color: Colors.white,
                               child: Row(
                                 children: <Widget>[
+                                  Spacer(),
                                   Text('مـتـلازمـة داون',
                                       style: TextStyle(
                                           fontFamily: 'myfont',
@@ -400,7 +416,8 @@ class _DetailsPageState extends State<DetailsPage> {
                                   Icon(
                                     Icons.category,
                                     color: Color.fromARGB(255, 111, 53, 165),
-                                  )
+                                  ),
+                                  Spacer(),
                                 ],
                               ),
                             ),
@@ -410,6 +427,7 @@ class _DetailsPageState extends State<DetailsPage> {
                               color: Colors.white,
                               child: Row(
                                 children: <Widget>[
+                                  Spacer(),
                                   ElevatedButton(
                                     onPressed: () {
                                       openphoto(context, 'images/id.jpg');
@@ -446,7 +464,8 @@ class _DetailsPageState extends State<DetailsPage> {
                                   Icon(
                                     Icons.image,
                                     color: Color.fromARGB(255, 111, 53, 165),
-                                  )
+                                  ),
+                                  Spacer(),
                                 ],
                               ),
                             ),
@@ -456,6 +475,7 @@ class _DetailsPageState extends State<DetailsPage> {
                               color: Colors.white,
                               child: Row(
                                 children: <Widget>[
+                                  Spacer(),
                                   ElevatedButton(
                                     onPressed: () {
                                       // print('okkkkkk');
@@ -494,7 +514,8 @@ class _DetailsPageState extends State<DetailsPage> {
                                   Icon(
                                     Icons.category,
                                     color: Color.fromARGB(255, 111, 53, 165),
-                                  )
+                                  ),
+                                  Spacer(),
                                 ],
                               ),
                             ),
@@ -504,6 +525,7 @@ class _DetailsPageState extends State<DetailsPage> {
                               color: Colors.white,
                               child: Row(
                                 children: <Widget>[
+                                  Spacer(),
                                   ElevatedButton(
                                     onPressed: () {
                                       //    _openFile();
@@ -540,10 +562,12 @@ class _DetailsPageState extends State<DetailsPage> {
                                   Icon(
                                     Icons.attach_file,
                                     color: Color.fromARGB(255, 111, 53, 165),
-                                  )
+                                  ),
+                                  Spacer(),
                                 ],
                               ),
-                            ),
+                            ),                            SizedBox(height: 20),
+
                           ]),
                         ],
                       ),

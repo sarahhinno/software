@@ -1,125 +1,43 @@
-import 'package:flutter/material.dart';
-import 'package:software/parentPages/ChildrenPersInfo.dart';
-import 'package:software/adminPages/addNewChild.dart';
-import 'package:software/adminPages/DetailsPageOfEmployee.dart'; // Import the file where SpDetailsPage is defined
-import 'package:software/specialestPages/empPersonalInformation.dart'; // Import the file where SpDetailsPage is defined
-import 'package:software/specialestPages/empVications.dart'; // Import the file where SpDetailsPage is defined
-import 'package:software/specialestPages/objectives.dart';
-import 'package:software/specialestPages/objectivesSp.dart';
-import 'package:software/parentPages/weeklySessions.dart'; // Import the file where SpDetailsPage is defined
-import 'package:software/adminPages/adminPosts.dart'; // Import the file where SpDetailsPage is defined
-import 'package:software/parentPages/viewPosts.dart'; // Import the file where SpDetailsPage is defined
+import 'dart:io';
 
-void main() {
-  runApp(MyApp());
+import 'package:flutter/material.dart';
+import 'package:software/theme.dart';
+import 'package:software/welcome.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  //Platform.isAndroid?
+  await Firebase.initializeApp(
+    options: const FirebaseOptions(
+      apiKey: "AIzaSyA1XhBrh9-8S5fSuQr0Ku2r17pTjoGWGJ0",
+      appId: "1:349745230853:android:18b77afe31ff4b59c1986c",
+      messagingSenderId: "349745230853",
+      projectId: "sanadd-870c8",
+    ),
+  );//:
+  await Firebase.initializeApp();
+  runApp( MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  late String id;
 
+
+class MyApp extends StatelessWidget {
+ // const MyApp({super.key});
+  final auth=FirebaseAuth.instance;
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: MyHomePage(),
       debugShowCheckedModeBanner: false,
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Main Page'),
+      theme: ThemeData(
+        primaryColor: primaryColor,
+        scaffoldBackgroundColor: Colors.white
+        
       ),
-      body: Center(
-          child: Column(
-        children: <Widget>[
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return newChild();
-              }));
-            },
-            child: Text('add new child'),
-          ),
-          SizedBox(height: 10),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return spDetailsPage(
-                  name: '',
-                );
-              }));
-            },
-            child: Text('page of emp'),
-          ),
-          SizedBox(height: 10),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return profile();
-              }));
-            },
-            child: Text('profile'),
-          ),
-          SizedBox(height: 10),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return vications();
-              }));
-            },
-            child: Text('vications'),
-          ),
-          SizedBox(height: 10),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return childProfile();
-              }));
-            },
-            child: Text('childProfile'),
-          ),
-          SizedBox(height: 10),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return wSession();
-              }));
-            },
-            child: Text('Weekly Sessions'),
-          ),
-          SizedBox(height: 10),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return adminPosts();
-              }));
-            },
-            child: Text('admin Posts'),
-          ),
-             SizedBox(height: 10),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return posts();
-              }));
-            },
-            child: Text('view Posts'),
-          ),
-               SizedBox(height: 10),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return goals();
-              }));
-            },
-            child: Text('objectives'),
-          ),
-        ],
-      )),
+      home: welcome(),
     );
   }
 }

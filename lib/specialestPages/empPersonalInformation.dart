@@ -62,6 +62,7 @@ class profileState extends State<profile> {
               ),
               SizedBox(height: 10),
               Container(
+                width: 500,
                 child: Card(
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
@@ -345,9 +346,9 @@ class profileState extends State<profile> {
                   ),
                 ),
               ),
-              Container(
-                child: Image.asset('images/image1.png'),
-              )
+              // Container(
+              //   child: Image.asset('images/image1.png'),
+              // )
             ],
           ),
         ),

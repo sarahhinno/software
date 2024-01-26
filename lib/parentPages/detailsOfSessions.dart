@@ -78,13 +78,13 @@ class _detailsOfSessionState extends State<detailsOfSession> {
             children: <Widget>[
               Container(
                 color: primaryLightColor,
-                width: 400, // Set the desired width
-                height: 100, // Set the desired height
+                // width: 600, // Set the desired width
+                // height: 100, // Set the desired height
                 child: Card(
                   color: primaryLightColor,
                   child: Row(
                     children: <Widget>[
-                      SizedBox(width: 30),
+                          SizedBox(width: 500),
                       Expanded(
                         child: TextField(
                           enabled: false,
@@ -98,7 +98,7 @@ class _detailsOfSessionState extends State<detailsOfSession> {
                           ),
                         ),
                       ),
-                      SizedBox(width: 100),
+                      
                       Text(
                         'عـدد الـجـلـسـات فـي الأسـبـوع',
                         style: TextStyle(
@@ -106,7 +106,8 @@ class _detailsOfSessionState extends State<detailsOfSession> {
                             fontSize: 20,
                             fontWeight: FontWeight.w100),
                       ),
-                      SizedBox(width: 20),
+                     SizedBox(width: 500),
+                     
                     ],
                   ),
                 ),
@@ -119,7 +120,7 @@ class _detailsOfSessionState extends State<detailsOfSession> {
                 endIndent: 0.0, // Set the ending padding
               ),
               Container(
-                width: 500,
+                   width: size.width,
                 color: primaryLightColor,
                 child: Column(
                   children: <Widget>[
@@ -143,6 +144,7 @@ class _detailsOfSessionState extends State<detailsOfSession> {
                                   style: TextStyle(
                                       fontFamily: 'myfont', fontSize: 20),
                                   textAlign: TextAlign.center)),
+                                  
                           DataColumn(
                               label: Text('الـوقـت',
                                   style: TextStyle(
@@ -187,7 +189,6 @@ class _detailsOfSessionState extends State<detailsOfSession> {
                 endIndent: 0.0, // Set the ending padding
               ),
               Container(
-                width: 500,
                 color: primaryLightColor,
                 child: Column(
                   ///    crossAxisAlignment: CrossAxisAlignment.end,

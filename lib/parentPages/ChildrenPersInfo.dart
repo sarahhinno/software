@@ -68,6 +68,7 @@ class _childProfileState extends State<childProfile> {
               ),
               SizedBox(height: 10),
               Container(
+                width: 500,
                 child: Card(
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),

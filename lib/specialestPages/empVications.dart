@@ -234,13 +234,6 @@ class _vicationsState extends State<vications> {
                             fontWeight: FontWeight.w100),
                       ),
                     ]),
-                Divider(
-                  height: 1.0,
-                  thickness: 1.0,
-                  color: Color(0xff6f35a5),
-                  indent: 50.0, // Set the starting padding
-                  endIndent: 50.0, // Set the ending padding
-                ),
                 SizedBox(height: 5),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -261,13 +254,6 @@ class _vicationsState extends State<vications> {
                             fontWeight: FontWeight.w100),
                       ),
                     ]),
-                Divider(
-                  height: 1.0,
-                  thickness: 1.0,
-                  color: Color(0xff6f35a5),
-                  indent: 50.0,
-                  endIndent: 50.0,
-                ),
                 SizedBox(height: 5),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -288,27 +274,23 @@ class _vicationsState extends State<vications> {
                             fontWeight: FontWeight.w100),
                       ),
                     ]),
-                Divider(
-                  height: 1.0,
-                  thickness: 1.0,
-                  color: Color(0xff6f35a5),
-                  indent: 50.0, // Set the starting padding
-                  endIndent: 50.0, // Set the ending padding
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () => _showDialog(context),
-                  style: ElevatedButton.styleFrom(
-                    primary: Color(0xff6f35a5),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(29.0),
+                SizedBox(height: 30),
+                Container(
+                  width: 400,
+                  child: ElevatedButton(
+                    onPressed: () => _showDialog(context),
+                    style: ElevatedButton.styleFrom(
+                      primary: Color(0xff6f35a5),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(29.0),
+                      ),
                     ),
+                    child: Text('تـقـديـم طـلـب إجـازة ',
+                        style: TextStyle(
+                            fontFamily: 'myfont',
+                            fontSize: 20,
+                            fontWeight: FontWeight.w100)),
                   ),
-                  child: Text('تـقـديـم طـلـب إجـازة ',
-                      style: TextStyle(
-                          fontFamily: 'myfont',
-                          fontSize: 20,
-                          fontWeight: FontWeight.w100)),
                 ),
                 SizedBox(height: 30),
                 Text('تـفـاصـيـل الإجـازات',
@@ -316,41 +298,46 @@ class _vicationsState extends State<vications> {
                         fontFamily: 'myfont',
                         fontSize: 20,
                         fontWeight: FontWeight.bold)),
-                DataTable(
-                  decoration: BoxDecoration(
-                    color: Color(0xFFF1E6FF),
+                SizedBox(height: 10),
+                Container(
+                //  alignment: Alignment.center,
+                  width: 600,
+                  child: DataTable(
+                    decoration: BoxDecoration(
+                      color: Color(0xFFF1E6FF),
+                    ),
+                    border: TableBorder.all(
+                      color: Color(0xff6f35a5),
+                    ),
+                    columns: [
+                      DataColumn(
+                          label: Text('تاريخ الإجازة',
+                              style:
+                                  TextStyle(fontFamily: 'myfont', fontSize: 20),
+                              textAlign: TextAlign.center)),
+                      DataColumn(
+                          label: Text('سبب الإجازة',
+                              style:
+                                  TextStyle(fontFamily: 'myfont', fontSize: 20),
+                              textAlign: TextAlign.center)),
+                    ],
+                    rows: tableData
+                        .map(
+                          (data) => DataRow(
+                            cells: [
+                              DataCell(Text(data['date'] ?? '',
+                                  style: TextStyle(
+                                      fontFamily: 'myfont', fontSize: 20),
+                                  textAlign: TextAlign.center)),
+                              DataCell(Text(data['reason'] ?? '',
+                                  style: TextStyle(
+                                      fontFamily: 'myfont', fontSize: 20),
+                                  textAlign: TextAlign.center)),
+                            ],
+                          ),
+                        )
+                        .toList(),
                   ),
-                  border: TableBorder.all(
-                    color: Color(0xff6f35a5),
-                  ),
-                  columns: [
-                    DataColumn(
-                        label: Text('تاريخ الإجازة',
-                            style:
-                                TextStyle(fontFamily: 'myfont', fontSize: 20),
-                            textAlign: TextAlign.center)),
-                    DataColumn(
-                        label: Text('سبب الإجازة',
-                            style:
-                                TextStyle(fontFamily: 'myfont', fontSize: 20),
-                            textAlign: TextAlign.center)),
-                  ],
-                  rows: tableData
-                      .map(
-                        (data) => DataRow(
-                          cells: [
-                            DataCell(Text(data['date'] ?? '',
-                                style: TextStyle(
-                                    fontFamily: 'myfont', fontSize: 20),
-                                textAlign: TextAlign.center)),
-                            DataCell(Text(data['reason'] ?? '',
-                                style: TextStyle(
-                                    fontFamily: 'myfont', fontSize: 20),
-                                textAlign: TextAlign.center)),
-                          ],
-                        ),
-                      )
-                      .toList(),
                 ),
               ],
             ),

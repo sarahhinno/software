@@ -3,26 +3,26 @@ import 'package:software/DetailsPage.dart';
 import 'package:software/theme.dart';
 import 'package:http/http.dart' as http;
 
-void main() {
-  runApp(MyApp());
-}
+// void main() {
+//   runApp(MyApp());
+// }
 
-class MyApp extends StatelessWidget {
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       home: TestPage(),
+//       debugShowCheckedModeBanner: false,
+//     );
+//   }
+// }
+
+class adminChat extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: TestPage(),
-      debugShowCheckedModeBanner: false,
-    );
-  }
+  _adminChatState createState() => _adminChatState();
 }
 
-class TestPage extends StatefulWidget {
-  @override
-  _TestPageState createState() => _TestPageState();
-}
-
-class _TestPageState extends State<TestPage> {
+class _adminChatState extends State<adminChat> {
   List<Map<String, String>> Freinds = [
     {
       'date': 'أمس',
@@ -97,16 +97,16 @@ class _TestPageState extends State<TestPage> {
                   return GestureDetector(
                     onTap: () {
                       //    Navigate to a new page when card is tapped
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DetailsPage(
-                            name: Freinds[index]['name'] ?? '',
-                            message: Freinds[index]['message'] ?? '',
-                            image: Freinds[index]['image'] ?? '',
-                          ),
-                        ),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => DetailsPage(
+                      //       name: Freinds[index]['name'] ?? '',
+                      //       message: Freinds[index]['message'] ?? '',
+                      //       image: Freinds[index]['image'] ?? '',
+                      //     ),
+                      //   ),
+                      // );
                     },
                     child: Column(
                       children: <Widget>[
@@ -143,8 +143,8 @@ class _TestPageState extends State<TestPage> {
                               //  Spacer(),
                               Image.asset(
                                 Freinds[index]['image'] ?? '',
-                                width: 60,
-                                height: 60,
+                                width: 100,
+                                height: 100,
                               ),
                             ],
                           ),

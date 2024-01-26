@@ -27,74 +27,72 @@ class _goalsState extends State<goals> {
               fontWeight: FontWeight.bold),
         ),
       ),
-      body: Container(
-        width: size.width,
-        height: size.height,
-        child: Stack(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Positioned.fill(
-              child: Image.asset(
-                'images/backSessions.png',
-                fit: BoxFit.cover,
+            Container(
+              width: 500,
+              child: RoundedButton(
+                color: primaryLightColor,
+                text: "الأهـداف الـحـالـيـة",
+                textColor: primaryColor,
+                press: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => objectives(),
+                    ),
+                  );
+                },
               ),
             ),
-            Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  RoundedButton(
-                    color: primaryLightColor,
-                    text: "الأهـداف الـحـالـيـة",
-                    textColor: primaryColor,
-                    press: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => objectives(),
-                        ),
-                      );
-                    },
-                  ),
-                  RoundedButton(
-                    color: primaryLightColor,
-                    text: "الأهـداف الـمنـجـزة بـالـكـامـل",
-                    textColor: primaryColor,
-                    press: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => objectives(),
-                        ),
-                      );
-                    },
-                  ),
-                  RoundedButton(
-                    color: primaryLightColor,
-                    text: "تـقـيـيـم الأهـداف",
-                    textColor: primaryColor,
-                    press: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => evalobjec(),
-                        ),
-                      );
-                    },
-                  ),
-                  RoundedButton(
-                    color: primaryLightColor,
-                    text: "إضافـة أهـداف جـديـدة",
-                    textColor: primaryColor,
-                    press: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => newGoals(),
-                        ),
-                      );
-                    },
-                  ),
-                ],
+            Container(
+              width: 500,
+              child: RoundedButton(
+                color: primaryLightColor,
+                text: "الأهـداف الـمنـجـزة بـالـكـامـل",
+                textColor: primaryColor,
+                press: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => objectives(),
+                    ),
+                  );
+                },
+              ),
+            ),
+            Container(
+              width: 500,
+              child: RoundedButton(
+                color: primaryLightColor,
+                text: "تـقـيـيـم الأهـداف",
+                textColor: primaryColor,
+                press: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => evalobjec(),
+                    ),
+                  );
+                },
+              ),
+            ),
+            Container(
+              width: 500,
+              child: RoundedButton(
+                color: primaryLightColor,
+                text: "إضافـة أهـداف جـديـدة",
+                textColor: primaryColor,
+                press: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => newGoals(),
+                    ),
+                  );
+                },
               ),
             ),
           ],

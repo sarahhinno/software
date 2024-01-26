@@ -156,19 +156,21 @@ class _adminPostsState extends State<adminPosts> {
                         ),
                       ),
                       // SizedBox(height: 5),
-                      Image.asset(
+                      Center(child: Image.asset(
                         dynamicposts[i]['image'] ?? '',
-                      ),
+                      ) ,),
+                     
                       Row(
-                        //  crossAxisAlignment: CrossAxisAlignment.end,
+                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
+                           SizedBox(width: 10),
                           Text(dynamicposts[i]['date'] ?? '',
                               style: TextStyle(
                                   fontFamily: 'myfont',
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.end),
-                          SizedBox(width: 240),
+                              textAlign: TextAlign.start),
+                          SizedBox(width: 100),
                           Text(dynamicposts[i]['time'] ?? '',
                               style: TextStyle(
                                   fontFamily: 'myfont',

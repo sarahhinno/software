@@ -7,12 +7,10 @@ import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
+import 'package:http/http.dart' as http;
 import 'package:software/components/roundedTextFeild2.dart';
 import 'package:software/components/rounded_button.dart';
 import 'package:software/theme.dart';
-import 'package:http/http.dart' as http;
-
-
 
 class newChild extends StatefulWidget {
   @override
@@ -22,19 +20,23 @@ class newChild extends StatefulWidget {
 }
 
 class _newChildState extends State<newChild> {
-
   static const List<String> sessions = [
-    'ســلــوكــي',
-    'وظــيــفــي',
-    'تــربـيـة خـاصـة',
-    'عــلاج طــبـيـعي',
-    'الـلغـة و نــطــق',
+    'سلوكي',
+    'وظيفي',
+    'تربية خاصة',
+    'علاج طبيعي',
+    'اللغة و النطق ',
   ];
   String selectedSession = sessions.first;
-  
-  String birthDate="select Date";
-  String enteryDate="select Date";
-  String firstSessionDate="select Date";
+
+  String birthDate = "select Date";
+  String enteryDate = "select Date";
+  String firstSessionDate = "select Date";
+
+  bool checked = false;
+  bool date1 = false;
+  bool date2 = false;
+  bool date3 = false;
   ////////////////////////////////////////////////////////////////////////////////////////////////////
   DateTime selectedDate1 = DateTime.now();
   DateTime selectedDate2 = DateTime.now();
@@ -50,13 +52,13 @@ class _newChildState extends State<newChild> {
         return Theme(
           data: Theme.of(context).copyWith(
             primaryColor: primaryColor, // Change this color as needed
-            colorScheme: ColorScheme.light(primary: primaryColor), // Change this color as needed
+            colorScheme: ColorScheme.light(
+                primary: primaryColor), // Change this color as needed
             buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
           ),
           child: child!,
         );
       },
-    
     );
 
     if (picked != null) {
@@ -64,158 +66,197 @@ class _newChildState extends State<newChild> {
         switch (pickerNumber) {
           case 1:
             selectedDate1 = picked;
-            birthDate=DateFormat('yyyy/MM/dd').format(selectedDate1.toLocal());
+            date1 = true;
+            birthDate =
+                DateFormat('yyyy/MM/dd').format(selectedDate1.toLocal());
             break;
           case 2:
             selectedDate2 = picked;
-            enteryDate=DateFormat('yyyy/MM/dd').format(selectedDate2.toLocal());
+            date2 = true;
+            enteryDate =
+                DateFormat('yyyy/MM/dd').format(selectedDate2.toLocal());
             break;
           case 3:
             selectedDate3 = picked;
-            firstSessionDate=DateFormat('yyyy/MM/dd').format(selectedDate3.toLocal());
+            date3 = true;
+            firstSessionDate =
+                DateFormat('yyyy/MM/dd').format(selectedDate3.toLocal());
             break;
         }
       });
     }
   }
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-final TextEditingController fnameController = TextEditingController();
-final TextEditingController secnameController = TextEditingController();
-final TextEditingController thnameController = TextEditingController();
-final TextEditingController lnameController = TextEditingController();
-final TextEditingController idController = TextEditingController();
-final TextEditingController fatherPhoneController = TextEditingController();
-final TextEditingController motherPhoneController = TextEditingController();
-final TextEditingController addressController = TextEditingController();
-final TextEditingController diagnosisController = TextEditingController();
-final List<TextEditingController> sessionsController =
+  final TextEditingController fnameController = TextEditingController();
+  final TextEditingController secnameController = TextEditingController();
+  final TextEditingController thnameController = TextEditingController();
+  final TextEditingController lnameController = TextEditingController();
+  final TextEditingController idController = TextEditingController();
+  final TextEditingController fatherPhoneController = TextEditingController();
+  final TextEditingController motherPhoneController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
+  final TextEditingController diagnosisController = TextEditingController();
+  final List<TextEditingController> sessionsController =
       List.generate(5, (index) => TextEditingController());
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
-File? _image;
-
-  Future<void> _getImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      setState(() {
-        _image = File(pickedFile.path);
-        print(pickedFile.path);
-      });
-    }
-  }
-File? _file;
-
-  Future<void> _getFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
-
-    setState(() {
-      if (result != null) {
-        _file = File(result.files.single.path!);
-      }
-    });
-  }
-
   /////////////////////////////////////////////////////////////////////////////////////////////////
-  
-  Future<void> addNewchild()async{
-    
+
+  Future<void> addNewchild() async {
     final List<Map<String, dynamic>> sessionsMap = [];
 
-  for (int i = 0; i < 5; i++) {
-    if (int.parse(sessionsController[i].text) > 0) {
-      Map<String, dynamic> newSession = {
-        'sessionName': sessions[i],
-        'sessionNo': int.parse(sessionsController[i].text),
-      };
-      sessionsMap.add(newSession);
+    for (int i = 0; i < 5; i++) {
+      if (int.parse(sessionsController[i].text) > 0) {
+        Map<String, dynamic> newSession = {
+          'sessionName': sessions[i],
+          'sessionNo': int.parse(sessionsController[i].text),
+        };
+        sessionsMap.add(newSession);
+      }
     }
-  }
-        print(jsonEncode(sessionsMap));
+    print(jsonEncode(sessionsMap));
 
-    final response = await http.post(Uri.parse(ip+"/sanad/addChildInfo"),body: {
+    final response =
+        await http.post(Uri.parse(ip + "/sanad/addChildInfo"), body: {
       'fname': fnameController.text,
-          'secname':secnameController.text,
-          'thname':thnameController.text,
-          'lname':lnameController.text,
-          'id': idController.text,
-          'birthDate': birthDate,
-          'enteryDate': enteryDate,
-          'firstSessionDate': firstSessionDate,
-          'fatherPhone':fatherPhoneController.text,
-          'motherPhone': motherPhoneController.text,
-          'address': addressController.text,
-          'diagnosis': diagnosisController.text,
-          'sessions':jsonEncode(sessionsMap),
+      'secname': secnameController.text,
+      'thname': thnameController.text,
+      'lname': lnameController.text,
+      'id': idController.text,
+      'birthDate': birthDate,
+      'enteryDate': enteryDate,
+      'firstSessionDate': firstSessionDate,
+      'fatherPhone': fatherPhoneController.text,
+      'motherPhone': motherPhoneController.text,
+      'address': addressController.text,
+      'diagnosis': diagnosisController.text,
+      'sessions': jsonEncode(sessionsMap),
     });
 
-    if(response.statusCode==200){
+    if (response.statusCode == 200) {
       print("Done");
-    }else{
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text(
+                "نــجــاح",
+                style: TextStyle(
+                    fontFamily: 'myFont',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20),
+              ),
+              icon: Icon(
+                Icons.done,
+                color: Colors.green,
+              ),
+              content: Text(
+                "تــم إضــافــة أخــصــائـي جــديــد بــنــجــاح",
+                style: TextStyle(fontFamily: 'myFont', fontSize: 18),
+                textAlign: TextAlign.left,
+              ),
+            );
+          });
+    } else {
       print("error");
     }
   }
 
-  Future<void> _uploadImage() async {
-    if (_image == null) {
-      print('No image selected');
-      return;
-    }
-
-    final url = Uri.parse(ip+'/sanad/upload'); // Replace with your server's IP
-    var request = http.MultipartRequest('POST', url);
-    request.fields['childID'] = idController.text;
-    request.files.add(await http.MultipartFile.fromPath('image', _image!.path));
-
-    try {
-      var response = await request.send();
-      if (response.statusCode == 200) {
-        print('Image uploaded successfully');
-      }else if(response.statusCode==201){
-        print(response.stream);
-      }
-       else {
-        print('Failed to upload image. Status code: ${response.statusCode}');
-      
-      }
-    } catch (error) {
-      print('Error uploading image: $error');
-    }
-  }
-
-  Future<void> _uploadFile() async {
-    if (_file == null) {
-      // Handle case where no file is selected
-      return;
-    }
-
-    var request = http.MultipartRequest(
-      'POST',
-      Uri.parse(ip+'/sanad/uploadfile'),
-    );
-
-    // Add file to the request
-    request.fields['childID'] = idController.text;
-    request.files.add(
-  await http.MultipartFile.fromPath(
-    'file',
-    _file!.path,
-    contentType: MediaType('application', 'pdf'),
-  ),
-);
-
-
-    // Send the request
-    var response = await request.send();
-
-    // Check the server response
-    if (response.statusCode == 200) {
-      print('File uploaded successfully');
+  void check(BuildContext context) {
+    if (fnameController.text.trim().isEmpty ||
+        secnameController.text.trim().isEmpty ||
+        thnameController.text.trim().isEmpty ||
+        lnameController.text.trim().isEmpty ||
+        idController.text.trim().isEmpty ||
+        fatherPhoneController.text.trim().isEmpty ||
+        motherPhoneController.text.trim().isEmpty ||
+        addressController.text.trim().isEmpty ||
+        diagnosisController.text.trim().isEmpty ||
+        date1 == false ||
+        date2 == false ||
+        date3 == false) {
+      checked = false;
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text(
+                "تــحــذيــر",
+                style: TextStyle(
+                    fontFamily: 'myFont',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20),
+              ),
+              icon: Icon(
+                Icons.error,
+                color: Colors.red,
+              ),
+              content: Text(
+                "يــجــب تــعــبــئــة جــمــيــع الــحــقـــول",
+                style: TextStyle(fontFamily: 'myFont', fontSize: 18),
+                textAlign: TextAlign.left,
+              ),
+            );
+          });
+    } else if (idController.text.length != 9) {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text(
+                "تــحــذيــر",
+                style: TextStyle(
+                    fontFamily: 'myFont',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20),
+              ),
+              icon: Icon(
+                Icons.error,
+                color: Colors.red,
+              ),
+              content: Text(
+                "رقــم الــهويــة يــجــب ان يــكــون 9 أرقــام",
+                style: TextStyle(fontFamily: 'myFont', fontSize: 18),
+                textAlign: TextAlign.left,
+              ),
+            );
+          });
+    } else if (fatherPhoneController.text.length < 10 ||
+        motherPhoneController.text.length < 10) {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text(
+                "تــحــذيــر",
+                style: TextStyle(
+                    fontFamily: 'myFont',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20),
+              ),
+              icon: Icon(
+                Icons.error,
+                color: Colors.red,
+              ),
+              content: Text(
+                "رقــم الهــاتــف أقــل مـــن 10 خــانــات",
+                style: TextStyle(fontFamily: 'myFont', fontSize: 18),
+                textAlign: TextAlign.left,
+              ),
+            );
+          });
     } else {
-      print('File upload failed with status ${response.statusCode}');
+      checked = true;
+    }
+
+    for (int i = 0; i < 5; i++) {
+      if ((sessionsController[i].text.trim().isEmpty)) {
+        sessionsController[i].text = "0";
+      }
     }
   }
+
   //////////////////////////////////////////////////////////////////////////////////////////////////
 
   @override
@@ -223,6 +264,8 @@ File? _file;
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        centerTitle: true,
         backgroundColor: primaryColor,
         title: Text(
           "إضــافــة طــفـل جــديــد",
@@ -238,386 +281,442 @@ File? _file;
         height: size.height,
         child: SingleChildScrollView(
             child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Image.asset(
               "images/down.png",
-              width: size.width * 0.6,
-              height: size.width * 0.5,
+              width: size.width * 0.3,
+              height: size.width * 0.2,
             ),
-            Card(
-              color: primaryLightColor,
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 10,
-                  ),
-                  RoundedTextField2(
-                      width: size.width * 0.6,
-                      child: TextField(
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Spacer(),
+                Card(
+                  color: primaryLightColor,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 10,
+                      ),
+                      RoundedTextField2(
+                          width: size.width * 0.15,
+                          child: TextField(
+                            textAlign: TextAlign.right,
+                            controller: secnameController,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                            ),
+                          )),
+                      Text(
+                        "اســم الــأب",
                         textAlign: TextAlign.right,
-                        controller: fnameController,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                        ),
-                      )),
-                  Spacer(),
-                  Text(
-                    "اســم الــطـفـل",
-                    textAlign: TextAlign.right,
-                    style: TextStyle(fontFamily: 'myFont', fontSize: 18),
+                        style: TextStyle(fontFamily: 'myFont', fontSize: 18),
+                      ),
+                      Icon(
+                        Icons.person,
+                        color: primaryColor,
+                      )
+                    ],
                   ),
-                  Icon(
-                    Icons.person,
-                    color: primaryColor,
-                  )
-                ],
-              ),
-            ),
-            Card(
-              color: primaryLightColor,
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 10,
-                  ),
-                  RoundedTextField2(
-                      width: size.width * 0.6,
-                      child: TextField(
+                ),
+                SizedBox(width: 150),
+                Card(
+                  color: primaryLightColor,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 10,
+                      ),
+                      RoundedTextField2(
+                          width: size.width * 0.15,
+                          child: TextField(
+                            textAlign: TextAlign.right,
+                            controller: fnameController,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                            ),
+                          )),
+                      Text(
+                        "اســم الــطـفـل",
                         textAlign: TextAlign.right,
-                        controller: secnameController,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                        ),
-                      )),
-                  Spacer(),
-                  Text(
-                    "اســم الــأب",
-                    textAlign: TextAlign.right,
-                    style: TextStyle(fontFamily: 'myFont', fontSize: 18),
+                        style: TextStyle(fontFamily: 'myFont', fontSize: 18),
+                      ),
+                      Icon(
+                        Icons.person,
+                        color: primaryColor,
+                      )
+                    ],
                   ),
-                  Icon(
-                    Icons.person,
-                    color: primaryColor,
-                  )
-                ],
-              ),
+                ),
+                Spacer(),
+              ],
             ),
-            Card(
-              color: primaryLightColor,
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 10,
-                  ),
-                  RoundedTextField2(
-                      width: size.width * 0.6,
-                      child: TextField(
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Spacer(),
+                Card(
+                  color: primaryLightColor,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 10,
+                      ),
+                      RoundedTextField2(
+                          width: size.width * 0.15,
+                          child: TextField(
+                            textAlign: TextAlign.right,
+                            controller: thnameController,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                            ),
+                          )),
+                      //  SizedBox(width: 25),
+                      Text(
+                        "اســم الـجـد",
                         textAlign: TextAlign.right,
-                        controller: thnameController,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                        ),
-                      )),
-                  Spacer(),
-                  Text(
-                    "اســم الـجـد",
-                    textAlign: TextAlign.right,
-                    style: TextStyle(fontFamily: 'myFont', fontSize: 18),
+                        style: TextStyle(fontFamily: 'myFont', fontSize: 18),
+                      ),
+                      Icon(
+                        Icons.person,
+                        color: primaryColor,
+                      )
+                    ],
                   ),
-                  Icon(
-                    Icons.person,
-                    color: primaryColor,
-                  )
-                ],
-              ),
-            ),
-            Card(
-              color: primaryLightColor,
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 10,
-                  ),
-                  RoundedTextField2(
-                      width: size.width * 0.6,
-                      child: TextField(
+                ),
+                SizedBox(width: 150),
+                Card(
+                  color: primaryLightColor,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 10,
+                      ),
+                      RoundedTextField2(
+                          width: size.width * 0.15,
+                          child: TextField(
+                            textAlign: TextAlign.right,
+                            controller: lnameController,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                            ),
+                          )),
+                      //  Spacer(),
+                      Text(
+                        "اســم الـعـائـلة",
                         textAlign: TextAlign.right,
-                        controller: lnameController,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                        ),
-                      )),
-                  Spacer(),
-                  Text(
-                    "اســم الـعـائـلة",
-                    textAlign: TextAlign.right,
-                    style: TextStyle(fontFamily: 'myFont', fontSize: 18),
+                        style: TextStyle(fontFamily: 'myFont', fontSize: 18),
+                      ),
+                      Icon(
+                        Icons.person,
+                        color: primaryColor,
+                      )
+                    ],
                   ),
-                  Icon(
-                    Icons.person,
-                    color: primaryColor,
-                  )
-                ],
-              ),
+                ),
+                Spacer(),
+              ],
             ),
-            
-            Card(
-              color: primaryLightColor,
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 10,
-                  ),
-                  RoundedTextField2(
-                      width: size.width * 0.6,
-                      child: TextField(
-                        keyboardType: TextInputType.number,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Spacer(),
+                Card(
+                  color: primaryLightColor,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 10,
+                      ),
+                      RoundedTextField2(
+                          width: size.width * 0.13,
+                          child: TextField(
+                            keyboardType: TextInputType.streetAddress,
+                            textAlign: TextAlign.right,
+                            controller: addressController,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                            ),
+                          )),
+                      // SizedBox(width: 15),
+                      Text(
+                        "عنـوان الســكـن",
                         textAlign: TextAlign.right,
-                        controller: idController,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                        ),
-                      )),
-                  Spacer(),
-                  Text(
-                    "رقــم الـهــويـة",
-                    textAlign: TextAlign.right,
-                    style: TextStyle(fontFamily: 'myFont', fontSize: 18),
+                        style: TextStyle(fontFamily: 'myFont', fontSize: 18),
+                      ),
+                      Icon(
+                        Icons.add_location,
+                        color: primaryColor,
+                      )
+                    ],
                   ),
-                  Icon(
-                    Icons.numbers,
-                    color: primaryColor,
-                  )
-                ],
-              ),
-            ),
-            Card(
-              color: primaryLightColor,
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 10,
-                  ),
-                  RoundedTextField2(
-                      width: size.width * 0.6,
-                      child: TextField(
-                        keyboardType: TextInputType.phone,
+                ),
+                SizedBox(width: 150),
+                Card(
+                  color: primaryLightColor,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 10,
+                      ),
+                      RoundedTextField2(
+                          width: size.width * 0.15,
+                          child: TextField(
+                            keyboardType: TextInputType.number,
+                            textAlign: TextAlign.right,
+                            controller: idController,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                            ),
+                          )),
+                      Text(
+                        "رقــم الـهــويـة",
                         textAlign: TextAlign.right,
-                        controller: fatherPhoneController,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                        ),
-                      )),
-                  Spacer(),
-                  Text(
-                    "هاتــف الأب",
-                    textAlign: TextAlign.right,
-                    style: TextStyle(fontFamily: 'myFont', fontSize: 18),
+                        style: TextStyle(fontFamily: 'myFont', fontSize: 18),
+                      ),
+                      Icon(
+                        Icons.numbers,
+                        color: primaryColor,
+                      )
+                    ],
                   ),
-                  Icon(
-                    Icons.call,
-                    color: primaryColor,
-                  )
-                ],
-              ),
+                ),
+                Spacer(),
+              ],
             ),
-            Card(
-              color: primaryLightColor,
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 10,
-                  ),
-                  RoundedTextField2(
-                      width: size.width * 0.6,
-                      child: TextField(
-                        keyboardType: TextInputType.phone,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Spacer(),
+                Card(
+                  color: primaryLightColor,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 10,
+                      ),
+                      RoundedTextField2(
+                          width: size.width * 0.15,
+                          child: TextField(
+                            keyboardType: TextInputType.phone,
+                            textAlign: TextAlign.right,
+                            controller: fatherPhoneController,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                            ),
+                          )),
+                      Text(
+                        "هاتــف الأب",
                         textAlign: TextAlign.right,
-                        controller: motherPhoneController,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                        ),
-                      )),
-                  Spacer(),
-                  Text(
-                    "هاتــف الأم",
-                    textAlign: TextAlign.right,
-                    style: TextStyle(fontFamily: 'myFont', fontSize: 18),
+                        style: TextStyle(fontFamily: 'myFont', fontSize: 18),
+                      ),
+                      Icon(
+                        Icons.call,
+                        color: primaryColor,
+                      )
+                    ],
                   ),
-                  Icon(
-                    Icons.call,
-                    color: primaryColor,
-                  )
-                ],
-              ),
-            ),
-            Card(
-              color: primaryLightColor,
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 10,
-                  ),
-                  RoundedTextField2(
-                      width: size.width * 0.6,
-                      child: TextField(
-                        keyboardType: TextInputType.streetAddress,
+                ),
+                SizedBox(
+                  width: 150,
+                ),
+                Card(
+                  color: primaryLightColor,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 10,
+                      ),
+                      RoundedTextField2(
+                          width: size.width * 0.15,
+                          child: TextField(
+                            keyboardType: TextInputType.phone,
+                            textAlign: TextAlign.right,
+                            controller: motherPhoneController,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                            ),
+                          )),
+                      SizedBox(
+                        width: 25,
+                      ),
+                      Text(
+                        "هاتــف الأم",
                         textAlign: TextAlign.right,
-                        controller: addressController,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                        ),
-                      )),
-                  Spacer(),
-                  Text(
-                    "عنـوان الســكـن",
-                    textAlign: TextAlign.right,
-                    style: TextStyle(fontFamily: 'myFont', fontSize: 18),
+                        style: TextStyle(fontFamily: 'myFont', fontSize: 18),
+                      ),
+                      Icon(
+                        Icons.call,
+                        color: primaryColor,
+                      )
+                    ],
                   ),
-                  Icon(
-                    Icons.add_location,
-                    color: primaryColor,
-                  )
-                ],
-              ),
+                ),
+                Spacer(),
+              ],
             ),
-            Card(
-              color: primaryLightColor,
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 10,
-                  ),
-                  RoundedTextField2(
-                      width: size.width * 0.6,
-                      child: TextField(
-                        keyboardType: TextInputType.text,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Spacer(),
+                Card(
+                  color: primaryLightColor,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 10,
+                      ),
+                      RoundedTextField2(
+                        width: size.width * 0.14,
+                        child: GestureDetector(
+                          child: TextField(
+                            enabled: false,
+                            decoration: InputDecoration(
+                                hintText: birthDate,
+                                hintStyle: TextStyle(color: Colors.black)),
+                          ),
+                          onTap: () => _selectDate(context, 1),
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Text(
+                        "تـاريـخ الـميــلاد",
                         textAlign: TextAlign.right,
-                        controller: diagnosisController,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
+                        style: TextStyle(fontFamily: 'myFont', fontSize: 18),
+                      ),
+                      Icon(
+                        Icons.calendar_month,
+                        color: primaryColor,
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  width: 150,
+                ),
+                Card(
+                  color: primaryLightColor,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 10,
+                      ),
+                      RoundedTextField2(
+                          width: size.width * 0.15,
+                          child: TextField(
+                            keyboardType: TextInputType.text,
+                            textAlign: TextAlign.right,
+                            controller: diagnosisController,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                            ),
+                          )),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "الـتـشـخـيـص",
+                        textAlign: TextAlign.right,
+                        style: TextStyle(fontFamily: 'myFont', fontSize: 18),
+                      ),
+                      Icon(
+                        Icons.person,
+                        color: primaryColor,
+                      )
+                    ],
+                  ),
+                ),
+                Spacer(),
+              ],
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Spacer(),
+                Card(
+                  color: primaryLightColor,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 10,
+                      ),
+                      RoundedTextField2(
+                        width: size.width * 0.14,
+                        child: GestureDetector(
+                          child: TextField(
+                            enabled: false,
+                            decoration: InputDecoration(
+                                hintText: enteryDate,
+                                hintStyle: TextStyle(color: Colors.black)),
+                          ),
+                          onTap: () => _selectDate(context, 2),
                         ),
-                      )),
-                  Spacer(),
-                  Text(
-                    "الـتـشـخـيـص",
-                    textAlign: TextAlign.right,
-                    style: TextStyle(fontFamily: 'myFont', fontSize: 18),
+                      ),
+                      SizedBox(height: 20),
+                      Text(
+                        "تـاريـخ الـدخـول",
+                        textAlign: TextAlign.right,
+                        style: TextStyle(fontFamily: 'myFont', fontSize: 18),
+                      ),
+                      Icon(
+                        Icons.calendar_month,
+                        color: primaryColor,
+                      )
+                    ],
                   ),
-                  Icon(
-                    Icons.person,
-                    color: primaryColor,
-                  )
-                ],
-              ),
+                ),
+                SizedBox(
+                  width: 140,
+                ),
+                Card(
+                  color: primaryLightColor,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 10,
+                      ),
+                      RoundedTextField2(
+                        width: size.width * 0.14,
+                        child: GestureDetector(
+                          child: TextField(
+                            enabled: false,
+                            decoration: InputDecoration(
+                                hintText: firstSessionDate,
+                                hintStyle: TextStyle(color: Colors.black)),
+                          ),
+                          onTap: () => _selectDate(context, 3),
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Text(
+                        "تـاريـخ أول جـلـسـة",
+                        textAlign: TextAlign.right,
+                        style: TextStyle(fontFamily: 'myFont', fontSize: 18),
+                      ),
+                      Icon(
+                        Icons.calendar_month,
+                        color: primaryColor,
+                      )
+                    ],
+                  ),
+                ),
+                Spacer(),
+              ],
+            ),
+            SizedBox(
+              height: 15,
             ),
             Card(
               color: primaryLightColor,
               child: Row(
                 children: [
-                  SizedBox(
-                    width: 10,
-                  ),
-                  RoundedTextField2(
-                    width: size.width*0.6,
-                    child: GestureDetector(
-                      child: TextField(
-                        enabled: false,
-                     decoration: InputDecoration(
-                      hintText: birthDate,
-                      hintStyle: TextStyle(color: Colors.black)
-                     ),),
-                      onTap: () => _selectDate(context,1),
-                    ),
-                  ),
-                  SizedBox(height: 20),
                   Spacer(),
-                  Text(
-                    "تـاريـخ الـميــلاد",
-                    textAlign: TextAlign.right,
-                    style: TextStyle(fontFamily: 'myFont', fontSize: 18),
-                  ),
-                  Icon(
-                    Icons.calendar_month,
-                    color: primaryColor,
-                  )
-                ],
-              ),
-            ),
-            Card(
-              color: primaryLightColor,
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 10,
-                  ),
-                  RoundedTextField2(
-                    width: size.width*0.6,
-                    child: GestureDetector(
-                      child: TextField(
-                        enabled: false,
-                     decoration: InputDecoration(
-                      hintText: enteryDate,
-                      hintStyle: TextStyle(color: Colors.black)
-                     ),),
-                      onTap: () => _selectDate(context,2),
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  Spacer(),
-                  Text(
-                    "تـاريـخ الـدخـول",
-                    textAlign: TextAlign.right,
-                    style: TextStyle(fontFamily: 'myFont', fontSize: 18),
-                  ),
-                  Icon(
-                    Icons.calendar_month,
-                    color: primaryColor,
-                  )
-                ],
-              ),
-            ),Card(
-              color: primaryLightColor,
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 10,
-                  ),
-                  RoundedTextField2(
-                    width: size.width*0.6,
-                    child: GestureDetector(
-                      child: TextField(
-                        enabled: false,
-                     decoration: InputDecoration(
-                      hintText: firstSessionDate,
-                      hintStyle: TextStyle(color: Colors.black)
-                     ),),
-                      onTap: () => _selectDate(context,3),
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  Spacer(),
-                  Text(
-                    "تـاريـخ أول جـلـسـة",
-                    textAlign: TextAlign.right,
-                    style: TextStyle(fontFamily: 'myFont', fontSize: 18),
-                  ),
-                  Icon(
-                    Icons.calendar_month,
-                    color: primaryColor,
-                  )
-                ],
-              ),
-            ),
-            Card(
-              color: primaryLightColor,
-              child: Row(
-                children: [
                   SizedBox(
                     width: 10,
                   ),
                   Container(
-                    width: 200,
+                    width: 300,
                     padding: EdgeInsets.only(bottom: 5),
                     child: RoundedButton(
                       color: primaryColor,
@@ -628,7 +727,9 @@ File? _file;
                       },
                     ),
                   ),
-                  Spacer(),
+                  SizedBox(
+                    width: 100,
+                  ),
                   Text(
                     "الـجــلـسـات",
                     textAlign: TextAlign.right,
@@ -637,148 +738,211 @@ File? _file;
                   Icon(
                     Icons.person,
                     color: primaryColor,
-                  )
+                  ),
+                  Spacer(),
                 ],
               ),
             ),
-            SizedBox(height: 5,),
-        
-         
-        
-            RoundedButton(text: "حــفــظ", press: (){
-              addNewchild();
-              _uploadImage();
-              _uploadFile();
-            }),
-            SizedBox(height: 15,)
+            SizedBox(
+              height: 15,
+            ),
+            Container(
+              width: 500,
+              padding: EdgeInsets.only(bottom: 5),
+              child: RoundedButton(
+                  text: "حــفــظ",
+                  press: () {
+                    check(context);
+                    if (checked) {
+                      addNewchild();
+                    }
+                  }),
+            ),
+            SizedBox(
+              height: 15,
+            )
           ],
         )),
       ),
     );
   }
 
-
-  void addSessionsDialog(){
+  void addSessionsDialog() {
     Size size = MediaQuery.of(context).size;
     showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-            backgroundColor: primaryLightColor,
-            title: Text(
-              'إضــافــة جـلـســات',
-              style: TextStyle(
-                fontFamily: 'myFont',
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: secondaryColor,
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+              backgroundColor: primaryLightColor,
+              title: Text(
+                'إضــافــة جـلـســات',
+                style: TextStyle(
+                  fontFamily: 'myFont',
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: secondaryColor,
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
-            ),
-            content:Container(
-              width: size.width*0.85,
-              child: SingleChildScrollView(child: Column(children: [
-                Row(children: [
-                 Text("الـعدد بالإسـبـوع",style: TextStyle(fontFamily: 'myFont',fontWeight: FontWeight.bold,fontSize: 22),),
-                 Spacer(),
-                 Text("الــجـــلــســة",style: TextStyle(fontFamily: 'myFont',fontWeight: FontWeight.bold,fontSize: 22),),
-                ],),
-                SizedBox(height: 10,),
-                Row(children: [
-                 RoundedTextField2(
-                      width: size.width * 0.3,
-                      child: TextField(
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.right,
-                        controller: sessionsController[0],
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
+              content: Container(
+                width: size.width * 0.85,
+                child: SingleChildScrollView(
+                    child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          "الـعدد بالإسـبـوع",
+                          style: TextStyle(
+                              fontFamily: 'myFont',
+                              fontWeight: FontWeight.bold,
+                              fontSize: 22),
                         ),
-                      )),
-                 Spacer(),
-                 Text("ســلــوكــي",style: TextStyle(fontFamily: 'myFont',fontSize: 18),),
-                ],),
-                SizedBox(height: 10,),
-                Row(children: [
-                 RoundedTextField2(
-                      width: size.width * 0.3,
-                      child: TextField(
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.right,
-                        controller: sessionsController[1],
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
+                        Spacer(),
+                        Text(
+                          "الــجـــلــســة",
+                          style: TextStyle(
+                              fontFamily: 'myFont',
+                              fontWeight: FontWeight.bold,
+                              fontSize: 22),
                         ),
-                      )),
-                 Spacer(),
-                 Text("وظــيــفــي",style: TextStyle(fontFamily: 'myFont',fontSize: 18),),
-                ],),
-                SizedBox(height: 10,),
-                Row(children: [
-                 RoundedTextField2(
-                      width: size.width * 0.3,
-                      child: TextField(
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.right,
-                        controller: sessionsController[2],
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        RoundedTextField2(
+                            width: size.width * 0.3,
+                            child: TextField(
+                              keyboardType: TextInputType.number,
+                              textAlign: TextAlign.right,
+                              controller: sessionsController[0],
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                              ),
+                            )),
+                        Spacer(),
+                        Text(
+                          "ســلــوكــي",
+                          style: TextStyle(fontFamily: 'myFont', fontSize: 18),
                         ),
-                      )),
-                 Spacer(),
-                 Text("تــربـيـة خـاصـة",style: TextStyle(fontFamily: 'myFont',fontSize: 18),),
-                ],),
-                SizedBox(height: 10,),
-                Row(children: [
-                 RoundedTextField2(
-                      width: size.width * 0.3,
-                      child: TextField(
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.right,
-                        controller: sessionsController[3],
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        RoundedTextField2(
+                            width: size.width * 0.3,
+                            child: TextField(
+                              keyboardType: TextInputType.number,
+                              textAlign: TextAlign.right,
+                              controller: sessionsController[1],
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                              ),
+                            )),
+                        Spacer(),
+                        Text(
+                          "وظــيــفــي",
+                          style: TextStyle(fontFamily: 'myFont', fontSize: 18),
                         ),
-                      )),
-                 Spacer(),
-                 Text("عــلاج طــبـيـعي",style: TextStyle(fontFamily: 'myFont',fontSize: 18),),
-                ],),
-                SizedBox(height: 10,),
-                Row(children: [
-                 RoundedTextField2(
-                      width: size.width * 0.3,
-                      child: TextField(
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.right,
-                        controller: sessionsController[4],
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        RoundedTextField2(
+                            width: size.width * 0.3,
+                            child: TextField(
+                              keyboardType: TextInputType.number,
+                              textAlign: TextAlign.right,
+                              controller: sessionsController[2],
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                              ),
+                            )),
+                        Spacer(),
+                        Text(
+                          "تــربـيـة خـاصـة",
+                          style: TextStyle(fontFamily: 'myFont', fontSize: 18),
                         ),
-                      )),
-                 Spacer(),
-                 Text("الـلغـة و نــطــق",style: TextStyle(fontFamily: 'myFont',fontSize: 18),),
-                ],),
-                SizedBox(height: 10,),
-                RoundedButton(text: "حــفــظ", press: (){
-                  print(fnameController.text);
-                  print(idController.text);
-                  print(fatherPhoneController.text);
-                  print(motherPhoneController.text);
-                  print(addressController.text);
-                  print(diagnosisController.text);
-                  print(sessionsController[0].text);
-                  print(sessionsController[1].text);
-                  print(sessionsController[2].text);
-                  print(sessionsController[3].text);
-                  print(sessionsController[4].text);
-                 Navigator.pop(context);
-                    }),
-                    SizedBox(height: 5,)
-              ],)),
-
-            )
-        );
-      }
-    );
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        RoundedTextField2(
+                            width: size.width * 0.3,
+                            child: TextField(
+                              keyboardType: TextInputType.number,
+                              textAlign: TextAlign.right,
+                              controller: sessionsController[3],
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                              ),
+                            )),
+                        Spacer(),
+                        Text(
+                          "عــلاج طــبـيـعي",
+                          style: TextStyle(fontFamily: 'myFont', fontSize: 18),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        RoundedTextField2(
+                            width: size.width * 0.3,
+                            child: TextField(
+                              keyboardType: TextInputType.number,
+                              textAlign: TextAlign.right,
+                              controller: sessionsController[4],
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                              ),
+                            )),
+                        Spacer(),
+                        Text(
+                          "الـلغـة و نــطــق",
+                          style: TextStyle(fontFamily: 'myFont', fontSize: 18),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    RoundedButton(
+                        text: "حــفــظ",
+                        press: () {
+                          print(fnameController.text);
+                          print(idController.text);
+                          print(fatherPhoneController.text);
+                          print(motherPhoneController.text);
+                          print(addressController.text);
+                          print(diagnosisController.text);
+                          print(sessionsController[0].text);
+                          print(sessionsController[1].text);
+                          print(sessionsController[2].text);
+                          print(sessionsController[3].text);
+                          print(sessionsController[4].text);
+                          Navigator.pop(context);
+                        }),
+                    SizedBox(
+                      height: 5,
+                    )
+                  ],
+                )),
+              ));
+        });
   }
 }

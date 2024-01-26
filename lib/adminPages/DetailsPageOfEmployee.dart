@@ -8,7 +8,7 @@ import 'dart:convert';
 import 'package:flutter/widgets.dart';
 import 'package:software/theme.dart';
 
-import '../main.dart';
+import '../mains.dart';
 
 class spDetailsPage extends StatefulWidget {
   final String name;
@@ -224,51 +224,66 @@ class _DetailsPageState extends State<spDetailsPage> {
           style: TextStyle(fontFamily: 'myfont'),
         ),
       ),
-      body: Container(
-        width: size.width,
-        height: size.height,
-        child: Stack(
-          children: <Widget>[
-            Positioned.fill(
-              child: Image.asset(
-                'images/background.png',
-                fit: BoxFit.cover,
-              ),
-            ),
-            Positioned(
-              top: 0,
-              left: 0,
-              child: Container(
-                alignment: Alignment.topLeft,
-                color: Colors.transparent,
-                child: Padding(
-                  padding: EdgeInsets.all(0),
-                  child: Row(
-                    children: <Widget>[
-                      ClipOval(
-                        child: Image.asset(
-                          'images/person1.png',
-                          width: 200,
-                          height: 250,
-                          fit: BoxFit.cover,
+      body: Center(
+        child: Container(
+          width: size.width * .5,
+          child: Column(
+            children: <Widget>[
+              Positioned(
+                top: 0,
+                left: 0,
+                child: Container(
+                  alignment: Alignment.topLeft,
+                  color: Colors.transparent,
+                  child: Padding(
+                    padding: EdgeInsets.all(0),
+                    child: Row(
+                      children: <Widget>[
+                        ClipOval(
+                          child: Image.asset(
+                            'images/person1.png',
+                            width: 200,
+                            height: 250,
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Column(
-                        // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: <Widget>[
-                          Positioned(
-                            top: 50,
-                            right: 20,
-                            child: Card(
+                        // SizedBox(
+                        //   width: 10,
+                        // ),
+                        Spacer(),
+                        Column(
+                          // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: <Widget>[
+                            Positioned(
+                              top: 50,
+                              right: 20,
+                              child: Card(
+                                color: Colors.transparent,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: <Widget>[
+                                    Text('ساره خالد وليد حنو',
+                                        textAlign: TextAlign.end,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontFamily: 'myfont',
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        )),
+                                    SizedBox(width: 5),
+                                    Icon(Icons.person, color: Colors.white),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 30),
+                            Card(
                               color: Colors.transparent,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: <Widget>[
-                                  Text(name,
+                                  Text('سمع ونطق',
                                       textAlign: TextAlign.end,
                                       style: TextStyle(
                                         color: Colors.white,
@@ -277,83 +292,55 @@ class _DetailsPageState extends State<spDetailsPage> {
                                         fontWeight: FontWeight.bold,
                                       )),
                                   SizedBox(width: 5),
-                                  Icon(Icons.person, color: Colors.white),
+                                  Icon(Icons.category, color: Colors.white),
                                 ],
                               ),
                             ),
-                          ),
-                          SizedBox(height: 30),
-                          Card(
-                            color: Colors.transparent,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: <Widget>[
-                                Text(sp,
-                                    textAlign: TextAlign.end,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: 'myfont',
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    )),
-                                SizedBox(width: 5),
-                                Icon(Icons.category, color: Colors.white),
-                              ],
+                            SizedBox(height: 30),
+                            Card(
+                              color: Color(0x8B19AB),
+                              // color: Colors.transparent,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: <Widget>[
+                                  Text('0593085764',
+                                      textAlign: TextAlign.end,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: 'myfont',
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      )),
+                                  SizedBox(width: 10),
+                                  Icon(Icons.phone, color: Colors.white),
+                                ],
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 30),
-                          Card(
-                            color: Color(0x8B19AB),
-                            // color: Colors.transparent,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: <Widget>[
-                                Text(phone,
-                                    textAlign: TextAlign.end,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: 'myfont',
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    )),
-                                SizedBox(width: 10),
-                                Icon(Icons.phone, color: Colors.white),
-                              ],
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            Positioned(
-              top: 310,
-              right: 0,
-              child:
-                  // Container(
-                  //       width: size.width,
-                  //       height: size.height,
-                  //       child:
-                  SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
+              Center(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
-                    //   crossAxisAlignment: CrossAxisAlignment.end,
-
                     Card(
                       color: Colors.white,
                       child: Row(
                         // crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
+                                                 SizedBox(width: 150),
+
                           Text('sarahhinno@gmail.com',
                               style: TextStyle(
                                   fontFamily: 'myfont',
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 17)),
-                          SizedBox(width: 15),
+                                  fontSize: 15)),
+                                                  SizedBox(width: 120),
+
                           Text('  الـبـريـد الالـكـتـرونـي',
                               style: TextStyle(
                                   fontFamily: 'myfont',
@@ -364,22 +351,24 @@ class _DetailsPageState extends State<spDetailsPage> {
                             Icons.email,
                             color: Color.fromARGB(255, 111, 53, 165),
                           ),
-                          SizedBox(width: 20),
+                                                  SizedBox(width: 150),
+
                         ],
                       ),
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 30),
                     Card(
                       color: Colors.white,
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
-                          Text(idd,
+                          SizedBox(width: 200),
+                          Text('123456890',
                               style: TextStyle(
                                   fontFamily: 'myfont',
                                   fontWeight: FontWeight.bold,
                                   fontSize: 17)),
-                          SizedBox(width: 150),
+                        SizedBox(width: 190),
                           Text('رقــم الــهـويـة',
                               style: TextStyle(
                                   fontFamily: 'myfont',
@@ -390,22 +379,23 @@ class _DetailsPageState extends State<spDetailsPage> {
                             Icons.sd_card,
                             color: Color.fromARGB(255, 111, 53, 165),
                           ),
-                          SizedBox(width: 20),
+                        SizedBox(width: 150),
                         ],
                       ),
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 30),
                     Card(
                       color: Colors.white,
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
-                          Text(add,
+                          Spacer(),
+                          Text('المساكن الشعبية',
                               style: TextStyle(
                                   fontFamily: 'myfont',
                                   fontWeight: FontWeight.bold,
                                   fontSize: 17)),
-                          SizedBox(width: 100),
+                          Spacer(),
                           Text('عــنـوان الـسـكــن',
                               style: TextStyle(
                                   fontFamily: 'myfont',
@@ -416,22 +406,23 @@ class _DetailsPageState extends State<spDetailsPage> {
                             Icons.sd_card,
                             color: Color.fromARGB(255, 111, 53, 165),
                           ),
-                          SizedBox(width: 20),
+                          Spacer(),
                         ],
                       ),
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 30),
                     Card(
                       color: Colors.white,
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
+                          Spacer(),
                           Text(DateFormat('yyyy/MM/dd').format(startDate),
                               style: TextStyle(
                                   fontFamily: 'myfont',
                                   fontWeight: FontWeight.bold,
                                   fontSize: 17)),
-                          SizedBox(width: 110),
+                          Spacer(),
                           Text('تـاريـخ بـدايـة الـعـمـل',
                               style: TextStyle(
                                   fontFamily: 'myfont',
@@ -442,16 +433,17 @@ class _DetailsPageState extends State<spDetailsPage> {
                             Icons.date_range,
                             color: Color.fromARGB(255, 111, 53, 165),
                           ),
-                          SizedBox(width: 20),
+                          Spacer(),
                         ],
                       ),
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 30),
                     Card(
                       color: Colors.white,
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
+                          Spacer(),
                           ElevatedButton(
                             onPressed: () {
                               print('okkkkkk');
@@ -476,7 +468,7 @@ class _DetailsPageState extends State<spDetailsPage> {
                                   fontSize: 15),
                             ),
                           ),
-                          SizedBox(width: 110),
+                          Spacer(),
                           Text('الإجـازات',
                               style: TextStyle(
                                   fontFamily: 'myfont',
@@ -487,16 +479,17 @@ class _DetailsPageState extends State<spDetailsPage> {
                             Icons.numbers,
                             color: Color.fromARGB(255, 111, 53, 165),
                           ),
-                          SizedBox(width: 20),
+                          Spacer(),
                         ],
                       ),
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 30),
                     Card(
                       color: Colors.white,
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
+                          Spacer(),
                           ElevatedButton(
                             onPressed: () {
                               _openFile();
@@ -521,7 +514,7 @@ class _DetailsPageState extends State<spDetailsPage> {
                                   fontSize: 15),
                             ),
                           ),
-                          SizedBox(width: 110),
+                          Spacer(),
                           Text('  الـسـيـرة الـذاتـيـة',
                               style: TextStyle(
                                   fontFamily: 'myfont',
@@ -532,7 +525,7 @@ class _DetailsPageState extends State<spDetailsPage> {
                             Icons.attach_file,
                             color: Color.fromARGB(255, 111, 53, 165),
                           ),
-                          SizedBox(width: 20),
+                          Spacer(),
                         ],
                       ),
                     ),
@@ -540,8 +533,8 @@ class _DetailsPageState extends State<spDetailsPage> {
                 ),
               ),
               //)
-            )
-          ],
+            ],
+          ),
         ),
       ),
     );

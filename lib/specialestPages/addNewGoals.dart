@@ -35,8 +35,9 @@ class _newGoalsState extends State<newGoals> {
               fontWeight: FontWeight.bold),
         ),
       ),
-      body: Container(
-        width: size.width,
+      body:
+      Center(child: Container(
+        width: size.width*.5,
         height: size.height,
         child: SingleChildScrollView(
           child: Column(
@@ -63,6 +64,7 @@ class _newGoalsState extends State<newGoals> {
                           Row(
                             children: <Widget>[
                               Container(
+                                width: 500,
                                 child: DropdownButtonHideUnderline(
                                   child: DropdownButton<String>(
                                     value: selectedValues.last,
@@ -162,19 +164,21 @@ class _newGoalsState extends State<newGoals> {
               SizedBox(height: 30),
               // SizedBox(height: 20),
               Container(
+                width: 250,
                 child: RoundedButton(
                   color: primaryColor,
                   text: "إضـافـة هـدف جـديـد",
                   textColor: Colors.white,
                   press: () {
                     addNewGoalCard();
-                    print('0000000000000000000000000000000');
+                 
                   },
                 ),
               )
             ],
           ),
         ),
+      ),
       ),
     );
   }
