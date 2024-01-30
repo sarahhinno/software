@@ -8,8 +8,6 @@ import 'dart:convert';
 import 'package:flutter/widgets.dart';
 import 'package:software/theme.dart';
 
-import '../mains.dart';
-
 class spDetailsPage extends StatefulWidget {
   final String name;
 
@@ -32,7 +30,10 @@ class _DetailsPageState extends State<spDetailsPage> {
   String phone = "";
   String sp = "";
   String idd = "";
-  String add = "";
+  String address = "";
+  String imageUrl = '';
+  String imageID = '';
+
   @override
   void initState() {
     super.initState();
@@ -41,6 +42,8 @@ class _DetailsPageState extends State<spDetailsPage> {
     });
     print("id" + id);
     getEmployeeInfo();
+    getImageUrl();
+    getIDImage();
   }
 
   Future<void> getEmpVacations() async {
@@ -93,12 +96,52 @@ class _DetailsPageState extends State<spDetailsPage> {
         phone = data!['phone'];
         sp = data!['specialise'];
         idd = data!['idd'];
-        add = data!['address'];
+        address = data!['address'];
       });
       //    print(bd);
     } else {
       print(response.reasonPhrase);
       print("error");
+    }
+  }
+
+  Future<void> getImageUrl() async {
+    print(id);
+    final String serverUrl = '$ip/sanad/getSPImage?id=$id';
+
+    try {
+      final response = await http.get(Uri.parse(serverUrl));
+      print(response.body);
+      if (response.statusCode == 200) {
+        setState(() {
+          imageUrl = serverUrl;
+          print(imageUrl);
+        });
+      } else {
+        print('Failed to get image. Status code: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error getting image: $error');
+    }
+  }
+
+  Future<void> getIDImage() async {
+    print(id);
+    final String serverUrl = '$ip/sanad/getJobImageSP?id=$id';
+
+    try {
+      final response = await http.get(Uri.parse(serverUrl));
+      print(response.body);
+      if (response.statusCode == 200) {
+        setState(() {
+          imageID = serverUrl;
+          print("image id " + imageID);
+        });
+      } else {
+        print('Failed to get image. Status code: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error getting image: $error');
     }
   }
 
@@ -114,17 +157,48 @@ class _DetailsPageState extends State<spDetailsPage> {
     }
   }
 
+  void _showImageDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          icon: imageID.isEmpty ? Icon(Icons.error) : Icon(Icons.done),
+          title: Text('صــورة مزاولـة الــمــهنــة',
+              style: TextStyle(
+                  fontFamily: 'myFont',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20)),
+          content: imageID.isEmpty
+              ? Text(
+                  "لــم يــتــم تــحــمــيــل صــورة الــهويــة",
+                  style: TextStyle(
+                      fontFamily: 'myFont',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: primaryColor),
+                )
+              : Image.network(imageID, // Replace with your image URL
+                  width: 200.0, // Set the desired width of the image
+                  height: 200.0, // Set the desired height of the image
+                  fit: BoxFit.cover)
+          // Adjust the BoxFit property as needed
+          ,
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('Close'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _showDialog(BuildContext context, String s) {
     List<Map<String, String>> tableData = [
       {"date": "20/10/2018", "reason": "مـرضـية"},
-      {"date": "16/03/2019", "reason": "مـرضـية"},
-      {"date": "20/10/2018", "reason": "مـرضـية"},
-      {"date": "16/03/2019", "reason": "مـرضـية"},
-      {"date": "20/10/2018", "reason": "مـرضـية"},
-      {"date": "16/03/2019", "reason": "مـرضـية"},
-      {"date": "20/10/2018", "reason": "مـرضـية"},
-      {"date": "16/03/2019", "reason": "مـرضـية"},
-      // Add more rows as needed
     ];
 
     showDialog(
@@ -220,323 +294,342 @@ class _DetailsPageState extends State<spDetailsPage> {
       appBar: AppBar(
         backgroundColor: Color(0xff6f35a5),
         title: Text(
-          'تـفــاصـيـل $name',
+          'تـفــاصـيـل',
           style: TextStyle(fontFamily: 'myfont'),
         ),
+        centerTitle: true,
       ),
-      body: Center(
-        child: Container(
-          width: size.width * .5,
-          child: Column(
-            children: <Widget>[
-              Positioned(
-                top: 0,
-                left: 0,
-                child: Container(
-                  alignment: Alignment.topLeft,
-                  color: Colors.transparent,
-                  child: Padding(
-                    padding: EdgeInsets.all(0),
-                    child: Row(
-                      children: <Widget>[
-                        ClipOval(
-                          child: Image.asset(
-                            'images/person1.png',
-                            width: 200,
-                            height: 250,
-                            fit: BoxFit.cover,
+      body: ListView(children: [
+        Column(
+          children: <Widget>[
+            Stack(
+              children: <Widget>[
+                Positioned(
+                    left: 550,
+                    top: 40,
+                    child: ClipOval(
+                      child: imageUrl.isNotEmpty
+                          ? (Image.network(
+                              imageUrl,
+                              height: 200.0,
+                              width: 200.0,
+                              fit: BoxFit.cover,
+                            ))
+                          : Image.asset(
+                              'assets/images/profileImage.jpg',
+                              width: 200,
+                              height: 200,
+                              fit: BoxFit.cover,
+                            ),
+                    )),
+                Container(
+                  padding: EdgeInsets.fromLTRB(10, 40, 550, 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Column(
+                        children: [
+                          SizedBox(height: 30),
+                          Card(
+                            color: primaryColor,
+                            child: Container(
+                              width: 170,
+                              child: Text(name,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.end,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'myfont',
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                            ),
                           ),
-                        ),
-                        // SizedBox(
-                        //   width: 10,
-                        // ),
-                        Spacer(),
-                        Column(
-                          // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: <Widget>[
-                            Positioned(
-                              top: 50,
-                              right: 20,
-                              child: Card(
-                                color: Colors.transparent,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: <Widget>[
-                                    Text('ساره خالد وليد حنو',
-                                        textAlign: TextAlign.end,
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontFamily: 'myfont',
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                        )),
-                                    SizedBox(width: 5),
-                                    Icon(Icons.person, color: Colors.white),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            SizedBox(height: 30),
-                            Card(
-                              color: Colors.transparent,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: <Widget>[
-                                  Text('سمع ونطق',
-                                      textAlign: TextAlign.end,
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: 'myfont',
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      )),
-                                  SizedBox(width: 5),
-                                  Icon(Icons.category, color: Colors.white),
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 30),
-                            Card(
-                              color: Color(0x8B19AB),
-                              // color: Colors.transparent,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: <Widget>[
-                                  Text('0593085764',
-                                      textAlign: TextAlign.end,
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: 'myfont',
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      )),
-                                  SizedBox(width: 10),
-                                  Icon(Icons.phone, color: Colors.white),
-                                ],
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Card(
+                            color: primaryColor,
+                            child: Text(phone,
+                                textAlign: TextAlign.end,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'myfont',
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                )),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Card(
+                            color: primaryColor,
+                            child: Text(sp,
+                                textAlign: TextAlign.end,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'myfont',
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                )),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-              ),
-              Center(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: <Widget>[
-                    Card(
-                      color: Colors.white,
-                      child: Row(
-                        // crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                                                 SizedBox(width: 150),
-
-                          Text('sarahhinno@gmail.com',
-                              style: TextStyle(
-                                  fontFamily: 'myfont',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15)),
-                                                  SizedBox(width: 120),
-
-                          Text('  الـبـريـد الالـكـتـرونـي',
-                              style: TextStyle(
-                                  fontFamily: 'myfont',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 17)),
-                          SizedBox(width: 15),
-                          Icon(
-                            Icons.email,
-                            color: Color.fromARGB(255, 111, 53, 165),
+              ],
+            ),
+            SizedBox(height: 100),
+            Container(
+                width: 500,
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(30, 0, 1, 1),
+                  child: Column(
+                    children: <Widget>[
+                      Column(children: <Widget>[
+                        Card(
+                          color: Colors.white,
+                          child: Row(
+                            children: <Widget>[
+                              Text(id,
+                                  style: TextStyle(
+                                      fontFamily: 'myfont',
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 17)),
+                              Spacer(),
+                              Text('الـبريـد الإلكتروني',
+                                  style: TextStyle(
+                                      fontFamily: 'myfont',
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 17)),
+                              SizedBox(width: 10),
+                              Icon(
+                                Icons.email,
+                                color: Color.fromARGB(255, 111, 53, 165),
+                              )
+                            ],
                           ),
-                                                  SizedBox(width: 150),
-
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 30),
-                    Card(
-                      color: Colors.white,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: <Widget>[
-                          SizedBox(width: 200),
-                          Text('123456890',
-                              style: TextStyle(
-                                  fontFamily: 'myfont',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 17)),
-                        SizedBox(width: 190),
-                          Text('رقــم الــهـويـة',
-                              style: TextStyle(
-                                  fontFamily: 'myfont',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 17)),
-                          SizedBox(width: 10),
-                          Icon(
-                            Icons.sd_card,
-                            color: Color.fromARGB(255, 111, 53, 165),
+                        ),
+                        SizedBox(height: 20),
+                        Card(
+                          color: Colors.white,
+                          child: Row(
+                            children: <Widget>[
+                              Text(id,
+                                  style: TextStyle(
+                                      fontFamily: 'myfont',
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 17)),
+                              Spacer(),
+                              Text(' رقــم الــهـويـة',
+                                  style: TextStyle(
+                                      fontFamily: 'myfont',
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 17)),
+                              SizedBox(width: 10),
+                              Icon(
+                                Icons.sd_card,
+                                color: Color.fromARGB(255, 111, 53, 165),
+                              )
+                            ],
                           ),
-                        SizedBox(width: 150),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 30),
-                    Card(
-                      color: Colors.white,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: <Widget>[
-                          Spacer(),
-                          Text('المساكن الشعبية',
-                              style: TextStyle(
-                                  fontFamily: 'myfont',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 17)),
-                          Spacer(),
-                          Text('عــنـوان الـسـكــن',
-                              style: TextStyle(
-                                  fontFamily: 'myfont',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 17)),
-                          SizedBox(width: 10),
-                          Icon(
-                            Icons.sd_card,
-                            color: Color.fromARGB(255, 111, 53, 165),
+                        ),
+                        SizedBox(height: 20),
+                        Card(
+                          //3
+                          color: Colors.white,
+                          child: Row(
+                            children: <Widget>[
+                              Text(DateFormat('yyyy/MM/dd').format(startDate),
+                                  style: TextStyle(
+                                      fontFamily: 'myfont',
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 17)),
+                              Spacer(),
+                              Text('تـاريـخ بــدايــة الـعــمــل',
+                                  style: TextStyle(
+                                      fontFamily: 'myfont',
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 17)),
+                              SizedBox(width: 10),
+                              Icon(
+                                Icons.date_range,
+                                color: Color.fromARGB(255, 111, 53, 165),
+                              )
+                            ],
                           ),
-                          Spacer(),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 30),
-                    Card(
-                      color: Colors.white,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: <Widget>[
-                          Spacer(),
-                          Text(DateFormat('yyyy/MM/dd').format(startDate),
-                              style: TextStyle(
-                                  fontFamily: 'myfont',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 17)),
-                          Spacer(),
-                          Text('تـاريـخ بـدايـة الـعـمـل',
-                              style: TextStyle(
-                                  fontFamily: 'myfont',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 17)),
-                          SizedBox(width: 10),
-                          Icon(
-                            Icons.date_range,
-                            color: Color.fromARGB(255, 111, 53, 165),
+                        ),
+                        SizedBox(height: 20),
+                        Card(
+                          //7
+                          color: Colors.white,
+                          child: Row(
+                            children: <Widget>[
+                              Text(address,
+                                  style: TextStyle(
+                                      fontFamily: 'myfont',
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 17)),
+                              Spacer(),
+                              Text('عـنـوان الـسـكـن',
+                                  style: TextStyle(
+                                      fontFamily: 'myfont',
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 17)),
+                              SizedBox(width: 10),
+                              Icon(
+                                Icons.location_pin,
+                                color: Color.fromARGB(255, 111, 53, 165),
+                              )
+                            ],
                           ),
-                          Spacer(),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 30),
-                    Card(
-                      color: Colors.white,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: <Widget>[
-                          Spacer(),
-                          ElevatedButton(
-                            onPressed: () {
-                              print('okkkkkk');
-                              _showDialog(context, 'ساره حنو');
-                            },
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Color(0xFFF1E6FF)),
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(29.0),
+                        ),
+                        SizedBox(height: 20),
+                        Card(
+                          //8
+                          color: Colors.white,
+                          child: Row(
+                            children: <Widget>[
+                              ElevatedButton(
+                                onPressed: () {
+                                  _showImageDialog(context);
+                                  print('okkkkkk');
+                                },
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          Color(0xFFF1E6FF)),
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(29.0),
+                                    ),
+                                  ),
+                                ),
+                                child: Text(
+                                  "  فـتـح الـصـورة",
+                                  style: TextStyle(
+                                      fontFamily: 'myfont',
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15),
                                 ),
                               ),
-                            ),
-                            child: Text(
-                              "   تـفـاصـيـل الإجـازات",
-                              style: TextStyle(
-                                  fontFamily: 'myfont',
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15),
-                            ),
+                              Spacer(),
+                              Text('صــورة مـزاولــة الــمـهـنــة',
+                                  style: TextStyle(
+                                      fontFamily: 'myfont',
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 17)),
+                              SizedBox(width: 10),
+                              Icon(
+                                Icons.image,
+                                color: Color.fromARGB(255, 111, 53, 165),
+                              )
+                            ],
                           ),
-                          Spacer(),
-                          Text('الإجـازات',
-                              style: TextStyle(
-                                  fontFamily: 'myfont',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 17)),
-                          SizedBox(width: 10),
-                          Icon(
-                            Icons.numbers,
-                            color: Color.fromARGB(255, 111, 53, 165),
-                          ),
-                          Spacer(),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 30),
-                    Card(
-                      color: Colors.white,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: <Widget>[
-                          Spacer(),
-                          ElevatedButton(
-                            onPressed: () {
-                              _openFile();
-                              print('okkkkkk');
-                            },
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  Color(0xFFF1E6FF)),
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(29.0),
+                        ),
+                        SizedBox(height: 20),
+                        Card(
+                          //10
+                          color: Colors.white,
+                          child: Row(
+                            children: <Widget>[
+                              ElevatedButton(
+                                onPressed: () {
+                                  //    _openFile();
+                                  print('okkkkkk');
+                                },
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          Color(0xFFF1E6FF)),
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(29.0),
+                                    ),
+                                  ),
+                                ),
+                                child: Text(
+                                  "  فـتـح الـمـلـف",
+                                  style: TextStyle(
+                                      fontFamily: 'myfont',
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15),
                                 ),
                               ),
-                            ),
-                            child: Text(
-                              "  فـتـح الـمـلـف",
-                              style: TextStyle(
-                                  fontFamily: 'myfont',
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15),
-                            ),
+                              Spacer(),
+                              Text('الــسـيـرة الــذاتــيــة',
+                                  style: TextStyle(
+                                      fontFamily: 'myfont',
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 17)),
+                              SizedBox(width: 10),
+                              Icon(
+                                Icons.attach_file,
+                                color: Color.fromARGB(255, 111, 53, 165),
+                              )
+                            ],
                           ),
-                          Spacer(),
-                          Text('  الـسـيـرة الـذاتـيـة',
-                              style: TextStyle(
-                                  fontFamily: 'myfont',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 17)),
-                          SizedBox(width: 10),
-                          Icon(
-                            Icons.attach_file,
-                            color: Color.fromARGB(255, 111, 53, 165),
+                        ),
+                        SizedBox(height: 20),
+                        Card(
+                          //9
+                          color: Colors.white,
+                          child: Row(
+                            children: <Widget>[
+                              ElevatedButton(
+                                onPressed: () {
+                                  // print('okkkkkk');
+                                  //   _showDialog(context, 'ساره حنو');
+                                  //   DynamicTable();
+                                  _showDialog(context, 'ساره حنو');
+                                },
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          Color(0xFFF1E6FF)),
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(29.0),
+                                    ),
+                                  ),
+                                ),
+                                child: Text(
+                                  "الـتـفـاصـيـل ",
+                                  style: TextStyle(
+                                      fontFamily: 'myfont',
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15),
+                                ),
+                              ),
+                              Spacer(),
+                              Text('الإجــــازات',
+                                  style: TextStyle(
+                                      fontFamily: 'myfont',
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 17)),
+                              SizedBox(width: 10),
+                              Icon(
+                                Icons.category,
+                                color: Color.fromARGB(255, 111, 53, 165),
+                              )
+                            ],
                           ),
-                          Spacer(),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              //)
-            ],
-          ),
+                        ),
+                      ]),
+                    ],
+                  ),
+                )),
+          ],
         ),
-      ),
+      ]),
     );
   }
 }

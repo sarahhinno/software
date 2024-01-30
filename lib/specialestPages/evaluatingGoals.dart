@@ -1,6 +1,13 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+
+import 'dart:convert';
+import 'dart:math';
+
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:software/specialestPages/objectives.dart';
 import 'package:software/theme.dart';
-import 'package:software/components/radioButtonWithImage.dart';
+import 'package:http/http.dart' as http;
 
 class evalobjec extends StatefulWidget {
   @override
@@ -8,42 +15,82 @@ class evalobjec extends StatefulWidget {
 }
 
 class _evalobjecState extends State<evalobjec> {
+  String childID = '123456789';
+  String spID = '987654321';
   bool isChecked = false;
+  String itemm = myItems.first;
+  static List<String> myItems = [
+    'التركيز والانتباه ',
+    'المهارات الإدراكية ',
+    'التواصل البصري ',
+    'المشاكل الصحية '
+  ];
 
-  List<Map<String, String>> obj1 = [
-    {'percentage': '20%', 'object': '---------------------------------'},
-    {'percentage': '50%', 'object': '--------------------------'},
-    {'percentage': '40%', 'object': '-------------------------'},
-  ];
-  List<Map<String, String>> obj2 = [
-    {'percentage': '50%', 'object': '======================'},
-    {'percentage': '70%', 'object': '==============='},
-    {'percentage': '90%', 'object': '=============='},
-  ];
-  List<Map<String, String>> obj3 = [
-    {'percentage': '50%', 'object': '%%%%%%%%%%%'},
-    {'percentage': '70%', 'object': '%%%%%%%%%%%%%%%%%%%%'},
-    {'percentage': '90%', 'object': '%%%%%%%%%%%%%%%%%%'},
-    {'percentage': '70%', 'object': '%%%%%%%%%%%%%%%%%%%%'},
-    {'percentage': '90%', 'object': '%%%%%%%%%%%%%%%%%%%'},
-  ];
-  List<Map<String, String>> obj4 = [
-    {'percentage': '50%', 'object': '************'},
-    {'percentage': '70%', 'object': '***************************'},
-    {'percentage': '90%', 'object': '********************************'},
-  ];
-  late List<bool> isCheckedList;
-  late List<bool> isCheckedList2;
-  late List<bool> isCheckedList3;
-  late List<bool> isCheckedList4;
+  List<String> goalsList = [];
+  List<String> percentList = [];
+
+  List<bool> isCheckedList = [];
+
+  Future<void> getGoals(String subType) async {
+    setState(() {
+      goalsList.clear();
+      percentList.clear();
+      isCheckedList.clear();
+    });
+
+    try {
+      final goalsResponse = await http.get(Uri.parse(
+          "$ip/sanad/getObjects?childID=$childID&spID=$spID&type=وظيفي&subType=$subType"));
+      if (goalsResponse.statusCode == 200) {
+        List<dynamic> data = jsonDecode(goalsResponse.body);
+        for (int i = 0; i < data.length; i++) {
+          setState(() {
+            String text = data[i]['object'];
+            goalsList.add(text);
+            String percent = data[i]['percent'];
+            percentList.add(percent);
+            isCheckedList.add(false);
+          });
+        }
+      }
+    } catch (error) {
+      print("error $error");
+    }
+  }
+
+  Future<void> update() async {
+    try {
+      for (int i = 0; i < goalsList.length; i++) {
+        if (isCheckedList[i] == true) {
+          print("index $i");
+          print(goalsList[i]);
+          print(percentList[i]);
+          final updateDone =
+              await http.post(Uri.parse("$ip/sanad/updateObjStatus"), body: {
+            'childID': childID,
+            'spID': spID,
+            'type': "وظيفي",
+            'subType': itemm,
+            'object': goalsList[i].trim(),
+            'percent': percentList[i].trim(),
+          });
+          if (updateDone.statusCode == 200) {
+            print("updated");
+          } else {
+            print("noo update");
+          }
+        }
+      }
+    } catch (error) {
+      print("error $error");
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    isCheckedList = List.generate(obj1.length, (index) => false);
-    isCheckedList2 = List.generate(obj2.length, (index) => false);
-    isCheckedList3 = List.generate(obj3.length, (index) => false);
-    isCheckedList4 = List.generate(obj4.length, (index) => false);
+    getGoals("التركيز والانتباه ");
+    print(goalsList.length);
   }
 
   @override
@@ -61,12 +108,15 @@ class _evalobjecState extends State<evalobjec> {
               fontWeight: FontWeight.bold),
         ),
       ),
-      body: Center(
-        child: Container(
-            width: size.width * .5,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: Column(
+      body: Container(
+          color: Color(0xffFAF5FF),
+          padding: EdgeInsets.symmetric(horizontal: 8),
+          width: size.width,
+          height: size.height,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Column(children: [
+              Column(
                 children: <Widget>[
                   SizedBox(height: 5),
                   Text(
@@ -74,322 +124,239 @@ class _evalobjecState extends State<evalobjec> {
                     style: TextStyle(
                         color: primaryColor,
                         fontFamily: 'myfont',
-                        fontSize: 30,
+                        fontSize: 24,
                         fontWeight: FontWeight.bold),
                     textAlign: TextAlign.end,
                   ),
-                  Card(
-                    color: Color.fromARGB(255, 242, 239, 193),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: <Widget>[
-                        Text(
-                          '-: الـتـركـيـز والانـتـبـاه -',
-                          style: TextStyle(
-                              color: primaryColor,
-                              fontFamily: 'myfont',
-                              fontSize: 25,
-                              fontWeight: FontWeight.w200),
-                          textAlign: TextAlign.end,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: <Widget>[
-                            for (int i = 0; i < obj1.length; i++)
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: <Widget>[
-                                  Row(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: <Widget>[
-                                      // Spacer(),
-                                      Text(
-                                        obj1[i]['percentage'] ?? '',
-                                        style: TextStyle(
-                                          fontFamily: 'myfont',
-                                          color: Color(0xff161A30),
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                      Spacer(),
-                                      Text(
-                                        obj1[i]['object'] ?? '',
-                                        style: TextStyle(
-                                          color: Color(0xff352F44),
-                                          fontFamily: 'myfont',
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                      // Spacer(),
-                                    ],
-                                  ),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      Spacer(),
-                                      Checkbox(
-                                        value: isCheckedList[i],
-                                        onChanged: (value) {
-                                          setState(() {
-                                            isCheckedList[i] = value ?? false;
-                                          });
-                                        },
-                                        activeColor: primaryColor,
-                                        checkColor: Colors.white,
-                                      ),
-                                      SizedBox(width: 20),
-                                      // Spacer(),
-                                      Text(
-                                        'تـم تـحـقـيـق الـهـدف',
-                                        style: TextStyle(
-                                          color: Color(0xff352F44),
-                                          fontFamily: 'myfont',
-                                          fontSize: 15,
-                                        ),
-                                      ),
-                                      Spacer(),
-                                    ],
-                                  )
-                                ],
-                              ),
-                          ],
-                        ),
-                      ],
-                    ),
+                  SizedBox(
+                    height: 20,
                   ),
-                  Card(
-                    color: Color(0xffe6f6ff),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: <Widget>[
-                        Text(
-                          '-:  الـمـهـارات الإدراكـيـة -',
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "سارة خالد وليد حنو",
+                        style: TextStyle(
+                            fontFamily: 'myFont',
+                            fontSize: 20,
+                            color: secondaryColor),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(": الــطــفــل",
                           style: TextStyle(
-                              color: primaryColor,
-                              fontFamily: 'myfont',
-                              fontSize: 25,
-                              fontWeight: FontWeight.w200),
-                          textAlign: TextAlign.end,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: <Widget>[
-                            for (int i = 0; i < obj2.length; i++)
-                              Column(
-                                children: <Widget>[
-                                  Row(
-                                    children: <Widget>[
-                                      Text(
-                                        obj2[i]['percentage'] ?? '',
-                                        style: TextStyle(
-                                          fontFamily: 'myfont',
-                                          color: Color(0xff161A30),
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                      Spacer(),
-                                      Text(
-                                        obj2[i]['object'] ?? '',
-                                        style: TextStyle(
-                                          color: Color(0xff352F44),
-                                          fontFamily: 'myfont',
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      Spacer(),
-                                      Checkbox(
-                                        value: isCheckedList2[i],
-                                        onChanged: (value) {
-                                          setState(() {
-                                            isCheckedList2[i] = value ?? false;
-                                          });
-                                        },
-                                        activeColor: primaryColor,
-                                        checkColor: Colors.white,
-                                      ),
-                                                                            SizedBox(width: 20),
-
-                                      Text(
-                                        'تـم تـحـقـيـق الـهـدف',
-                                        style: TextStyle(
-                                          color: Color(0xff352F44),
-                                          fontFamily: 'myfont',
-                                          fontSize: 15,
-                                        ),
-                                      ),
-                                      Spacer(),
-                                    ],
-                                  )
-                                ],
-                              ),
-                          ],
-                        ),
-                      ],
-                    ),
+                              fontFamily: 'myFont',
+                              fontSize: 20,
+                              color: secondaryColor))
+                    ],
                   ),
-                  Card(
-                    color: Color(0xfffff9e6),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: <Widget>[
-                        Text(
-                          '-: الـتـواصـل الـبـصـري -',
-                          style: TextStyle(
-                              color: primaryColor,
-                              fontFamily: 'myfont',
-                              fontSize: 25,
-                              fontWeight: FontWeight.w200),
-                          textAlign: TextAlign.end,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: <Widget>[
-                            for (int i = 0; i < obj3.length; i++)
-                              Column(
-                                children: <Widget>[
-                                  Row(
-                                    children: <Widget>[
-                                      Text(
-                                        obj3[i]['percentage'] ?? '',
-                                        style: TextStyle(
-                                          fontFamily: 'myfont',
-                                          color: Color(0xff161A30),
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                      Spacer(),
-                                      Text(
-                                        obj3[i]['object'] ?? '',
-                                        style: TextStyle(
-                                          color: Color(0xff352F44),
-                                          fontFamily: 'myfont',
-                                          fontSize: 20,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      Spacer(),
-                                      Checkbox(
-                                        value: isCheckedList3[i],
-                                        onChanged: (value) {
-                                          setState(() {
-                                            isCheckedList3[i] = value ?? false;
-                                          });
-                                        },
-                                        activeColor: primaryColor,
-                                        checkColor: Colors.white,
-                                      ),
-                                                                         SizedBox(width: 20),
-
-                                      Text(
-                                        'تـم تـحـقـيـق الـهـدف',
-                                        style: TextStyle(
-                                          color: Color(0xff352F44),
-                                          fontFamily: 'myfont',
-                                          fontSize: 15,
-                                        ),
-                                      ),
-                                      Spacer(),
-                                    ],
-                                  )
-                                ],
-                              ),
-                          ],
-                        ),
-                      ],
-                    ),
+                  SizedBox(
+                    height: 20,
                   ),
-                  Card(
-                    color: Color(0xffebffe5),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: <Widget>[
-                        Text(
-                          '-: الـمـشـاكـل الـصـحـيـة -',
-                          style: TextStyle(
-                              color: primaryColor,
-                              fontFamily: 'myfont',
-                              fontSize: 25,
-                              fontWeight: FontWeight.w200),
-                          textAlign: TextAlign.end,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      DropdownButtonHideUnderline(
+                        child: DropdownButton2<String>(
+                          isExpanded: true,
+                          hint: Text(
+                            'Select Item',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context).hintColor,
+                            ),
+                          ),
+                          items: myItems
+                              .map((item) => DropdownMenuItem(
+                                    value: item,
+                                    child: Text(
+                                      item,
+                                      style: const TextStyle(
+                                          fontSize: 14, fontFamily: 'myFont'),
+                                    ),
+                                  ))
+                              .toList(),
+                          value: itemm,
+                          onChanged: (value) {
+                            setState(() {
+                              itemm = value!;
+                              getGoals(itemm);
+                              //ss = value!;
+                            });
+                          },
+                          buttonStyleData: ButtonStyleData(
+                            height: 50,
+                            width: 160,
+                            padding: const EdgeInsets.only(left: 14, right: 14),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(14),
+                                border:
+                                    Border.all(color: primaryColor, width: 2),
+                                color: Colors.white),
+                            elevation: 2,
+                          ),
+                          dropdownStyleData: const DropdownStyleData(
+                            maxHeight: 200,
+                          ),
+                          menuItemStyleData: const MenuItemStyleData(
+                            height: 40,
+                          ),
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: <Widget>[
-                            for (int i = 0; i < obj4.length; i++)
-                              Column(
-                                children: <Widget>[
-                                  Row(
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "اخـــتـــر الــمــهــارة ",
+                        style: TextStyle(
+                            fontFamily: 'myFont',
+                            fontSize: 20,
+                            color: secondaryColor),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  // for(int j=0;j<3;j++)
+                  Container(
+                    margin: EdgeInsets.only(bottom: 20),
+                    color: Color(0xffFAF5FF),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 5),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            itemm,
+                            style: TextStyle(
+                                color: primaryColor,
+                                fontFamily: 'myfont',
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.end,
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: <Widget>[
+                              goalsList.isEmpty
+                                  ? Text("لا يوجد اهداف",
+                                      style: TextStyle(
+                                          fontFamily: 'myFont',
+                                          fontSize: 20,
+                                          color: secondaryColor,
+                                          fontWeight: FontWeight.bold))
+                                  : SizedBox(),
+                              for (int i = 0; i < goalsList.length; i++)
+                                Card(
+                                  margin: EdgeInsets.only(bottom: 20),
+                                  color: primaryLightColor,
+                                  elevation: 2,
+                                  child: Column(
                                     children: <Widget>[
-                                      Text(
-                                        obj4[i]['percentage'] ?? '',
-                                        style: TextStyle(
-                                          fontFamily: 'myfont',
-                                          color: Color(0xff161A30),
-                                          fontSize: 20,
-                                        ),
+                                      Row(
+                                        children: <Widget>[
+                                          Spacer(),
+                                          Text(
+                                            "${percentList[i]}%" ?? '',
+                                            style: TextStyle(
+                                              fontFamily: 'myfont',
+                                              color: Color(0xff161A30),
+                                              fontSize: 20,
+                                            ),
+                                          ),
+                                          Spacer(),
+                                          Container(
+                                            width:
+                                                300, // Replace maxWidth with the maximum width you want to allow
+                                            child: Text(
+                                              goalsList[i] ?? '',
+                                              style: TextStyle(
+                                                color: Color(0xff352F44),
+                                                fontFamily: 'myfont',
+                                                fontSize: 20,
+                                              ),
+                                              textAlign: TextAlign.right,
+                                              maxLines:
+                                                  10, // Adjust the number of lines as needed
+                                              overflow: TextOverflow
+                                                  .ellipsis, // Handle overflow by displaying ellipsis
+                                            ),
+                                          ),
+                                          Spacer(),
+                                        ],
                                       ),
-                                      Spacer(),
-                                      Text(
-                                        obj4[i]['object'] ?? '',
-                                        style: TextStyle(
-                                          color: Color(0xff352F44),
-                                          fontFamily: 'myfont',
-                                          fontSize: 20,
-                                        ),
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: <Widget>[
+                                          Spacer(),
+                                          Checkbox(
+                                            value: isCheckedList[i],
+                                            onChanged: (value) {
+                                              setState(() {
+                                                isCheckedList[i] = value!;
+                                              });
+                                            },
+                                            activeColor: primaryColor,
+                                            checkColor: Colors.white,
+                                          ),
+                                          Spacer(),
+                                          Text(
+                                            'تـم تـحـقـيـق الـهـدف',
+                                            style: TextStyle(
+                                              color: Color.fromARGB(
+                                                  255, 40, 34, 55),
+                                              fontFamily: 'myfont',
+                                              fontSize: 17,
+                                            ),
+                                          ),
+                                          Spacer(),
+                                        ],
                                       ),
+                                      SizedBox(
+                                        height: 8,
+                                      ),
+                                      // Divider(thickness: 0.8,color: Colors.grey,)
                                     ],
                                   ),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      Spacer(),
-                                      Checkbox(
-                                        value: isCheckedList4[i],
-                                        onChanged: (value) {
-                                          setState(() {
-                                            isCheckedList4[i] = value ?? false;
-                                          });
-                                        },
-                                        activeColor: primaryColor,
-                                        checkColor: Colors.white,
-                                      ),
-                                                                           SizedBox(width: 20),
-
-                                      Text(
-                                        'تـم تـحـقـيـق الـهـدف',
-                                        style: TextStyle(
-                                          color: Color(0xff352F44),
-                                          fontFamily: 'myfont',
-                                          fontSize: 15,
-                                        ),
-                                      ),
-                                      Spacer(),
-                                    ],
-                                  )
-                                ],
-                              ),
-                          ],
-                        ),
-                      ],
+                                ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
               ),
-            )),
-      ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: primaryColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                ),
+                child: Text(
+                  "حـــفـــظ",
+                  style: TextStyle(
+                      fontFamily: 'myFont',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16),
+                ),
+                onPressed: () {
+                  update();
+                  getGoals(itemm);
+                },
+              ),
+              SizedBox(
+                height: 10,
+              ),
+            ]),
+          )),
     );
   }
 }

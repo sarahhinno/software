@@ -1,31 +1,208 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print, use_build_context_synchronously
+
+import 'dart:convert';
+//import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+//import 'package:software/notification.dart';
 import 'package:software/theme.dart';
+import 'package:http/http.dart' as http;
 
 class vications extends StatefulWidget {
+  final String id;
+  const vications({super.key, required this.id});
   @override
-  _vicationsState createState() => _vicationsState();
+  State<StatefulWidget> createState() {
+    return _vicationsState();
+  }
 }
 
 class _vicationsState extends State<vications> {
-  List<Map<String, String>> tableData = [
-    {"date": "20/10/2018", "reason": "مـرضـية"},
-    {"date": "16/03/2019", "reason": "مـرضـية"},
-    {"date": "20/10/2018", "reason": "مـرضـية"},
-    {"date": "16/03/2019", "reason": "مـرضـية"},
-    {"date": "20/10/2018", "reason": "مـرضـية"},
-    {"date": "16/03/2019", "reason": "مـرضـية"},
-    {"date": "20/10/2018", "reason": "مـرضـية"},
-    {"date": "16/03/2019", "reason": "مـرضـية"},
-    {"date": "20/10/2018", "reason": "مـرضـية"},
+  // final firestore=FirebaseFirestore.instance;
+
+  late String id;
+  static List<String> type = [
+    'مرضية',
+    'سنوية',
+    'أمومة',
   ];
-  String _formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+  String nowYear = '';
+  List<String> years = [''];
+  String selectedType = type.first;
+  // List<Map<String, String>> tableData = [
+  //   {"stsrtdate": "20/10/2018", "endDate": "1/1/2024", "reason": "مـرضـية"},
+  //   {"stsrtdate": "16/03/2019", "endDate": "1/1/2024", "reason": "مـرضـية"},
+  //   {"stsrtdate": "20/10/2018", "endDate": "1/1/2024", "reason": "مـرضـية"},
+  //   {"stsrtdate": "16/03/2019", "endDate": "1/1/2024", "reason": "مـرضـية"},
+  // ];
+  DateTime StartDate = DateTime.now();
+  DateTime endDate = DateTime.now();
+  String sd = DateFormat('yyyy-MM-dd').format(DateTime.now());
+  String ed = DateFormat('yyyy-MM-dd').format(DateTime.now());
+  final TextEditingController reasonController = TextEditingController();
 
-  bool _isTextFieldEnabled = false;
-  bool dates = false;
+  bool date1 = false;
+  bool date2 = false;
+  bool checked = false;
+
+  String sickRem = '';
+  String yearlyRem = '';
+  String shifted = '';
+
   DateTime selectedDate = DateTime.now();
+  String selectedYear = DateTime.now().year.toString();
+  late List<Map<String, dynamic>> data = [];
+  late String name;
 
-  Future<void> _selectDate(BuildContext context) async {
+  Future<void> getSPname() async {
+    final spName = await http.get(Uri.parse("$ip/sanad/getsppnename?id=$id"));
+    if (spName.statusCode == 200) {
+      print("body " + spName.body.toString());
+      final spNameBody = jsonDecode(spName.body);
+      name = spNameBody['Fname'] + " " + spNameBody['Lname'];
+
+      print("name" + name);
+    } else {
+      print("error" + spName.body);
+    }
+  }
+
+  Future<void> postNewVecation() async {
+    final newVecationResponse =
+        await http.post(Uri.parse(ip + "/sanad/newVecation"), body: {
+      'id': id,
+      'reason': reasonController.text,
+      'type': selectedType,
+      'startDate': sd,
+      'endDate': ed
+    });
+    if (newVecationResponse.statusCode == 200) {
+      print("Done");
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text(
+                "نــجــاح",
+                style: TextStyle(
+                    fontFamily: 'myFont',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20),
+              ),
+              icon: Icon(
+                Icons.done,
+                color: Colors.green,
+              ),
+              content: Text(
+                "تــم طــلــب إجــازة بــنــجــاح",
+                style: TextStyle(fontFamily: 'myFont', fontSize: 18),
+                textAlign: TextAlign.left,
+              ),
+            );
+          });
+    }
+  }
+
+  Future<void> getStartYear() async {
+    final startYearRes =
+        await http.get(Uri.parse("$ip/sanad/enteredYear?id=$id"));
+    if (startYearRes.statusCode == 200) {
+      print(startYearRes.body);
+
+      String y = startYearRes.body;
+      int yy = int.parse(y);
+
+      years = [];
+
+      int count = DateTime.now().year - int.parse(startYearRes.body);
+      for (int i = 0; i <= count; i++) {
+        y = yy.toString();
+        years.add(y);
+        yy++;
+      }
+      nowYear = years.last;
+
+      for (int i = 0; i < years.length; i++) {
+        print(years[i]);
+      }
+    }
+  }
+
+  void checkPost() {
+    if (reasonController.text.trim().isEmpty) {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text(
+                "تــحــذيــر",
+                style: TextStyle(
+                    fontFamily: 'myFont',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20),
+              ),
+              icon: Icon(
+                Icons.error,
+                color: Colors.red,
+              ),
+              content: Text(
+                "يــجــب تــعــبــئــة ســبــب الإجــازة",
+                style: TextStyle(fontFamily: 'myFont', fontSize: 18),
+                textAlign: TextAlign.left,
+              ),
+            );
+          });
+    } else {
+      checked = true;
+    }
+  }
+
+  Future<void> getVecations() async {
+    print("insideeee");
+    final allVecationsResponse = await http
+        .get(Uri.parse('$ip/sanad/getVecations?id=$id&year=$selectedYear'));
+    if (allVecationsResponse.statusCode == 200) {
+      //print(jsonDecode(allVecationsResponse.body));
+      data = List<Map<String, dynamic>>.from(
+          jsonDecode(allVecationsResponse.body));
+    } else {
+      data = [];
+    }
+  }
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  Future<void> getDetails() async {
+    final detailsResponse = await http
+        .get(Uri.parse('$ip/sanad/detailes?id=$id&year=$selectedYear'));
+    if (detailsResponse.statusCode == 200) {
+      print(detailsResponse.body);
+      final details = jsonDecode(detailsResponse.body);
+      setState(() {
+        sickRem = details['sickRemaining'].toString();
+        yearlyRem = details['yearlyRemaining'].toString();
+        shifted = details['shifted'].toString();
+      });
+      print(sickRem);
+      print(yearlyRem);
+      print(shifted);
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    id = widget.id;
+    print("vecations id" + id);
+    print("yeaarrrr" + selectedYear);
+    getSPname();
+    getVecations();
+    getStartYear();
+    getDetails();
+  }
+
+  Future<void> _selectDate(BuildContext context, int pickerNumber) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: selectedDate,
@@ -45,158 +222,41 @@ class _vicationsState extends State<vications> {
     );
 
     if (picked != null && picked != selectedDate) {
-      String formattedDate = DateFormat('yyyy-MM-dd').format(picked);
       setState(() {
-        dates = true;
-
-        selectedDate = picked;
-        _formattedDate = formattedDate;
+        switch (pickerNumber) {
+          case 1:
+            setState(() {
+              StartDate = picked;
+              sd = DateFormat('yyyy-MM-dd').format(StartDate);
+              date1 = true;
+            });
+            break;
+          case 2:
+            setState(() {
+              endDate = picked;
+              ed = DateFormat('yyyy-MM-dd').format(endDate);
+              date2 = true;
+            });
+            break;
+        }
       });
     }
   }
 
-  void _showDialog(BuildContext context) {
-    //String formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            'تـقـديـم طـلـب إجـازة ',
-            style: TextStyle(
-              fontFamily: 'myfont',
-              color: Color(0xff6f35a5),
-              fontWeight: FontWeight.bold,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          content: Container(
-            height: 240,
-            width: 350,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: <Widget>[
-                SizedBox(width: 10),
-                Text(
-                  'سـبـب الإجـازة    ',
-                  style: TextStyle(fontFamily: 'myfont', fontSize: 20),
-                ),
-                Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      labelText: ' ',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(29.0),
-                        borderSide: BorderSide(
-                            //  color: Color(0xff6f35a5),
-                            ),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20),
-                Text(
-                  'تـاريـخ الإجـازة',
-                  style: TextStyle(fontFamily: 'myfont', fontSize: 20),
-                ),
-                Row(
-                  //      crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () => _selectDate(context),
-                      style: ElevatedButton.styleFrom(
-                        primary: Color(0xff6f35a5),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50.0),
-                        ),
-                      ),
-                      child: Icon(Icons.calendar_month),
-                    ),
-                    SizedBox(width: 95),
-                    Text(
-                      _formattedDate,
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20),
-                Center(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text(
-                              'تأكيد الطلب',
-                              style: TextStyle(
-                                fontFamily: 'myfont',
-                                color: Color(0xff6f35a5),
-                                fontWeight: FontWeight.bold,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            content: Text(
-                              ' تـم إرسـال طـلـبـك بـنـجـاح',
-                              style: TextStyle(
-                                fontFamily: 'myfont',
-                                color: Color(0xff6f35a5),
-                                fontWeight: FontWeight.w100,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: Text(
-                                  'تــم',
-                                  style: TextStyle(
-                                      fontFamily: 'myfamily',
-                                      fontSize: 20,
-                                      color: Color(0xff6f35a5)),
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: Color(0xff6f35a5),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50.0),
-                      ),
-                    ),
-                    child: Text(
-                      'تـأكـيـد الـطـلـب',
-                      style: TextStyle(fontFamily: 'myfont', fontSize: 20),
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(
-                'تــم',
-                style: TextStyle(
-                    fontFamily: 'myfont',
-                    fontSize: 20,
-                    color: Color(0xff6f35a5)),
-              ),
-            ),
-          ],
-        );
-      },
-    );
+  String formateDate(String dateStr) {
+    try {
+      DateTime date = DateTime.parse(dateStr);
+      return DateFormat('yyyy-MM-dd').format(date);
+    } catch (e) {
+      // Handle parsing error, return original string or any default value
+      return dateStr;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    // pushNotificationsManager.initInfo(context,0,"");
 
     return Scaffold(
       appBar: AppBar(
@@ -205,6 +265,8 @@ class _vicationsState extends State<vications> {
           'الإجـازات',
           style: TextStyle(fontFamily: 'myfont'),
         ),
+        automaticallyImplyLeading: false,
+        centerTitle: true,
       ),
       body: Container(
         width: size.width,
@@ -215,130 +277,453 @@ class _vicationsState extends State<vications> {
             child: Column(
               children: <Widget>[
                 SizedBox(height: 20),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        '10',
-                        style: TextStyle(
-                            fontFamily: 'myfont',
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(width: 100),
-                      Text(
-                        'عـدد الإجـازات الـكـلـي',
-                        style: TextStyle(
-                            fontFamily: 'myfont',
-                            fontSize: 20,
-                            fontWeight: FontWeight.w100),
-                      ),
-                    ]),
-                SizedBox(height: 5),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        '10',
-                        style: TextStyle(
-                            fontFamily: 'myfont',
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(width: 80),
-                      Text(
-                        'عـدد الإجـازات الـمـترحـلـة',
-                        style: TextStyle(
-                            fontFamily: 'myfont',
-                            fontSize: 20,
-                            fontWeight: FontWeight.w100),
-                      ),
-                    ]),
-                SizedBox(height: 5),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        '10',
-                        style: TextStyle(
-                            fontFamily: 'myfont',
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(width: 90),
-                      Text(
-                        'عـدد الإجـازات الـمـبـقـيـة',
-                        style: TextStyle(
-                            fontFamily: 'myfont',
-                            fontSize: 20,
-                            fontWeight: FontWeight.w100),
-                      ),
-                    ]),
-                SizedBox(height: 30),
-                Container(
-                  width: 400,
-                  child: ElevatedButton(
-                    onPressed: () => _showDialog(context),
-                    style: ElevatedButton.styleFrom(
-                      primary: Color(0xff6f35a5),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(29.0),
-                      ),
-                    ),
-                    child: Text('تـقـديـم طـلـب إجـازة ',
-                        style: TextStyle(
-                            fontFamily: 'myfont',
-                            fontSize: 20,
-                            fontWeight: FontWeight.w100)),
-                  ),
+                SizedBox(
+                  height: 20,
                 ),
-                SizedBox(height: 30),
-                Text('تـفـاصـيـل الإجـازات',
-                    style: TextStyle(
-                        fontFamily: 'myfont',
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold)),
-                SizedBox(height: 10),
                 Container(
-                //  alignment: Alignment.center,
-                  width: 600,
-                  child: DataTable(
-                    decoration: BoxDecoration(
-                      color: Color(0xFFF1E6FF),
-                    ),
-                    border: TableBorder.all(
-                      color: Color(0xff6f35a5),
-                    ),
-                    columns: [
-                      DataColumn(
-                          label: Text('تاريخ الإجازة',
-                              style:
-                                  TextStyle(fontFamily: 'myfont', fontSize: 20),
-                              textAlign: TextAlign.center)),
-                      DataColumn(
-                          label: Text('سبب الإجازة',
-                              style:
-                                  TextStyle(fontFamily: 'myfont', fontSize: 20),
-                              textAlign: TextAlign.center)),
-                    ],
-                    rows: tableData
-                        .map(
-                          (data) => DataRow(
-                            cells: [
-                              DataCell(Text(data['date'] ?? '',
+                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  width: size.width * 0.4,
+                  child: Card(
+                    elevation: 5,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: <Widget>[
+                          SizedBox(width: 10),
+                          Center(
+                            child: Text(
+                              'تـقـديـم طـلـب إجـازة ',
+                              style: TextStyle(
+                                  fontFamily: 'myfont',
+                                  color: Color(0xff6f35a5),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 22),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          Text(
+                            'سـبـب الإجـازة    ',
+                            style:
+                                TextStyle(fontFamily: 'myfont', fontSize: 20),
+                          ),
+                          TextField(
+                            controller: reasonController,
+                            maxLines: 2,
+                            decoration: InputDecoration(
+                              labelText: ' ',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(29.0),
+                                borderSide: BorderSide(
+                                    //  color: Color(0xff6f35a5),
+                                    ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 30),
+                          Row(
+                            children: [
+                              //    Spacer(),
+                              Container(
+                                  //width: size.width * 0.5,
+                                  child: DropdownButtonHideUnderline(
+                                child: DropdownButton2<String>(
+                                  isExpanded: true,
+                                  hint: Text(
+                                    'Select Item',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Theme.of(context).hintColor,
+                                    ),
+                                  ),
+                                  items: type
+                                      .map((item) => DropdownMenuItem(
+                                            value: item,
+                                            child: Text(
+                                              item,
+                                              style: const TextStyle(
+                                                  fontSize: 14,
+                                                  fontFamily: 'myFont'),
+                                            ),
+                                          ))
+                                      .toList(),
+                                  value: selectedType,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      selectedType = value!;
+                                    });
+                                  },
+                                  buttonStyleData: ButtonStyleData(
+                                    height: 50,
+                                    width: 160,
+                                    padding: const EdgeInsets.only(
+                                        left: 14, right: 14),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(14),
+                                        border: Border.all(
+                                            color: primaryColor, width: 2),
+                                        color: Colors.white),
+                                    elevation: 2,
+                                  ),
+                                  dropdownStyleData: const DropdownStyleData(
+                                    maxHeight: 200,
+                                  ),
+                                  menuItemStyleData: const MenuItemStyleData(
+                                    height: 40,
+                                  ),
+                                ),
+                              )),
+                              Spacer(),
+                              //    SizedBox(width: 50),
+
+                              Text("نــوع الإجـــازة",
                                   style: TextStyle(
-                                      fontFamily: 'myfont', fontSize: 20),
-                                  textAlign: TextAlign.center)),
-                              DataCell(Text(data['reason'] ?? '',
-                                  style: TextStyle(
-                                      fontFamily: 'myfont', fontSize: 20),
-                                  textAlign: TextAlign.center)),
+                                      fontFamily: 'myfont', fontSize: 20)),
+                              // Spacer(),
                             ],
                           ),
-                        )
-                        .toList(),
+                          SizedBox(height: 20),
+                          Text(
+                            'تـاريـخ بــدء الإجـازة',
+                            style:
+                                TextStyle(fontFamily: 'myfont', fontSize: 20),
+                          ),
+                          Row(
+                            children: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  setState(
+                                    () {
+                                      _selectDate(context, 1);
+                                    },
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  primary: Color(0xff6f35a5),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(50.0),
+                                  ),
+                                ),
+                                child: Icon(Icons.calendar_month),
+                              ),
+                              Spacer(),
+                              Text(
+                                sd,
+                                style: TextStyle(fontSize: 20),
+                              ),
+                              SizedBox(
+                                width: 40,
+                              )
+                            ],
+                          ),
+                          SizedBox(height: 20),
+                          Text(
+                            'تـاريـخ انــتــهـــاء الإجـازة',
+                            style:
+                                TextStyle(fontFamily: 'myfont', fontSize: 20),
+                          ),
+                          Row(
+                            //  mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              ElevatedButton(
+                                onPressed: () => _selectDate(context, 2),
+                                style: ElevatedButton.styleFrom(
+                                  primary: Color(0xff6f35a5),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(50.0),
+                                  ),
+                                ),
+                                child: Icon(Icons.calendar_month),
+                              ),
+                              Spacer(),
+                              Text(
+                                ed,
+                                style: TextStyle(fontSize: 20),
+                              ),
+                              SizedBox(
+                                width: 40,
+                              )
+                            ],
+                          ),
+                          SizedBox(height: 20),
+                          Center(
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                checkPost();
+                                if (checked) {
+                                  postNewVecation();
+                                  //  DocumentSnapshot snap=await FirebaseFirestore.instance.collection("notifications").doc(id).get();
+                                  //  String token=snap['token'];
+                                  //  print(token);
+                                  print(id);
+                                  //      pushNotificationsManager.sendPushMessage(token, "vecation", "vecation Body");
+                                  // firestore.collection('notifInfo').add({
+                                  //   'name':name,
+                                  //   'id':id,
+                                  //   'startDate':sd,
+                                  //   'endDate':ed,
+                                  //   'reason':reasonController.text,
+                                  //   'type':selectedType,
+                                  //   'time':FieldValue.serverTimestamp(),
+                                  //   'token':token,
+                                  //   'clicked':false
+                                  // });
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                primary: Color(0xff6f35a5),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(50.0),
+                                ),
+                              ),
+                              child: Text(
+                                'تـأكـيـد الـطـلـب',
+                                style: TextStyle(
+                                    fontFamily: 'myfont', fontSize: 20),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          )
+                        ],
+                      ),
+                    ),
                   ),
                 ),
+                SizedBox(
+                  height: 50,
+                ),
+                SizedBox(height: 20),
+                Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                  Spacer(),
+                  Container(
+                      //width: size.width * 0.5,
+                      child: DropdownButtonHideUnderline(
+                    child: DropdownButton2<String>(
+                      isExpanded: true,
+                      hint: Text(
+                        'Select Item',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Theme.of(context).hintColor,
+                        ),
+                      ),
+                      items: years
+                          .map((item) => DropdownMenuItem(
+                                value: item,
+                                child: Text(
+                                  item,
+                                  style: const TextStyle(
+                                      fontSize: 14, fontFamily: 'myFont'),
+                                ),
+                              ))
+                          .toList(),
+                      value: nowYear,
+                      onChanged: (value) {
+                        setState(() {
+                          nowYear = value!;
+                          selectedYear = value!;
+                          print(selectedYear);
+                          getVecations();
+                          getDetails();
+                        });
+                      },
+                      buttonStyleData: ButtonStyleData(
+                        height: 50,
+                        width: 100,
+                        padding: const EdgeInsets.only(left: 14, right: 14),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(14),
+                            border: Border.all(color: primaryColor, width: 2),
+                            color: Colors.white),
+                        elevation: 2,
+                      ),
+                      dropdownStyleData: const DropdownStyleData(
+                        maxHeight: 200,
+                      ),
+                      menuItemStyleData: const MenuItemStyleData(
+                        height: 40,
+                      ),
+                    ),
+                  )),
+                  SizedBox(
+                    width: 50,
+                  ),
+                  Text('تـفـاصـيـل الإجـازات',
+                      style: TextStyle(
+                          fontFamily: 'myfont',
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold)),
+                  Spacer(),
+                ]),
+                SizedBox(
+                  height: 20,
+                ),
+                FutureBuilder(
+                    future: getVecations(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator(); // Show a loading indicator
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else {
+                        // Continue building your UI with the fetched data
+                        return Container(
+                          padding: EdgeInsets.symmetric(horizontal: 0),
+                          child: DataTable(
+                            decoration: BoxDecoration(
+                              color: Color(0xFFF1E6FF),
+                            ),
+                            border: TableBorder.all(
+                              color: Color(0xff6f35a5),
+                            ),
+                            columns: [
+                              DataColumn(
+                                  label: Text(
+                                ' انتهاء الإجازة',
+                                style: TextStyle(
+                                    fontFamily: 'myfont', fontSize: 18),
+                                // textAlign: TextAlign.center
+                              )),
+                              DataColumn(
+                                  label: Text(
+                                ' بدء الإجازة',
+                                style: TextStyle(
+                                    fontFamily: 'myfont', fontSize: 18),
+                                // textAlign: TextAlign.center
+                              )),
+                              DataColumn(
+                                  label: Text(
+                                'نوع الإجازة',
+                                style: TextStyle(
+                                    fontFamily: 'myfont', fontSize: 18),
+                                //textAlign: TextAlign.center
+                              )),
+                            ],
+                            rows: data.map((Map<String, dynamic> rowData) {
+                              return DataRow(
+                                cells: [
+                                  DataCell(Text(
+                                    formateDate(rowData['endDate'] ?? ''),
+                                    style: TextStyle(
+                                        fontFamily: 'myfont', fontSize: 18),
+                                  )),
+                                  DataCell(Text(
+                                    formateDate(rowData['startDate'] ?? ''),
+                                    style: TextStyle(
+                                        fontFamily: 'myfont', fontSize: 18),
+                                  )),
+                                  DataCell(Text(
+                                    rowData['type'] ?? '',
+                                    style: TextStyle(
+                                        fontFamily: 'myfont', fontSize: 18),
+                                  )),
+                                ],
+                              );
+                            }).toList(),
+                          ),
+                        );
+                      }
+                    }),
+                SizedBox(
+                  height: 50,
+                ),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Spacer(),
+                      Text(
+                        sickRem,
+                        style: TextStyle(
+                            fontFamily: 'myfont',
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        width: 50,
+                      ),
+                      Text(
+                        ' الإجـازات الـمــرضــيــة الـمتــبــقـيــة',
+                        style: TextStyle(
+                            fontFamily: 'myfont',
+                            fontSize: 20,
+                            fontWeight: FontWeight.w100),
+                      ),
+                      Spacer(),
+                    ]),
+                Divider(
+                  height: 1.0,
+                  thickness: 1.0,
+                  color: Color(0xff6f35a5),
+                  indent: 500.0, // Set the starting padding
+                  endIndent: 500.0, // Set the ending padding
+                ),
+                SizedBox(height: 5),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Spacer(),
+                      Text(
+                        yearlyRem,
+                        style: TextStyle(
+                            fontFamily: 'myfont',
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        width: 50,
+                      ),
+                      Text(
+                        ' الإجـازات الـســنـويــة الـمتـبـقــيــة ',
+                        style: TextStyle(
+                            fontFamily: 'myfont',
+                            fontSize: 20,
+                            fontWeight: FontWeight.w100),
+                      ),
+                      Spacer(),
+                    ]),
+                Divider(
+                  height: 1.0,
+                  thickness: 1.0,
+                  color: Color(0xff6f35a5),
+                  indent: 500.0,
+                  endIndent: 500.0,
+                ),
+                SizedBox(height: 5),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Spacer(),
+                      Text(
+                        shifted,
+                        style: TextStyle(
+                            fontFamily: 'myfont',
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        width: 50,
+                      ),
+                      Text(
+                        'عـــدد الإجـــازات الـــمــــرحـــلــة',
+                        style: TextStyle(
+                            fontFamily: 'myfont',
+                            fontSize: 20,
+                            fontWeight: FontWeight.w100),
+                      ),
+                      Spacer(),
+                    ]),
+                Divider(
+                  height: 1.0,
+                  thickness: 1.0,
+                  color: Color(0xff6f35a5),
+                  indent: 500.0, // Set the starting padding
+                  endIndent: 500.0, // Set the ending padding
+                ),
+                SizedBox(
+                  height: 50,
+                )
               ],
             ),
           ),

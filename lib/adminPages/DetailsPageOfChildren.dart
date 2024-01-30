@@ -1,6 +1,12 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
+import 'package:software/theme.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class CardData {
   final String type;
@@ -16,16 +22,119 @@ List<String> yourTableDataList = [
   // Add more rows as needed
 ];
 
-class DetailsOfChild extends StatefulWidget {
+class DetailsPage extends StatefulWidget {
   final String name;
 
-  DetailsOfChild({required this.name});
+  DetailsPage({required this.name});
 
   @override
-  _DetailsOfChildState createState() => _DetailsOfChildState();
+  _DetailsPageState createState() => _DetailsPageState();
 }
 
-class _DetailsOfChildState extends State<DetailsOfChild> {
+class _DetailsPageState extends State<DetailsPage> {
+  final String imageId = '147852369'; // Replace with the actual image ID
+  String imageUrl = '';
+  String imageID = '';
+
+  late String id;
+  late final Map<String, dynamic>? data;
+  List<dynamic>? sessions;
+
+  String name = "";
+  String fp = "";
+  String mp = "";
+  String add = "";
+  String diag = "";
+
+  DateTime bd = DateTime.now();
+  DateTime ed = DateTime.now();
+  DateTime fsd = DateTime.now();
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      id = widget.name;
+    });
+    print("id" + id);
+    getChildInfo();
+    getImageUrl();
+    getIDImage();
+  }
+
+  Future<void> getImageUrl() async {
+    print(imageId);
+    final String serverUrl = '$ip/sanad/getImage?id=$id';
+
+    try {
+      final response = await http.get(Uri.parse(serverUrl));
+      print(response.body);
+      if (response.statusCode == 200) {
+        setState(() {
+          imageUrl = serverUrl;
+          print("personal" + imageUrl);
+        });
+      } else {
+        print('Failed to get image. Status code: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error getting image: $error');
+    }
+  }
+
+  Future<void> getIDImage() async {
+    print(imageId);
+    final String serverUrl = '$ip/sanad/getIDImageChild?id=$id';
+
+    try {
+      final response = await http.get(Uri.parse(serverUrl));
+      print(response.body);
+      if (response.statusCode == 200) {
+        setState(() {
+          imageID = serverUrl;
+          print("image id" + imageID);
+        });
+      } else {
+        print('Failed to get image. Status code: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error getting image: $error');
+    }
+  }
+
+  Future<void> getChildInfo() async {
+    final response = await http.get(
+      Uri.parse(ip + '/sanad/getChildInfoByID?id=$id'),
+    );
+
+    if (response.statusCode == 200) {
+      print("okkk");
+      //print(response.body);
+      data = jsonDecode(response.body);
+      setState(() {
+        name = data!['firstName'] +
+            " " +
+            data!['secondName'] +
+            " " +
+            data!['thirdName'] +
+            " " +
+            data!['lastName'];
+        bd = DateTime.parse(data!['birthDate']).toLocal();
+        ed = DateTime.parse(data!['enteryDate']).toLocal();
+        fsd = DateTime.parse(data!['firstSessionDate']).toLocal();
+        fp = data!['fatherPhone'];
+        mp = data!['motherPhone'];
+        add = data!['address'];
+        diag = data!['diagnosis'];
+        sessions = data!['sessions'];
+      });
+      print(bd);
+    } else {
+      print(response.reasonPhrase);
+      print("error");
+    }
+  }
+
   Future<void> _openFile() async {
     String filePath = 'files/exp2.pdf';
     OpenResult result = await OpenFile.open(filePath);
@@ -39,15 +148,15 @@ class _DetailsOfChildState extends State<DetailsOfChild> {
   }
 
   void _showDialog(BuildContext context, String s) {
-    List<Map<String, String>> tableData = [
-      {"date": "1", "reason": "سـمع ونـطق"},
-      {"date": "2", "reason": "علاج سلوكي"},
-      {"date": "3", "reason": "علاج وظيفي"},
-      {"date": "4", "reason": "رياضة"},
-      // Add more rows as needed
-    ];
+    // List<Map<String, String>> tableData = [
+    //   {"date": "1", "reason": "سـمع ونـطق"},
+    //   {"date": "2", "reason": "علاج سلوكي"},
+    //   {"date": "3", "reason": "علاج وظيفي"},
+    //   {"date": "4", "reason": "رياضة"},
+    //   // Add more rows as needed
+    // ];
     bool _selectAll = false;
-    List<bool> _selectedRows = List.filled(tableData.length, false);
+    List<bool> _selectedRows = List.filled(sessions!.length, false);
     void _deleteSelectedRows() {
       List<int> indicesToRemove = [];
       for (int i = 0; i < _selectedRows.length; i++) {
@@ -60,50 +169,74 @@ class _DetailsOfChildState extends State<DetailsOfChild> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        Size size = MediaQuery.of(context).size;
         return AlertDialog(
-          content: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Container(
-              height: 500,
-              padding: EdgeInsets.all(16.0),
-              child: Column(
-                children: <Widget>[
-                  DataTable(
-                    columns: [
-                      DataColumn(label: Text("نـوع الـجـلـسـة",style: TextStyle(fontFamily: 'myfont'),)),
-                      DataColumn(label: Text("رقـم الجـلـسـة",style: TextStyle(fontFamily: 'myfont'),)),
-                    ],
-                    rows: List.generate(tableData.length, (index) {
-                      return DataRow(
-                        cells: [
-                          DataCell(Text(tableData[index]["date"]!,style: TextStyle(fontFamily: 'myfont'),)),
-                          DataCell(Text(tableData[index]["reason"]!,style: TextStyle(fontFamily: 'myfont'))),
+          content: Container(
+            width: size.width * 0.75,
+            height: size.height * 0.4,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Column(
+                    children: <Widget>[
+                      DataTable(
+                        columns: [
+                          DataColumn(
+                              label: Text(
+                            "العـدد بالإسـبـوع",
+                            style: TextStyle(
+                                fontFamily: 'myFont',
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16),
+                          )),
+                          DataColumn(
+                              label: Text("نـوع الـجـلـسـة",
+                                  style: TextStyle(
+                                      fontFamily: 'myFont',
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16))),
                         ],
-                      );
-                    }),
-                  ),
-                  SizedBox(height: 50),
-                  ElevatedButton(
-                      onPressed: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //       builder: (context) =>
-                        //           AnotherPage()), // Navigate to AnotherPage
-                        // );
-                      },
-                      child: Text(
-                        'تـعـديـل الـجـلـسـات',
-                        style: TextStyle(fontSize: 20),
+                        rows: List.generate(sessions!.length, (index) {
+                          return DataRow(
+                            cells: [
+                              DataCell(Text(sessions![index]['no'].toString(),
+                                  style: TextStyle(
+                                      fontFamily: 'myFont', fontSize: 16))),
+                              DataCell(Text(sessions![index]['sessionName'],
+                                  style: TextStyle(
+                                      fontFamily: 'myFont', fontSize: 16))),
+                            ],
+                          );
+                        }),
                       ),
-                      style: ElevatedButton.styleFrom(
-                        primary: Color(0xFF6F35A5),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                              29), // Optional: for custom shapes
-                        ),
-                      )),
-                ],
+                      SizedBox(height: 50),
+                      ElevatedButton(
+                          onPressed: () {
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //       builder: (context) =>
+                            //           AnotherPage()), // Navigate to AnotherPage
+                            // );
+                          },
+                          child: Text(
+                            'تـعـديـل الـجـلـسـات',
+                            style:
+                                TextStyle(fontSize: 20, fontFamily: 'myFont'),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            primary: Color(0xFF6F35A5),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  29), // Optional: for custom shapes
+                            ),
+                          )),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
@@ -114,7 +247,8 @@ class _DetailsOfChildState extends State<DetailsOfChild> {
                 style: TextStyle(
                     color: Color(0xFF6F35A5),
                     fontSize: 20,
-                    fontWeight: FontWeight.bold),
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'myFont'),
               ),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -140,12 +274,46 @@ class _DetailsOfChildState extends State<DetailsOfChild> {
         });
   }
 
-// ... existing code ...
+  void _showImageDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          icon: imageID.isEmpty ? Icon(Icons.error) : Icon(Icons.done),
+          title: Text('صــورة الـــهــويــة',
+              style: TextStyle(
+                  fontFamily: 'myFont',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20)),
+          content: imageID.isEmpty
+              ? Text(
+                  "لــم يــتــم تــحــمــيــل صــورة الــهويــة",
+                  style: TextStyle(
+                      fontFamily: 'myFont',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      color: primaryColor),
+                )
+              : Image.network(imageID,
+                  width: 200.0, height: 200.0, fit: BoxFit.cover),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('إغلاق',
+                  style: TextStyle(
+                      fontFamily: 'myFont', fontSize: 18, color: primaryColor)),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xff6f35a5),
@@ -153,10 +321,11 @@ class _DetailsOfChildState extends State<DetailsOfChild> {
           'تـفــاصـيـل',
           style: TextStyle(fontFamily: 'myfont'),
         ),
+        centerTitle: true,
       ),
-      body: Center(
-        // width: size.width,
-        // height: size.height,
+      body: Container(
+        width: size.width,
+        height: size.height,
         child: Stack(
           children: <Widget>[
             SingleChildScrollView(
@@ -164,12 +333,6 @@ class _DetailsOfChildState extends State<DetailsOfChild> {
                 children: <Widget>[
                   Stack(
                     children: <Widget>[
-                      // Positioned(
-                      //   child: Image.asset(
-                      //     'images/tester.png',
-                      //     fit: BoxFit.cover,
-                      //   ),
-                      // ),
                       Center(
                         child: Padding(
                           padding: EdgeInsets.all(20),
@@ -178,7 +341,7 @@ class _DetailsOfChildState extends State<DetailsOfChild> {
                               SizedBox(height: 5),
                               Card(
                                 color: Colors.transparent,
-                                child: Text('ســاره خـالـد ولـيـد حــنــو',
+                                child: Text(name,
                                     textAlign: TextAlign.end,
                                     style: TextStyle(
                                       color: Colors.white,
@@ -187,11 +350,22 @@ class _DetailsOfChildState extends State<DetailsOfChild> {
                                       fontWeight: FontWeight.bold,
                                     )),
                               ),
-                              Image.asset(
-                                'images/child1.png',
-                                width: 300,
-                                height: 300,
-                              ),
+                              ClipOval(
+                                child: imageUrl.isNotEmpty
+                                    ? (Image.network(
+                                        imageUrl,
+                                        height: 200.0,
+                                        width: 200.0,
+                                        fit: BoxFit.cover,
+                                      ))
+                                    : Image.asset(
+                                        'images/profileImage.jpg',
+                                        width: 200,
+                                        height: 200,
+                                        fit: BoxFit.cover,
+                                      ),
+                              )
+
                               //  SizedBox(height: 20),
                             ],
                           ),
@@ -206,368 +380,364 @@ class _DetailsOfChildState extends State<DetailsOfChild> {
                       child: Column(
                         children: <Widget>[
                           Column(children: <Widget>[
-                            Card(
-                              //1
-                              color: Colors.white,
-                              child: Row(
-                                children: <Widget>[
-                                  Spacer(),
-                                  Text('123456789',
-                                      style: TextStyle(
-                                          fontFamily: 'myfont',
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17)),
-                                  SizedBox(width: 140),
-                                  Text(' رقــم الــهـويـة',
-                                      style: TextStyle(
-                                          fontFamily: 'myfont',
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17)),
-                                  SizedBox(width: 10),
-                                  Icon(
-                                    Icons.sd_card,
-                                    color: Color.fromARGB(255, 111, 53, 165),
-                                  ),
-                                  Spacer(),
-                                ],
+                            Row(children: <Widget>[
+                              Spacer(),
+                              Card(
+                                //1
+                                color: Colors.white,
+                                child: Row(
+                                  children: <Widget>[
+                                    Text(id,
+                                        style: TextStyle(
+                                            fontFamily: 'myfont',
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 17)),
+                                    SizedBox(width: 25),
+                                    Text(' رقــم الــهـويـة',
+                                        style: TextStyle(
+                                            fontFamily: 'myfont',
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 17)),
+                                    SizedBox(width: 10),
+                                    Icon(
+                                      Icons.sd_card,
+                                      color: Color.fromARGB(255, 111, 53, 165),
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                            SizedBox(height: 20),
-                            Card(
-                              // 2
-                              color: Colors.white,
-                              child: Row(
-                                children: <Widget>[
-                                  Spacer(),
-                                  Text('27/6/2015',
-                                      style: TextStyle(
-                                          fontFamily: 'myfont',
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17)),
-                                  SizedBox(width: 110),
-                                  Text('   تـاريـخ  الـمـيـلاد ',
-                                      style: TextStyle(
-                                          fontFamily: 'myfont',
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17)),
-                                  SizedBox(width: 10),
-                                  Icon(
-                                    Icons.date_range,
-                                    color: Color.fromARGB(255, 111, 53, 165),
-                                  ),
-                                  Spacer(),
-                                ],
+                              Spacer(),
+                              Card(
+                                // 2
+                                color: Colors.white,
+                                child: Row(
+                                  children: <Widget>[
+                                    Text(DateFormat('yyyy/MM/dd').format(bd),
+                                        style: TextStyle(
+                                            fontFamily: 'myfont',
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 17)),
+                                    // Spacer(),
+                                    Text('   تـاريـخ  الـمـيـلاد ',
+                                        style: TextStyle(
+                                            fontFamily: 'myfont',
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 17)),
+                                    SizedBox(width: 10),
+                                    Icon(
+                                      Icons.date_range,
+                                      color: Color.fromARGB(255, 111, 53, 165),
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
+                              Spacer(),
+                            ]),
                             SizedBox(height: 20),
-                            Card(
-                              //3
-                              color: Colors.white,
-                              child: Row(
-                                children: <Widget>[
-                                  Spacer(),
-                                  Text('27/6/2015',
-                                      style: TextStyle(
-                                          fontFamily: 'myfont',
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17)),
-                                  SizedBox(width: 110),
-                                  Text('   تـاريـخ  الـدخـول ',
-                                      style: TextStyle(
-                                          fontFamily: 'myfont',
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17)),
-                                  SizedBox(width: 10),
-                                  Icon(
-                                    Icons.date_range,
-                                    color: Color.fromARGB(255, 111, 53, 165),
-                                  ),
-                                  Spacer(),
-                                ],
+                            Row(children: <Widget>[
+                              Spacer(),
+                              Card(
+                                //3
+                                color: Colors.white,
+                                child: Row(
+                                  children: <Widget>[
+                                    Text(DateFormat('yyyy/MM/dd').format(ed),
+                                        style: TextStyle(
+                                            fontFamily: 'myfont',
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 17)),
+                                    Text('   تـاريـخ  الـدخـول ',
+                                        style: TextStyle(
+                                            fontFamily: 'myfont',
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 17)),
+                                    SizedBox(width: 10),
+                                    Icon(
+                                      Icons.date_range,
+                                      color: Color.fromARGB(255, 111, 53, 165),
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                            SizedBox(height: 20),
-                            Card(
-                              //4
-                              color: Colors.white,
-                              child: Row(
-                                children: <Widget>[
-                                  Spacer(),
-                                  Text('27/6/2015',
-                                      style: TextStyle(
-                                          fontFamily: 'myfont',
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17)),
-                                  SizedBox(width: 110),
-                                  Text('تـاريـخ  أول جـلـسـة',
-                                      style: TextStyle(
-                                          fontFamily: 'myfont',
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17)),
-                                  SizedBox(width: 10),
-                                  Icon(
-                                    Icons.date_range,
-                                    color: Color.fromARGB(255, 111, 53, 165),
-                                  ),
-                                  Spacer(),
-                                ],
+                              Spacer(),
+                              Card(
+                                //4
+                                color: Colors.white,
+                                child: Row(
+                                  children: <Widget>[
+                                    Text(DateFormat('yyyy/MM/dd').format(fsd),
+                                        style: TextStyle(
+                                            fontFamily: 'myfont',
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 17)),
+                                    Text('تـاريـخ  أول جـلـسـة',
+                                        style: TextStyle(
+                                            fontFamily: 'myfont',
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 17)),
+                                    SizedBox(width: 10),
+                                    Icon(
+                                      Icons.date_range,
+                                      color: Color.fromARGB(255, 111, 53, 165),
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
+                              Spacer(),
+                            ]),
                             SizedBox(height: 20),
-                            Card(
-                              //5
-                              color: Colors.white,
-                              child: Row(
-                                children: <Widget>[
-                                  Spacer(),
-                                  Text('0598598388',
-                                      style: TextStyle(
-                                          fontFamily: 'myfont',
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17)),
-                                  SizedBox(width: 105),
-                                  Text('رقـم هـاتـف الأب',
-                                      style: TextStyle(
-                                          fontFamily: 'myfont',
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17)),
-                                  SizedBox(width: 10),
-                                  Icon(
-                                    Icons.phone,
-                                    color: Color.fromARGB(255, 111, 53, 165),
-                                  ),
-                                  Spacer(),
-                                ],
+                            Row(children: <Widget>[
+                              Spacer(),
+                              Card(
+                                //5
+                                color: Colors.white,
+                                child: Row(
+                                  children: <Widget>[
+                                    Text(fp,
+                                        style: TextStyle(
+                                            fontFamily: 'myfont',
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 17)),
+                                    Text('رقـم هـاتـف الأب',
+                                        style: TextStyle(
+                                            fontFamily: 'myfont',
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 17)),
+                                    SizedBox(width: 10),
+                                    Icon(
+                                      Icons.phone,
+                                      color: Color.fromARGB(255, 111, 53, 165),
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                            SizedBox(height: 20),
-                            Card(
-                              //6
-                              color: Colors.white,
-                              child: Row(
-                                children: <Widget>[
-                                  Spacer(),
-                                  Text('0568507339',
-                                      style: TextStyle(
-                                          fontFamily: 'myfont',
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17)),
-                                  SizedBox(width: 110),
-                                  Text(' رقم هـاتـف الأم',
-                                      style: TextStyle(
-                                          fontFamily: 'myfont',
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17)),
-                                  SizedBox(width: 10),
-                                  Icon(
-                                    Icons.phone,
-                                    color: Color.fromARGB(255, 111, 53, 165),
-                                  ),
-                                  Spacer(),
-                                ],
+                              Spacer(),
+                              Card(
+                                //6
+                                color: Colors.white,
+                                child: Row(
+                                  children: <Widget>[
+                                    Text(mp,
+                                        style: TextStyle(
+                                            fontFamily: 'myfont',
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 17)),
+                                    Text(' رقم هـاتـف الأم',
+                                        style: TextStyle(
+                                            fontFamily: 'myfont',
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 17)),
+                                    SizedBox(width: 10),
+                                    Icon(
+                                      Icons.phone,
+                                      color: Color.fromARGB(255, 111, 53, 165),
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
+                              Spacer(),
+                            ]),
                             SizedBox(height: 20),
-                            Card(
-                              //7
-                              color: Colors.white,
-                              child: Row(
-                                children: <Widget>[
-                                  Spacer(),
-                                  Text('نابلس/المساكن الشعبية',
-                                      style: TextStyle(
-                                          fontFamily: 'myfont',
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17)),
-                                  SizedBox(width: 80),
-                                  Text('عـنـوان الـسـكـن',
-                                      style: TextStyle(
-                                          fontFamily: 'myfont',
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17)),
-                                  SizedBox(width: 10),
-                                  Icon(
-                                    Icons.location_pin,
-                                    color: Color.fromARGB(255, 111, 53, 165),
-                                  ),
-                                  Spacer(),
-                                ],
+                            Row(children: <Widget>[
+                              Spacer(),
+                              Card(
+                                //7
+                                color: Colors.white,
+                                child: Row(
+                                  children: <Widget>[
+                                    Text(add,
+                                        style: TextStyle(
+                                            fontFamily: 'myfont',
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 17)),
+                                    Text('عـنـوان الـسـكـن',
+                                        style: TextStyle(
+                                            fontFamily: 'myfont',
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 17)),
+                                    SizedBox(width: 10),
+                                    Icon(
+                                      Icons.location_pin,
+                                      color: Color.fromARGB(255, 111, 53, 165),
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                            SizedBox(height: 20),
-                            Card(
-                              //8
-                              color: Colors.white,
-                              child: Row(
-                                children: <Widget>[
-                                  Spacer(),
-                                  Text('مـتـلازمـة داون',
-                                      style: TextStyle(
-                                          fontFamily: 'myfont',
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17)),
-                                  SizedBox(width: 130),
-                                  Text(' الـتـشـخـيـص',
-                                      style: TextStyle(
-                                          fontFamily: 'myfont',
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17)),
-                                  SizedBox(width: 10),
-                                  Icon(
-                                    Icons.category,
-                                    color: Color.fromARGB(255, 111, 53, 165),
-                                  ),
-                                  Spacer(),
-                                ],
+                              Spacer(),
+                              Card(
+                                //8
+                                color: Colors.white,
+                                child: Row(
+                                  children: <Widget>[
+                                    Text(diag,
+                                        style: TextStyle(
+                                            fontFamily: 'myfont',
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 17)),
+                                    Text(' الـتـشـخـيـص',
+                                        style: TextStyle(
+                                            fontFamily: 'myfont',
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 17)),
+                                    SizedBox(width: 50),
+                                    Icon(
+                                      Icons.category,
+                                      color: Color.fromARGB(255, 111, 53, 165),
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
+                              Spacer(),
+                            ]),
                             SizedBox(height: 20),
-                            Card(
-                              //8
-                              color: Colors.white,
-                              child: Row(
-                                children: <Widget>[
-                                  Spacer(),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      openphoto(context, 'images/id.jpg');
-                                      print('okkkkkk');
-                                    },
-                                    style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all<Color>(
-                                              Color(0xFFF1E6FF)),
-                                      shape: MaterialStateProperty.all<
-                                          RoundedRectangleBorder>(
-                                        RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(29.0),
+                            Row(children: <Widget>[
+                              Spacer(),
+                              Card(
+                                //8
+                                color: Colors.white,
+                                child: Row(
+                                  children: <Widget>[
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        // openphoto(context, 'assets/images/id.jpg');
+                                        _showImageDialog(context);
+                                        print('okkkkkk');
+                                      },
+                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                                Color(0xFFF1E6FF)),
+                                        shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(29.0),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    child: Text(
-                                      "  فـتـح الـصـورة",
-                                      style: TextStyle(
-                                          fontFamily: 'myfont',
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 15),
-                                    ),
-                                  ),
-                                  SizedBox(width: 100),
-                                  Text(' هـويـة الـطـفـل',
-                                      style: TextStyle(
-                                          fontFamily: 'myfont',
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17)),
-                                  SizedBox(width: 10),
-                                  Icon(
-                                    Icons.image,
-                                    color: Color.fromARGB(255, 111, 53, 165),
-                                  ),
-                                  Spacer(),
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 20),
-                            Card(
-                              //9
-                              color: Colors.white,
-                              child: Row(
-                                children: <Widget>[
-                                  Spacer(),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      // print('okkkkkk');
-                                      //   _showDialog(context, 'ساره حنو');
-                                      //   DynamicTable();
-                                      _showDialog(context, 'ساره حنو');
-                                    },
-                                    style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all<Color>(
-                                              Color(0xFFF1E6FF)),
-                                      shape: MaterialStateProperty.all<
-                                          RoundedRectangleBorder>(
-                                        RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(29.0),
-                                        ),
+                                      child: Text(
+                                        "  فـتـح الـصـورة",
+                                        style: TextStyle(
+                                            fontFamily: 'myfont',
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15),
                                       ),
                                     ),
-                                    child: Text(
-                                      "الـتـفـاصـيـل ",
-                                      style: TextStyle(
-                                          fontFamily: 'myfont',
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 15),
-                                    ),
-                                  ),
-                                  SizedBox(width: 135),
-                                  Text('الـجـلـسـات',
-                                      style: TextStyle(
-                                          fontFamily: 'myfont',
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17)),
-                                  SizedBox(width: 10),
-                                  Icon(
-                                    Icons.category,
-                                    color: Color.fromARGB(255, 111, 53, 165),
-                                  ),
-                                  Spacer(),
-                                ],
+                                    SizedBox(width: 25),
+                                    Text(' هـويـة الـطـفـل',
+                                        style: TextStyle(
+                                            fontFamily: 'myfont',
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 17)),
+                                    SizedBox(width: 10),
+                                    Icon(
+                                      Icons.image,
+                                      color: Color.fromARGB(255, 111, 53, 165),
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                            SizedBox(height: 20),
-                            Card(
-                              //10
-                              color: Colors.white,
-                              child: Row(
-                                children: <Widget>[
-                                  Spacer(),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      //    _openFile();
-                                      print('okkkkkk');
-                                    },
-                                    style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all<Color>(
-                                              Color(0xFFF1E6FF)),
-                                      shape: MaterialStateProperty.all<
-                                          RoundedRectangleBorder>(
-                                        RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(29.0),
+                              Spacer(),
+                              Card(
+                                //9
+                                color: Colors.white,
+                                child: Row(
+                                  children: <Widget>[
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        // print('okkkkkk');
+                                        //   _showDialog(context, 'ساره حنو');
+                                        //   DynamicTable();
+                                        _showDialog(context, 'ساره حنو');
+                                      },
+                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                                Color(0xFFF1E6FF)),
+                                        shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(29.0),
+                                          ),
                                         ),
                                       ),
+                                      child: Text(
+                                        "الـتـفـاصـيـل ",
+                                        style: TextStyle(
+                                            fontFamily: 'myfont',
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15),
+                                      ),
                                     ),
-                                    child: Text(
-                                      "  فـتـح الـمـلـف",
-                                      style: TextStyle(
-                                          fontFamily: 'myfont',
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 15),
-                                    ),
-                                  ),
-                                  SizedBox(width: 95),
-                                  Text('الـتـقـريـر الـطـبـي',
-                                      style: TextStyle(
-                                          fontFamily: 'myfont',
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17)),
-                                  SizedBox(width: 10),
-                                  Icon(
-                                    Icons.attach_file,
-                                    color: Color.fromARGB(255, 111, 53, 165),
-                                  ),
-                                  Spacer(),
-                                ],
+                                    SizedBox(width: 30),
+                                    Text('الـجـلـسـات',
+                                        style: TextStyle(
+                                            fontFamily: 'myfont',
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 17)),
+                                    SizedBox(width: 10),
+                                    Icon(
+                                      Icons.category,
+                                      color: Color.fromARGB(255, 111, 53, 165),
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),                            SizedBox(height: 20),
+                              Spacer(),
+                            ]),
+                            SizedBox(height: 20),
+                            Row(children: <Widget>[
+                              Spacer(),
+                              Card(
+                                //10
+                                color: Colors.white,
+                                child: Row(
+                                  children: <Widget>[
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        //    _openFile();
+                                        print('okkkkkk');
+                                      },
+                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all<Color>(
+                                                Color(0xFFF1E6FF)),
+                                        shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(29.0),
+                                          ),
+                                        ),
+                                      ),
+                                      child: Text(
+                                        "  فـتـح الـمـلـف",
+                                        style: TextStyle(
+                                            fontFamily: 'myfont',
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 15),
+                                      ),
+                                    ),                                    SizedBox(width: 30),
 
+                                    Text('الـتـقـريـر الـطـبـي',
+                                        style: TextStyle(
+                                            fontFamily: 'myfont',
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 17)),
+                                    SizedBox(width: 10),
+                                    Icon(
+                                      Icons.attach_file,
+                                      color: Color.fromARGB(255, 111, 53, 165),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Spacer(),
+                            ]),
                           ]),
                         ],
                       ),
@@ -580,11 +750,5 @@ class _DetailsOfChildState extends State<DetailsOfChild> {
         ),
       ),
     );
-  }
-
-  @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    throw UnimplementedError();
   }
 }

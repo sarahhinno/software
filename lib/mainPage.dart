@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:software/adminPages/DetailsPageOfEmployee.dart';
 import 'package:software/auuth/login.dart';
+import 'package:software/auuth/signup.dart';
 import 'package:software/components/rounded_button.dart';
 import 'package:software/theme.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -78,7 +79,7 @@ class MyHomePage extends StatelessWidget {
                     onTap: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                        return Login();
+                        return signup();
                       }));
                     },
                     child: Text(
@@ -102,7 +103,7 @@ class MyHomePage extends StatelessWidget {
                 // Background Image
                 Positioned.fill(
                   child: Image.asset(
-                    "images/mainPage.png",
+                    "images/mainPageWelcome.png",
                     fit: BoxFit
                         .cover, // Adjust this property based on your requirement
                   ),
@@ -261,7 +262,7 @@ class MyHomePage extends StatelessWidget {
 
           // SizedBox(height: 20),
           Container(
-            color: Color(0xffE8DFFB),
+            color: Color.fromARGB(255, 205, 195, 228),
             width: double.infinity,
             height: 50,
             child: Row(

@@ -28,7 +28,10 @@ class _spEvaluationState extends State<spEvaluation> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
-        title: Text('تـقـيـيـم الأخـصـائـيـن',style: TextStyle(fontFamily: 'myfont',fontWeight: FontWeight.bold),),
+        title: Text(
+          'تـقـيـيـم الأخـصـائـيـن',
+          style: TextStyle(fontFamily: 'myfont', fontWeight: FontWeight.bold),
+        ),
       ),
       body: SingleChildScrollView(
           padding: EdgeInsets.fromLTRB(20, 5, 20, 20),
@@ -39,6 +42,7 @@ class _spEvaluationState extends State<spEvaluation> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
+                  Spacer(),
                   SizedBox(width: 10),
                   Expanded(
                     child: Center(
@@ -65,7 +69,7 @@ class _spEvaluationState extends State<spEvaluation> {
                       ),
                     ),
                   ),
-                  SizedBox(width: 20),
+                  //   SizedBox(width: 20),
                   Text(
                     'اخـتـيـار أخـصـائـي',
                     style: TextStyle(
@@ -74,7 +78,7 @@ class _spEvaluationState extends State<spEvaluation> {
                       color: primaryColor,
                     ),
                   ),
-                  SizedBox(width: 30),
+                  Spacer(),
                 ],
               ),
               SizedBox(height: 70),
@@ -255,12 +259,15 @@ class _spEvaluationState extends State<spEvaluation> {
                 ),
               ),
               SizedBox(height: 20),
-              RoundedButton(
-                color: primaryColor,
-                text: "تـخـزيـن ",
-                textColor: Colors.white,
-                press: () {},
-              ),
+              Container(
+                width: 250,
+                child: RoundedButton(
+                  color: primaryColor,
+                  text: "تـخـزيـن ",
+                  textColor: Colors.white,
+                  press: () {},
+                ),
+              )
             ],
           )),
     );

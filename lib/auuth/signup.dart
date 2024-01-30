@@ -10,11 +10,6 @@ import 'package:software/components/rounded_textField.dart';
 import 'package:software/theme.dart';
 import 'package:http/http.dart' as http;
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
 class signup extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -28,18 +23,10 @@ class _signupState extends State<signup> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmController = TextEditingController();
-<<<<<<< HEAD
   bool passStrength = false;
   bool _obscureText = true;
   bool _obscureText2 = true;
 
-=======
-  bool passStrength=false;
-  bool _obscureText = true;
-  bool _obscureText2 = true;
-
-
->>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
   String result = "";
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -61,10 +48,7 @@ class _signupState extends State<signup> {
     super.initState();
     print(selectedValue);
   }
-<<<<<<< HEAD
 
-=======
->>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
 /////////////////////////////////////////////////////////////////////////////////////////////
   void handleRadioValueChanged(int value) {
     setState(() {
@@ -74,7 +58,6 @@ class _signupState extends State<signup> {
   }
 
   Future<void> signupfun() async {
-<<<<<<< HEAD
     showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -127,48 +110,6 @@ class _signupState extends State<signup> {
               style: TextStyle(fontFamily: 'myFont', fontSize: 18),
               textAlign: TextAlign.right,
             ),
-=======
-
-showDialog<void>(
-    context: context,
-    barrierDismissible: false,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        backgroundColor: primaryLightColor,
-        content: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            CircularProgressIndicator(),
-            SizedBox(height: 16),
-            Text("...جــاري الــتــحــقـق",style: TextStyle(fontFamily: 'myFont',fontSize: 18),),
-          ],
-        ),
-      );
-    },
-  );
-    print("inside signup fun");
-    final response = await http
-          .post(Uri.parse(ip+"/sanad/signup"), body: {
-        'id': idController.text.trim(),
-        'email': emailController.text.trim(),
-        'password':passwordController.text.trim(),
-        'type':selectedValue.toString()
-      });
-
-      Navigator.pop(context); // Close loading dialog
-
-      if(response.statusCode==200){
-        var mass = jsonDecode(response.body.toString());
-        print("mass");
-        showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            icon: Icon(Icons.done,color: Colors.green,),
-            title: Text("نــجــاح",style: TextStyle(fontFamily: 'myFont',fontSize: 20,fontWeight: FontWeight.bold)),
-            content: Text("تــمـت الـعملــيـة بــنـجـاح، يـمـنـك الانـتـقال لـصـفـحة تـسـجـيـل الــدخــول",style: TextStyle(fontFamily: 'myFont',fontSize: 18),textAlign: TextAlign.right,),
->>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
             actions: [
               TextButton(
                 onPressed: () {
@@ -180,7 +121,6 @@ showDialog<void>(
           );
         },
       );
-<<<<<<< HEAD
     } else if (response.statusCode == 501) {
       showDialog(
         context: context,
@@ -200,16 +140,6 @@ showDialog<void>(
               style: TextStyle(fontFamily: 'myFont', fontSize: 18),
               textAlign: TextAlign.right,
             ),
-=======
-      }else if(response.statusCode==501){
-        showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            icon: Icon(Icons.close,color: Colors.red,),
-            title: Text("خــطــأ",style: TextStyle(fontFamily: 'myFont',fontSize: 20,fontWeight: FontWeight.bold)),
-            content: Text("رقـم الـهـويـة هـذا مـسـتـخدم من قـبــل فـي هـذا الــنظـام",style: TextStyle(fontFamily: 'myFont',fontSize: 18),textAlign: TextAlign.right,),
->>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
             actions: [
               TextButton(
                 onPressed: () {
@@ -221,7 +151,6 @@ showDialog<void>(
           );
         },
       );
-<<<<<<< HEAD
     } else {
       var mass = jsonDecode(response.body.toString());
       print(mass);
@@ -240,19 +169,6 @@ showDialog<void>(
                     fontWeight: FontWeight.bold)),
             content: Text("رقـم الــهويــة هــذا غـيـر مـوجـود فـي الـنــظــام",
                 style: TextStyle(fontFamily: 'myFont', fontSize: 18)),
-=======
-      }
-      else{
-        var mass = jsonDecode(response.body.toString());
-        print(mass);
-        showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            icon: Icon(Icons.close,color: Colors.red,),
-            title: Text("خــطــأ",style: TextStyle(fontFamily: 'myFont',fontSize: 20,fontWeight: FontWeight.bold)),
-            content: Text("رقـم الــهويــة هــذا غـيـر مـوجـود فـي الـنــظــام",style: TextStyle(fontFamily: 'myFont',fontSize: 18)),
->>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
             actions: [
               TextButton(
                 onPressed: () {
@@ -264,7 +180,6 @@ showDialog<void>(
           );
         },
       );
-<<<<<<< HEAD
     }
   }
 
@@ -299,46 +214,6 @@ showDialog<void>(
       signupfun();
     }
 
-=======
-      }
-  }
-
-  void check(){
-    passwordStrength(passwordController.text);
-    print("inside check fun");
-    if (idController.text.isEmpty || emailController.text.isEmpty || passwordController.text.isEmpty || confirmController.text.isEmpty) {
-      setState(() {
-        result = "يـجــب تــعبـئــة جــمـيـع الــحـقــول";
-      });
-      
-    } else if(selectedValue==0){
-      setState(() {
-        result="يــجـب أن تــخـتار طــفــل أو أخـصـائـيـة";
-      });
-
-    }else if (idController.text.length < 9) {
-      setState(() {
-        result = "رقــم الــهـويــة أقـل مــن 9 أرقــام";
-
-      });      
-    }
-    else if(passStrength==false){
-      setState(() {
-        result =
-          "كـلـمة الـمرور ضـعـيـفـة،يـجب أن تـحتـوي عـلى رمـوز و أرقـام وأحـرف";
-      });
-
-    }else if (passwordController.text!=confirmController.text) {
-      setState(() {
-        result="تـأكــيـد كــلـمـة الـمرور لا تـسـاوي كـلـمـة الــمرور";
-
-      });
-    }
-    else{
-      signupfun();
-    }
-    
->>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
     print("mmm");
   }
 
@@ -366,18 +241,13 @@ showDialog<void>(
         hasSpecialCharacters &&
         pass.length >= 8) {
       result = " ";
-<<<<<<< HEAD
       passStrength = true;
-=======
-      passStrength=true;
->>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
     } else {
       result =
           "كـلـمة الـمرور ضـعـيـفـة،يـجب أن تـحتـوي عـلى رمـوز و أرقـام وأحـرف";
     }
   }
 
-<<<<<<< HEAD
   Future<void> showLoadingDialog(BuildContext context) async {
     return showDialog<void>(
       context: context,
@@ -397,28 +267,6 @@ showDialog<void>(
       },
     );
   }
-=======
-
-Future<void> showLoadingDialog(BuildContext context) async {
-  return showDialog<void>(
-    context: context,
-    barrierDismissible: false,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        content: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            CircularProgressIndicator(),
-            SizedBox(height: 16),
-            Text("Please wait..."),
-          ],
-        ),
-      );
-    },
-  );
-}
->>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
 
   @override
   Widget build(BuildContext context) {
@@ -430,7 +278,6 @@ Future<void> showLoadingDialog(BuildContext context) async {
           child: Stack(
             alignment: Alignment.center,
             children: [
-<<<<<<< HEAD
               // Positioned(
               //     top: 0,
               //     right: 0,
@@ -445,22 +292,6 @@ Future<void> showLoadingDialog(BuildContext context) async {
               //       "images/login_bottom_left.png",
               //       width: size.width,
               //     )),
-=======
-              Positioned(
-                  top: 0,
-                  right: 0,
-                  child: Image.asset(
-                    "images/login_top_right.png",
-                    width: size.width * 0.42,
-                  )),
-              Positioned(
-                  bottom: 0,
-                  left: 0,
-                  child: Image.asset(
-                    "images/login_bottom_left.png",
-                    width: size.width,
-                  )),
->>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
               Container(
                   width: double.infinity,
                   height: size.height,
@@ -468,11 +299,7 @@ Future<void> showLoadingDialog(BuildContext context) async {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-<<<<<<< HEAD
-                       // SizedBox(height: 50),
-=======
-                        SizedBox(height: 50),
->>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
+                      //  SizedBox(height: 50),
                         Text(
                           "إنــشـــاء حــســاب  ",
                           style: TextStyle(
@@ -487,10 +314,6 @@ Future<void> showLoadingDialog(BuildContext context) async {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-<<<<<<< HEAD
-                            Spacer(),
-=======
->>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
                             Expanded(
                               child: CustomImageRadioButton(
                                 text: "أخــصـائـيـة",
@@ -509,10 +332,6 @@ Future<void> showLoadingDialog(BuildContext context) async {
                                 image: image2, // Replace with your image path
                               ),
                             ),
-<<<<<<< HEAD
-                            Spacer(),
-=======
->>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
                           ],
                         ),
                         SizedBox(
@@ -521,13 +340,12 @@ Future<void> showLoadingDialog(BuildContext context) async {
                         Text(
                           result,
                           style: TextStyle(
-<<<<<<< HEAD
                               color: Colors.red,
                               fontFamily: 'myFont',
                               fontWeight: FontWeight.bold),
                         ),
                         Container(
-                          width: 700,
+                          width: 500,
                           child: RoundedTextField(
                             child: TextField(
                               keyboardType: TextInputType.number,
@@ -553,7 +371,7 @@ Future<void> showLoadingDialog(BuildContext context) async {
 
                         ///////////////////////////////////////////////////////
                         Container(
-                          width: 700,
+                          width: 500,
                           child: RoundedTextField(
                             child: TextField(
                               keyboardType: TextInputType.emailAddress,
@@ -573,58 +391,13 @@ Future<void> showLoadingDialog(BuildContext context) async {
                                 ),
                                 border: InputBorder.none,
                               ),
-=======
-                              color: Colors.red, fontFamily: 'myFont',fontWeight: FontWeight.bold),
-                        ),
-                        RoundedTextField(
-                          child: TextField(
-                            keyboardType: TextInputType.number,
-                            textAlign: TextAlign.right,
-                            controller: idController,
-                            onChanged: (value) {
-                              setState(() {
-                                  result=" ";
-                              });
-                            },
-                            decoration: InputDecoration(
-                              hintText: " رقــم الـهــويــة ",
-                              hintStyle: TextStyle(fontFamily: 'myFont'),
-                              suffixIcon: Icon(
-                                Icons.numbers,
-                                color: Color(0xff800080),
-                              ),
-                              border: InputBorder.none,
-                            ),
-                          ),
-                        ),
-                        ///////////////////////////////////////////////////////
-                        RoundedTextField(
-                          child: TextField(
-                            keyboardType: TextInputType.emailAddress,
-                            textAlign: TextAlign.right,
-                            controller: emailController,
-                            onChanged: (value) {
-                              setState(() {
-                                  result=" ";
-                              });
-                            },
-                            decoration: InputDecoration(
-                              hintText: "  البـريــد الإلــكـتـرونــي ",
-                              hintStyle: TextStyle(fontFamily: 'myFont'),
-                              suffixIcon: Icon(
-                                Icons.email,
-                                color: Color(0xff800080),
-                              ),
-                              border: InputBorder.none,
->>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
                             ),
                           ),
                         ),
 
                         //////////////////////////////////////////////////
-<<<<<<< HEAD
                         Container(
-                          width: 700,
+                          width: 500,
                           child: RoundedTextField(
                             child: TextField(
                               obscureText: _obscureText,
@@ -667,7 +440,7 @@ Future<void> showLoadingDialog(BuildContext context) async {
 
                         //////////////////////////////////////////////////////////////////
                         Container(
-                          width: 700,
+                          width: 500,
                           child: RoundedTextField(
                             child: TextField(
                               obscureText: _obscureText2,
@@ -721,95 +494,6 @@ Future<void> showLoadingDialog(BuildContext context) async {
                         SizedBox(
                           height: 20,
                         ),
-
-=======
-                        RoundedTextField(
-                          child: TextField(
-                            obscureText: _obscureText,
-                            textAlign: TextAlign.right,
-                            controller: passwordController,
-                            onSubmitted: (value)=>passwordStrength(value),
-                            onChanged: (value) {
-                              setState(() {
-                                  result=" ";
-                              });
-                            },
-                            decoration: InputDecoration(
-                              hintText: "  كــلـمــة الــمـرور ",
-                              hintStyle: TextStyle(fontFamily: 'myFont'),
-                              suffixIcon: Icon(
-                                Icons.lock,
-                                color: Color(0xff800080),
-                              ),
-                              icon: Material(
-                                type: MaterialType.transparency,
-                                child: IconButton(
-                                  icon: Icon(
-                                    _obscureText
-                                        ? Icons.visibility
-                                        : Icons.visibility_off,
-                                        color: Colors.grey,
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      _obscureText = !_obscureText;
-                                    });
-                                  },
-                                ),
-                              ),
-                              border: InputBorder.none,
-                            ),
-                          ),
-                        ),
-                        //////////////////////////////////////////////////////////////////
-                        RoundedTextField(
-                          child: TextField(
-                            obscureText: _obscureText2,
-                            textAlign: TextAlign.right,
-                            controller: confirmController,
-                            onChanged: (value) {
-                              setState(() {
-                                  result=" ";
-                              });
-                            },
-                            decoration: InputDecoration(
-                              hintText: " تـأكــيـد كــلـمــة الــمـرور ",
-                              hintStyle: TextStyle(fontFamily: 'myFont'),
-                              suffixIcon: Icon(
-                                Icons.lock,
-                                color: Color(0xff800080),
-                              ),
-                              icon: Material(
-                                type: MaterialType.transparency,
-                                child: IconButton(
-                                  icon: Icon(
-                                    _obscureText2
-                                        ? Icons.visibility
-                                        : Icons.visibility_off,
-                                        color: Colors.grey,
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      _obscureText2 = !_obscureText2;
-                                    });
-                                  },
-                                ),
-                              ),
-                              border: InputBorder.none,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        RoundedButton(
-                          text: " إنــشــاء حــســاب",
-                          press: () => {check()},
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
->>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
                         GestureDetector(
                             onTap: () {
                               Navigator.push(context,
@@ -832,8 +516,4 @@ Future<void> showLoadingDialog(BuildContext context) async {
           )),
     );
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2

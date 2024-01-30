@@ -6,16 +6,16 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:software/theme.dart';
 
-class objectives extends StatefulWidget {
+class doneGoals extends StatefulWidget {
   final String childId;
   final String spId;
 
-  const objectives({super.key, required this.childId, required this.spId});
+  const doneGoals({super.key, required this.childId, required this.spId});
   @override
-  _objectivesState createState() => _objectivesState();
+  _doneGoalsState createState() => _doneGoalsState();
 }
 
-class _objectivesState extends State<objectives> {
+class _doneGoalsState extends State<doneGoals> {
   String childID = '123456789';
   String spID = '987654321';
   bool isChecked = false;
@@ -46,7 +46,7 @@ class _objectivesState extends State<objectives> {
 
     try {
       final goalsResponse = await http.get(Uri.parse(
-          "$ip/sanad/getObjects?childID=$childID&spID=$spID&type=وظيفي&subType=$subType"));
+          "$ip/sanad/getDoneObj?childID=$childID&spID=$spID&type=وظيفي&subType=$subType"));
       if (goalsResponse.statusCode == 200) {
         List<dynamic> data = jsonDecode(goalsResponse.body);
         for (int i = 0; i < data.length; i++) {
@@ -70,7 +70,6 @@ class _objectivesState extends State<objectives> {
     super.initState();
     getGoals(myItems.first);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +114,7 @@ class _objectivesState extends State<objectives> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "سـارة خالد وليد حنو",
+                        "سارة خالد وليد حنو",
                         style: TextStyle(
                             fontFamily: 'myFont',
                             fontSize: 20,
@@ -220,103 +219,110 @@ class _objectivesState extends State<objectives> {
                           SizedBox(
                             height: 20,
                           ),
-                          goalsList.isEmpty?SizedBox():
-                          Container(
-                                  margin: EdgeInsets.only(bottom: 20),
-                                  color: Color(0xffFAF5FF),
-                                  child: 
-                                      Row(
-                                        children: <Widget>[
-                                       Spacer(),
-                                          Text(
-                                            "الـنـسـبـة ",
+                          goalsList.isEmpty
+                              ? SizedBox()
+                              :
+                              // Container(
+                              //         margin: EdgeInsets.only(bottom: 20),
+                              //         color: Color(0xffFAF5FF),
+                              //         child:
+                              //             Row(
+                              //               children: <Widget>[
+                              //                 SizedBox(
+                              //                   width: 6,
+                              //                 ),
+                              //                 Text(
+                              //                   "الـنـسـبـة ",
+                              //                   style: TextStyle(
+                              //                     fontFamily: 'myfont',
+                              //                     color: secondaryColor,
+                              //                     fontSize: 20,
+                              //                   ),
+                              //                 ),
+                              //                 Spacer(),
+                              //                 Container(
+                              //                   child: Text(
+                              //                     "الـهدف الـمراد تـحـقـيـقـه",
+                              //                     style: TextStyle(
+                              //                       color: secondaryColor,
+                              //                       fontFamily: 'myfont',
+                              //                       fontSize: 20,
+                              //                     ),
+                              //                     textAlign: TextAlign.right,
+                              //                   ),
+                              //                 ),
+                              //                 SizedBox(
+                              //                   width: 5,
+                              //                 ),
+                              //               ],
+                              //             ),
+                              //       ),
+                              Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: <Widget>[
+                                    goalsList.isEmpty
+                                        ? Text("لا يوجد اهداف",
                                             style: TextStyle(
-                                              fontFamily: 'myfont',
-                                              color: secondaryColor,
-                                              fontSize: 20,
-                                            ),
-                                          ),
-                                          Spacer(),
-                                          Container(
-                                            child: Text(
-                                              "الـهدف الـمراد تـحـقـيـقـه",
-                                              style: TextStyle(
+                                                fontFamily: 'myFont',
+                                                fontSize: 20,
                                                 color: secondaryColor,
-                                                fontFamily: 'myfont',
-                                                fontSize: 20,
-                                              ),
-                                              textAlign: TextAlign.right,
+                                                fontWeight: FontWeight.bold))
+                                        : SizedBox(),
+                                    for (int i = 0; i < goalsList.length; i++)
+                                      Container(
+                                        margin: EdgeInsets.only(bottom: 20),
+                                        color: colors[i % 3],
+                                        child: Column(
+                                          children: <Widget>[
+                                            Row(
+                                              children: <Widget>[
+                                                SizedBox(
+                                                  width: 6,
+                                                ),
+                                                // Text(
+                                                //   "${percentList[i]}%" ?? '',
+                                                //   style: TextStyle(
+                                                //     fontFamily: 'myfont',
+                                                //     color: Color(0xff161A30),
+                                                //     fontSize: 20,
+                                                //   ),
+                                                // ),
+                                                Spacer(),
+                                                Container(
+                                                  width:
+                                                      300, // Replace maxWidth with the maximum width you want to allow
+                                                  child: Text(
+                                                    goalsList[i] ?? '',
+                                                    style: TextStyle(
+                                                      color: Color(0xff352F44),
+                                                      fontFamily: 'myfont',
+                                                      fontSize: 20,
+                                                    ),
+                                                    textAlign: TextAlign.right,
+                                                    maxLines:
+                                                        10, // Adjust the number of lines as needed
+                                                    overflow: TextOverflow
+                                                        .ellipsis, // Handle overflow by displaying ellipsis
+                                                  ),
+                                                ),
+                                                Spacer(),
+                                              ],
                                             ),
-                                          ),
-                                         Spacer(),
-                                        ],
-                                      ),
-                                ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: <Widget>[
-                              goalsList.isEmpty
-                                  ? Text("لا يوجد اهداف",
-                                      style: TextStyle(
-                                          fontFamily: 'myFont',
-                                          fontSize: 20,
-                                          color: secondaryColor,
-                                          fontWeight: FontWeight.bold))
-                                  : SizedBox(),
-                              for (int i = 0; i < goalsList.length; i++)
-                                Container(
-                                  margin: EdgeInsets.only(bottom: 20),
-                                  color: colors[i%3],
-                                  child: Column(
-                                    children: <Widget>[
-                                      Row(
-                                        children: <Widget>[
-                                         Spacer(),
-                                          // Text(
-                                          //   "${percentList[i]}%" ?? '',
-                                          //   style: TextStyle(
-                                          //     fontFamily: 'myfont',
-                                          //     color: Color(0xff161A30),
-                                          //     fontSize: 20,
-                                          //   ),
-                                          // ),
-                                          Spacer(),
-                                          Container(
-                                            width:
-                                                300, // Replace maxWidth with the maximum width you want to allow
-                                            child: Text(
-                                              goalsList[i] ?? '',
-                                              style: TextStyle(
-                                                color: Color(0xff352F44),
-                                                fontFamily: 'myfont',
-                                                fontSize: 20,
-                                              ),
-                                              textAlign: TextAlign.right,
-                                              maxLines:
-                                                  10, // Adjust the number of lines as needed
-                                              overflow: TextOverflow
-                                                  .ellipsis, // Handle overflow by displaying ellipsis
+                                            SizedBox(
+                                              height: 10,
                                             ),
-                                          ),
-                                         Spacer(),
-                                      ],
+                                            //  Divider(thickness: 0.8,color:secondaryColor,)
+                                          ],
+                                        ),
                                       ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      //  Divider(thickness: 0.8,color:secondaryColor,)
-                                    ],
-                                  ),
+                                  ],
                                 ),
-                            ],
-                          ),
                         ],
                       ),
                     ),
                   ),
                 ],
               ),
-              
               SizedBox(
                 height: 10,
               ),

@@ -1,24 +1,110 @@
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:software/components/roundedTextFeild2.dart';
 import 'package:software/components/rounded_button.dart';
-import 'package:software/components/rounded_textField.dart';
 import 'package:software/theme.dart';
+import 'package:http/http.dart' as http;
 
 class newGoals extends StatefulWidget {
+  final String childId;
+  final String spId;
+
+  const newGoals({super.key, required this.childId, required this.spId});
   @override
   _newGoalsState createState() => _newGoalsState();
 }
 
 class _newGoalsState extends State<newGoals> {
-  List<String> selectedValues = ['الـمـهـارات الإدراكـيـة '];
-  List<String> myItems = [
-    'الـتـركـيـز والانـتـبـاه ',
-    'الـمـهـارات الإدراكـيـة ',
-    'الـتـواصـل الـبـصـري ',
-    'الـمـشـاكـل الـصـحـيـة '
+  String childId = "123456789";
+  String spId = "987654321";
+  List<String> selectedValues = [];
+  static List<String> myItems = [
+    'التركيز والانتباه ',
+    'المهارات الإدراكية ',
+    'التواصل البصري ',
+    'المشاكل الصحية '
   ];
-
+  String s = myItems.first;
   List<Widget> goalCards = [];
+  List<TextEditingController> controllerList = [];
+  List<TextEditingController> percentcontrollerList = [];
+  List<bool> enable = [];
+
+  int index = 0;
+
+  void func() {
+    if (goalCards.isEmpty) {
+      print("hi");
+    } else {
+      print("hhhhhhhhhhhhhhhhiiiiiiiiiiiiiiiiii");
+      for (int i = 0; i < goalCards.length; i++) {
+        print(controllerList[i].text);
+        print(percentcontrollerList[i].text);
+      }
+    }
+  }
+
+  Future<void> postnewGoals(
+      String text, String percent, String selected, int i) async {
+    bool check = false;
+    try {
+      if (text.trim().isEmpty) {
+        check = true;
+      }
+
+      if (check) {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                icon: Icon(
+                  Icons.warning,
+                  color: primaryColor,
+                ),
+                content: Text(
+                  " يـرجـى تــعـبـئـة  الــهــدف الـذي قــمــت بـإضـافـتـه",
+                  style: TextStyle(fontFamily: 'myFont', fontSize: 18),
+                  textAlign: TextAlign.center,
+                ),
+              );
+            });
+        return;
+      }
+
+      final newOB = await http.post(Uri.parse("$ip/sanad/newObject"), body: {
+        'childID': childId,
+        'spID': spId,
+        'type': "وظيفي",
+        'subType': selected.trim(),
+        'object': text.trim(),
+        'percent': percent.trim(),
+      });
+      if (newOB.statusCode == 200) {
+        print("done ");
+        setState(() {
+          enable[i] = false;
+        });
+      }
+    } catch (error) {
+      print("error $error");
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    TextEditingController newController = TextEditingController();
+    TextEditingController percentController = TextEditingController();
+    String selected = myItems.first;
+    bool e = true;
+    enable.add(e);
+    selectedValues.add(selected);
+    controllerList.add(newController);
+    percentcontrollerList.add(percentController);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +113,8 @@ class _newGoalsState extends State<newGoals> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
+        automaticallyImplyLeading: true,
+        centerTitle: true,
         title: Text(
           " إضـافـة أهـداف جـديـدة",
           style: TextStyle(
@@ -35,259 +123,229 @@ class _newGoalsState extends State<newGoals> {
               fontWeight: FontWeight.bold),
         ),
       ),
-      body:
-      Center(child: Container(
-        width: size.width*.5,
+      body: Container(
+        color: Colors.white,
+        padding: EdgeInsets.symmetric(horizontal: 5),
+        width: size.width,
         height: size.height,
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              SizedBox(height: 5),
-              Text(
-                'العـلاج الـوظـيـفـي',
-                style: TextStyle(
-                    color: primaryColor,
-                    fontFamily: 'myfont',
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
-                textAlign: TextAlign.end,
-              ),
-              SizedBox(height: 10),
-              Column(
+        child: Column(
+          children: <Widget>[
+            SizedBox(height: 5),
+            Text(
+              'العـلاج الـوظـيـفـي',
+              style: TextStyle(
+                  color: primaryColor,
+                  fontFamily: 'myfont',
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
+              textAlign: TextAlign.end,
+            ),
+            SizedBox(height: 10),
+
+            //   color: Colors.white,
+            Expanded(
+              child: Column(
                 children: [
-                  ...goalCards,
-                  if (goalCards.isEmpty)
-                    Card(
-                      color: primaryLightColor,
-                      child: Column(
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              Container(
+                  // ...goalCards,
+                  // if (goalCards.isEmpty)
+                  Expanded(
+                    child: ListView.builder(
+                        itemCount: controllerList.length,
+                        itemBuilder: (context, indexx) {
+                          print(controllerList.length);
+
+                          return Container(
+                            color: primaryLightColor,
+                            width: 600,
+                            child: Card(
+                              elevation: 5,
+                              color: primaryLightColor,
+                              child: Container(
                                 width: 500,
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton<String>(
-                                    value: selectedValues.last,
-                                    items: myItems.map((String value) {
-                                      return DropdownMenuItem<String>(
-                                        value: value,
-                                        child: Text(
-                                          value,
+                                padding: EdgeInsets.symmetric(horizontal: 8),
+                                child: Column(
+                                  children: <Widget>[
+                                    Row(
+                                      children: <Widget>[
+                                        Spacer(),
+                                        Container(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 10, vertical: 5),
+                                          child: DropdownButtonHideUnderline(
+                                            child: DropdownButton<String>(
+                                              value: selectedValues[indexx],
+                                              items:
+                                                  myItems.map((String value) {
+                                                return DropdownMenuItem<String>(
+                                                  value: value,
+                                                  child: Text(
+                                                    value,
+                                                    style: TextStyle(
+                                                      fontFamily: 'myfont',
+                                                      color: Color(0xff161A30),
+                                                      fontSize: 20,
+                                                    ),
+                                                  ),
+                                                );
+                                              }).toList(),
+                                              onChanged: (String? value) {
+                                                setState(() {
+                                                  selectedValues[indexx] =
+                                                      value!;
+                                                });
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                        Spacer(),
+                                        Text(
+                                          'إضـافـة هـدف إلـى',
                                           style: TextStyle(
                                             fontFamily: 'myfont',
                                             color: Color(0xff161A30),
                                             fontSize: 20,
                                           ),
                                         ),
-                                      );
-                                    }).toList(),
-                                    onChanged: (String? value) {
-                                      setState(() {
-                                        selectedValues[
-                                            selectedValues.length - 1] = value!;
-                                      });
-                                    },
-                                  ),
-                                ),
-                              ),
-                              Spacer(),
-                              Text(
-                                'إضـافـة هـدف إلـى',
-                                style: TextStyle(
-                                  fontFamily: 'myfont',
-                                  color: Color(0xff161A30),
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: <Widget>[
-                              RoundedTextField2(
-                                width: 120,
-                                child: TextField(
-                                  textAlign: TextAlign.right,
-                                  decoration: InputDecoration(
-                                    hintText: 'الـنـسـبـة',
-                                    suffixText: '%',
-                                    border: InputBorder.none,
-                                  ),
-                                ),
-                              ),
-                              Spacer(),
-                              RoundedTextField2(
-                                width: 250,
-                                child: TextField(
-                                  textAlign: TextAlign.right,
-                                  // controller: fnameController,
-                                  decoration: InputDecoration(
-                                    hintText: 'الـهـدف',
-                                    border: InputBorder.none,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Container(
-                            width: 200,
-                            padding: EdgeInsets.only(bottom: 5),
-                            child: RoundedButton(
-                              color: primaryColor,
-                              text: "إضـافـة ",
-                              textColor: Colors.white,
-                              press: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      content: Text(
-                                        'تـمـت إضـافـة الـهـدف',
-                                        style: TextStyle(
-                                          fontFamily: 'myfont',
-                                          color: primaryColor,
-                                          fontSize: 20,
+                                        SizedBox(
+                                          width: 5,
                                         ),
-                                        textAlign: TextAlign.center,
+                                        Spacer(),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: <Widget>[
+                                        Spacer(),
+                                        RoundedTextField2(
+                                          width: 120,
+                                          child: TextField(
+                                            controller:
+                                                percentcontrollerList[indexx],
+                                            textAlign: TextAlign.right,
+                                            decoration: InputDecoration(
+                                              hintText: 'الـنـسـبـة',
+                                              hintStyle: TextStyle(
+                                                  fontFamily: 'myFont'),
+                                              suffixText: '%',
+                                              border: InputBorder.none,
+                                            ),
+                                          ),
+                                        ),
+                                        Spacer(),
+                                        RoundedTextField2(
+                                          width: 250,
+                                          child: TextField(
+                                            textAlign: TextAlign.right,
+                                            controller: controllerList[indexx],
+                                            decoration: InputDecoration(
+                                              hintText: 'الـهـدف',
+                                              hintStyle: TextStyle(
+                                                  fontFamily: 'myFont'),
+                                              border: InputBorder.none,
+                                            ),
+                                          ),
+                                        ),
+                                        Spacer(),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Container(
+                                      width: 200,
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: primaryColor,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20.0),
+                                          ),
+                                        ),
+                                        child: Text(
+                                          "حـــفـــظ",
+                                          style: TextStyle(
+                                              fontFamily: 'myFont',
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16),
+                                        ),
+                                        onPressed: enable[indexx]
+                                            ? () {
+                                                postnewGoals(
+                                                    controllerList[indexx].text,
+                                                    percentcontrollerList[
+                                                            indexx]
+                                                        .text,
+                                                    selectedValues[indexx],
+                                                    indexx);
+                                              }
+                                            : null,
                                       ),
-                                    );
-                                  },
-                                );
-                              },
+                                    ), SizedBox(
+                                      height: 15,
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
+                          );
+                        }),
+                  ),
                 ],
               ),
+            ),
 
-              SizedBox(height: 30),
-              // SizedBox(height: 20),
-              Container(
-                width: 250,
-                child: RoundedButton(
-                  color: primaryColor,
-                  text: "إضـافـة هـدف جـديـد",
-                  textColor: Colors.white,
-                  press: () {
-                    addNewGoalCard();
-                 
-                  },
-                ),
-              )
-            ],
-          ),
+            SizedBox(height: 30),
+            // SizedBox(height: 20),
+            Container(
+              width: 400,
+              child: RoundedButton(
+                color: primaryColor,
+                text: "إضـافـة هـدف جـديـد",
+                textColor: Colors.white,
+                press: () {
+                  addNewGoalCard();
+                },
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            // Container(
+            //   width: size.width*0.8,
+            //     child: ElevatedButton(
+
+            //   style: ElevatedButton.styleFrom(
+            //     backgroundColor: primaryColor,
+            //     shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(20.0),
+            //     ),
+            //   ),
+            //   child: Text("save"),
+            //   onPressed: () {
+            //   //  postnewGoals();
+            //   },
+            // )),
+            SizedBox(
+              height: 20,
+            )
+          ],
         ),
-      ),
       ),
     );
   }
 
   void addNewGoalCard() {
+    print(index);
+    TextEditingController newController = TextEditingController();
+    TextEditingController percentController = TextEditingController();
+    bool e = true;
+    String selected = "";
     setState(() {
-      goalCards.add(
-        Card(
-          color: primaryLightColor,
-          child: Column(
-            children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Container(
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        value: selectedValues.last,
-                        items: myItems.map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(
-                              value,
-                              style: TextStyle(
-                                fontFamily: 'myfont',
-                                color: Color(0xff161A30),
-                                fontSize: 20,
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (String? value) {
-                          setState(() {
-                            selectedValues=myItems;
-                               selectedValues.add(value!);
-                          //  selectedValues.contains(value);
-                          });
-                        },
-                      ),
-                    ),
-                  ),
-                  Spacer(),
-                  Text(
-                    'إضـافـة هـدف إلـى',
-                    style: TextStyle(
-                      fontFamily: 'myfont',
-                      color: Color(0xff161A30),
-                      fontSize: 20,
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: <Widget>[
-                  RoundedTextField2(
-                    width: 120,
-                    child: TextField(
-                      textAlign: TextAlign.right,
-                      decoration: InputDecoration(
-                        hintText: 'الـنـسـبـة',
-                        suffixText: '%',
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                  Spacer(),
-                  RoundedTextField2(
-                    width: 250,
-                    child: TextField(
-                      textAlign: TextAlign.right,
-                      // controller: fnameController,
-                      decoration: InputDecoration(
-                        hintText: 'الـهـدف',
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Container(
-                width: 200,
-                padding: EdgeInsets.only(bottom: 5),
-                child: RoundedButton(
-                  color: primaryColor,
-                  text: "إضـافـة ",
-                  textColor: Colors.white,
-                  press: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          content: Text(
-                            'تـمـت إضـافـة الـهـدف',
-                            style: TextStyle(
-                              fontFamily: 'myfont',
-                              color: primaryColor,
-                              fontSize: 20,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        );
-                      },
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
+      index++;
+      selected = myItems.first;
+      enable.add(e);
+      selectedValues.add(selected);
+      controllerList.add(newController);
+      percentcontrollerList.add(percentController);
     });
   }
 }

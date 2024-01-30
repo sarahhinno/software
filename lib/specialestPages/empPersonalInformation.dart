@@ -1,42 +1,97 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_interpolation_to_compose_strings
 
+import 'dart:convert';
+
+import 'package:calendar_view/calendar_view.dart';
 import 'package:flutter/material.dart';
-import 'package:software/parentPages/completeChildProfile.dart';
-
-// void main() {
-//   runApp(MyApp());
-// }
-
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       home: TestPage(),
-//       debugShowCheckedModeBanner: false,
-//     );
-//   }
-// }
+import 'package:intl/intl.dart';
+import 'package:software/theme.dart';
+//import 'package:software/parentPages/completeChildProfile.dart';
+import 'package:http/http.dart' as http;
 
 class profile extends StatefulWidget {
+  final String id;
+
+  const profile({super.key, required this.id});
   @override
   profileState createState() => profileState();
 }
 
 class profileState extends State<profile> {
-  TextEditingController _textEditingControllername = TextEditingController();
-  TextEditingController _textEditingControllerphone = TextEditingController();
-  final TextEditingController _textFieldController = TextEditingController();
-  TextEditingController _textEditingControlleremail = TextEditingController();
+  late String id;
+
+  TextEditingController nameController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController _textFieldController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
 
   bool pressed = false;
-  String name = 'ساره خالد وليد حنو';
-  String phone = '0593085764';
-  String email = 'sarahhinno8@gmail.com';
-  String idd = '1234567890';
-  String startDate = '09/12/2023';
-  String sp = 'سـمـع ونـطـق';
+  String name = '';
+  String phone = '';
+  String emailString = 'sarahhinno8@gmail.com';
+  String idd = '';
+  String startDate = " ";
+  late DateTime sd;
+  String sp = '';
+  String imageUrl = "";
 
   bool _isTextFieldEnabled = false;
+
+  Future<void> getspinfo() async {
+    final spInfo = await http.get(Uri.parse('$ip/sanad/getSPInfoByID?id=$id'));
+    final email = await http.get(Uri.parse('$ip/sanad/getEmail?id=$id'));
+    if (spInfo.statusCode == 200) {
+      print("body" + spInfo.body);
+      final spInfoBody = jsonDecode(spInfo.body);
+      name = spInfoBody['firstName'] +
+          " " +
+          spInfoBody['secondName'] +
+          " " +
+          spInfoBody['thirdName'] +
+          " " +
+          spInfoBody['lastName'];
+      phone = spInfoBody['phone'];
+      sp = spInfoBody['specialise'];
+      idd = id;
+      sd = DateTime.parse(spInfoBody['startDate']).toLocal();
+      startDate = DateFormat('yyyy/MM/dd').format(sd);
+
+      if (email.statusCode == 200) {
+        print("email " + email.body);
+        final emailBody = jsonDecode(email.body);
+        emailString = emailBody['email'];
+      }
+    }
+  }
+
+  Future<void> getImageUrl() async {
+    print(id);
+    final String serverUrl = '$ip/sanad/getSPImage?id=$id';
+
+    try {
+      final response = await http.get(Uri.parse(serverUrl));
+      print(response.body);
+      if (response.statusCode == 200) {
+        setState(() {
+          imageUrl = serverUrl;
+          print(imageUrl);
+        });
+      } else {
+        print('Failed to get image. Status code: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error getting image: $error');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    id = widget.id;
+    print("spinfo id " + id);
+    getImageUrl();
+    getspinfo();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +99,8 @@ class profileState extends State<profile> {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        centerTitle: true,
         backgroundColor: Color(0xff6f35a5),
         title: Text(
           'الـمـعـلـومـات الـشـخـصـيـة',
@@ -51,306 +108,352 @@ class profileState extends State<profile> {
         ),
       ),
       body: Container(
+        padding: EdgeInsets.symmetric(horizontal: 5),
+        color: primaryLightColor,
         width: size.width,
         height: size.height,
         child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
-          child: Column(
-            children: <Widget>[
-              Center(
-                child: Image.asset('images/person1.png'),
-              ),
-              SizedBox(height: 10),
-              Container(
-                width: 500,
-                child: Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Expanded(
-                              child: TextField(
-                                enabled: false,
-                                decoration: InputDecoration(
-                                  labelText: name,
-                                  labelStyle: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 20.0,
-                                    fontFamily: 'myfont',
-                                  ),
+          child: FutureBuilder(
+              future: getspinfo(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator(); // Show a loading indicator
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  // Continue building your UI with the fetched data
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Center(
+                        child: ClipOval(
+                          child: imageUrl.isNotEmpty
+                              ? (Image.network(
+                                  imageUrl,
+                                  height: 200.0,
+                                  width: 200.0,
+                                  fit: BoxFit.cover,
+                                ))
+                              : Image.asset(
+                                  'assets/images/profileImage.jpg',
+                                  width: 500,
+                                  height: 200,
+                                  fit: BoxFit.cover,
                                 ),
-                              ),
-                            ),
-                            Text(
-                              'الاسـم الـربـاعـي',
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                fontFamily: 'myfont',
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(width: 5),
-                          ],
                         ),
-                        SizedBox(
-                          height: 16.0,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Expanded(
-                              child: TextField(
-                                controller: _textEditingControllerphone,
-                                enabled: _isTextFieldEnabled,
-                                onTap: () {
-                                  if (!_isTextFieldEnabled) {
-                                    _textEditingControllerphone.clear();
-                                  }
-                                },
-                                onChanged: (text) {
-                                  setState(() {
-                                    phone = _textEditingControllerphone.text;
-                                  });
-                                },
-                                decoration: InputDecoration(
-                                  labelText: phone,
-                                  labelStyle: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 20.0,
-                                    fontFamily: 'myfont',
-                                  ),
+                      ),
+                      SizedBox(height: 10),
+                      Container(
+                        child: Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: <Widget>[
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Spacer(),
+                                    Expanded(
+                                      child: TextField(
+                                        enabled: false,
+                                        decoration: InputDecoration(
+                                          labelText: name,
+                                          labelStyle: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 20.0,
+                                            fontFamily: 'myfont',
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Text(
+                                      'الاسـم الـربـاعـي',
+                                      textAlign: TextAlign.end,
+                                      style: TextStyle(
+                                        fontFamily: 'myfont',
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Spacer(),
+                                  ],
                                 ),
-                              ),
-                            ),
-                            Text(
-                              ' رقم الهاتف',
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                fontFamily: 'myfont',
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(width: 5),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 16.0,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Expanded(
-                              child: TextField(
-                                controller: _textEditingControlleremail,
-                                enabled: _isTextFieldEnabled,
-                                onTap: () {
-                                  if (!_isTextFieldEnabled) {
-                                    _textEditingControlleremail.clear();
-                                  }
-                                },
-                                onChanged: (text) {
-                                  setState(() {
-                                    email = _textEditingControlleremail.text;
-                                  });
-                                },
-                                decoration: InputDecoration(
-                                  labelText: email,
-                                  labelStyle: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 20.0,
-                                    fontFamily: 'myfont',
-                                  ),
+                                SizedBox(
+                                  height: 16.0,
                                 ),
-                              ),
-                            ),
-                            Text(
-                              ' الـبـريـد الالـكـترونـي',
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                fontFamily: 'myfont',
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(width: 5),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 16.0,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Expanded(
-                              child: TextField(
-                                enabled: false,
-                                decoration: InputDecoration(
-                                  labelText: idd,
-                                  labelStyle: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 20.0,
-                                    fontFamily: 'myfont',
-                                  ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Spacer(),
+                                    Expanded(
+                                      child: TextField(
+                                        controller: phoneController,
+                                        enabled: _isTextFieldEnabled,
+                                        onTap: () {
+                                          if (!_isTextFieldEnabled) {
+                                            phoneController.clear();
+                                          }
+                                        },
+                                        onChanged: (text) {
+                                          setState(() {
+                                            phone = phoneController.text;
+                                          });
+                                        },
+                                        decoration: InputDecoration(
+                                          labelText: phone,
+                                          labelStyle: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 20.0,
+                                            fontFamily: 'myfont',
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Text(
+                                      ' رقم الهاتف',
+                                      textAlign: TextAlign.end,
+                                      style: TextStyle(
+                                        fontFamily: 'myfont',
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Spacer(),
+                                  ],
                                 ),
-                              ),
-                            ),
-                            Text(
-                              '  رقـم الـهـويـة',
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                fontFamily: 'myfont',
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(width: 5),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 16.0,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Expanded(
-                              child: TextField(
-                                enabled: false,
-                                decoration: InputDecoration(
-                                  labelText: startDate,
-                                  labelStyle: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 20.0,
-                                    fontFamily: 'myfont',
-                                  ),
+                                SizedBox(
+                                  height: 16.0,
                                 ),
-                              ),
-                            ),
-                            Text(
-                              '  تـاريـخ بـدايـة الـعـمـل',
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                fontFamily: 'myfont',
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(width: 5),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 16.0,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Expanded(
-                              child: TextField(
-                                enabled: false,
-                                decoration: InputDecoration(
-                                  labelText: sp,
-                                  labelStyle: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 20.0,
-                                    fontFamily: 'myfont',
-                                  ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Spacer(),
+                                    Expanded(
+                                      child: TextField(
+                                        controller: emailController,
+                                        enabled: _isTextFieldEnabled,
+                                        onTap: () {
+                                          if (!_isTextFieldEnabled) {
+                                            emailController.clear();
+                                          }
+                                        },
+                                        onChanged: (text) {
+                                          setState(() {
+                                            emailString = emailController.text;
+                                          });
+                                        },
+                                        decoration: InputDecoration(
+                                          labelText: emailString,
+                                          labelStyle: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 20.0,
+                                            fontFamily: 'myfont',
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Text(
+                                      ' الـبـريـد الالـكـترونـي',
+                                      textAlign: TextAlign.end,
+                                      style: TextStyle(
+                                        fontFamily: 'myfont',
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Spacer(),
+                                  ],
                                 ),
-                              ),
-                            ),
-                            Text(
-                              '  أخـصـائـي',
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                fontFamily: 'myfont',
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(width: 5),
-                          ],
-                        ),
-                        SizedBox(height: 40),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  pressed = true;
-                                  setState(() {
-                                    _isTextFieldEnabled = !_isTextFieldEnabled;
-                                    // Navigator.push(context,
-                                    //     MaterialPageRoute(builder: (context) {
-                                    //   return edit();
-                                    // }));
-                                  });
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  primary: Color(0xff6f35a5),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(29.0),
-                                  ),
+                                SizedBox(
+                                  height: 16.0,
                                 ),
-                                child: Text(
-                                  'تـعـديـل',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: 'myfont',
-                                    fontSize: 20,
-                                  ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Spacer(),
+                                    Expanded(
+                                      child: TextField(
+                                        enabled: false,
+                                        decoration: InputDecoration(
+                                          labelText: idd,
+                                          labelStyle: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 20.0,
+                                            fontFamily: 'myfont',
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Text(
+                                      '  رقـم الـهـويـة',
+                                      textAlign: TextAlign.end,
+                                      style: TextStyle(
+                                        fontFamily: 'myfont',
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Spacer(),
+                                  ],
                                 ),
-                              ),
-                            ),
-                            SizedBox(width: 16.0),
-                            Visibility(
-                              visible: pressed,
-                              child: Expanded(
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    pressed = false;
-                                    setState(() {
-                                      _isTextFieldEnabled =
-                                          !_isTextFieldEnabled;
+                                SizedBox(
+                                  height: 16.0,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Spacer(),
+                                    Expanded(
+                                      child: TextField(
+                                        enabled: false,
+                                        decoration: InputDecoration(
+                                          labelText: startDate,
+                                          labelStyle: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 20.0,
+                                            fontFamily: 'myfont',
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Text(
+                                      '  تـاريـخ بـدايـة الـعـمـل',
+                                      textAlign: TextAlign.end,
+                                      style: TextStyle(
+                                        fontFamily: 'myfont',
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Spacer(),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 16.0,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Spacer(),
+                                    Expanded(
+                                      child: TextField(
+                                        enabled: false,
+                                        decoration: InputDecoration(
+                                          labelText: sp,
+                                          labelStyle: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 20.0,
+                                            fontFamily: 'myfont',
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Text(
+                                      '  أخـصـائـي',
+                                      textAlign: TextAlign.end,
+                                      style: TextStyle(
+                                        fontFamily: 'myfont',
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Spacer(),
+                                  ],
+                                ),
+                                SizedBox(height: 40),
+                                Center(
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Spacer(),
+                                      Container(
+                                  
+                                        width: 300,
+                                        child: ElevatedButton(
+                                          onPressed: () {
+                                            pressed = true;
+                                            setState(() {
+                                              _isTextFieldEnabled =
+                                                  !_isTextFieldEnabled;
+                                              // Navigator.push(context,
+                                              //     MaterialPageRoute(builder: (context) {
+                                              //   return edit();
+                                              // }));
+                                            });
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            primary: Color(0xff6f35a5),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(29.0),
+                                            ),
+                                          ),
+                                          child: Text(
+                                            'تـعـديـل',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: 'myfont',
+                                              fontSize: 20,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width: 16.0),
+                                      Visibility(
+                                        visible: pressed,
+                                        child: Container(
+                                             width: 300,
+                                          child: ElevatedButton(
+                                            onPressed: () {
+                                              pressed = false;
+                                              setState(() {
+                                                _isTextFieldEnabled =
+                                                    !_isTextFieldEnabled;
 
-                                      _textEditingControllerphone.text =
-                                          _textEditingControllername.text;
-                                      _textEditingControlleremail.text =
-                                          _textEditingControllername.text;
-                                    });
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    primary: Color(0xff6f35a5),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(29.0),
-                                    ),
-                                  ),
-                                  child: Text(
-                                    'تـم',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: 'myfont',
-                                      fontSize: 20,
-                                    ),
+                                                phoneController.text =
+                                                    nameController.text;
+                                                emailController.text =
+                                                    nameController.text;
+                                              });
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              primary: Color(0xff6f35a5),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(29.0),
+                                              ),
+                                            ),
+                                            child: Text(
+                                              'تـم',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontFamily: 'myfont',
+                                                fontSize: 20,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        
+                                      ),                                      Spacer(),
+
+                                    ],
                                   ),
                                 ),
-                              ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              // Container(
-              //   child: Image.asset('images/image1.png'),
-              // )
-            ],
-          ),
+                      ),
+                    ],
+                  );
+                }
+              }),
         ),
       ),
     );

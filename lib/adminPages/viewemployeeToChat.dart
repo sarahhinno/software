@@ -1,178 +1,233 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'dart:convert';
+
+//import 'package:cloud_firestore/cloud_firestore.dart';
+//import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:software/DetailsPage.dart';
-import 'package:software/theme.dart';
+import 'package:intl/intl.dart';
+import 'package:software/adminPages/chat.dart';
 import 'package:http/http.dart' as http;
+import 'package:software/theme.dart';
 
-// void main() {
-//   runApp(MyApp());
-// }
 
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       home: TestPage(),
-//       debugShowCheckedModeBanner: false,
-//     );
-//   }
-// }
 
-class adminChat extends StatefulWidget {
+class chat extends StatefulWidget {
   @override
-  _adminChatState createState() => _adminChatState();
+  _chatState createState() => _chatState();
 }
 
-class _adminChatState extends State<adminChat> {
+class _chatState extends State<chat> {
+
+   late final List<dynamic> data;
+  List<String> imagePath = [];
+  List<String> imageID = [];
+  List<String> EMP = [];
+
+  //final auth=FirebaseAuth.instance;
+ // final firestore=FirebaseFirestore.instance;
+  //late User? user;
+
+  void getUser(){
+    // try{
+    //     final currentUser = auth.currentUser;
+    //   if (currentUser != null) {
+    //     setState(() {
+    //       user = currentUser;
+    //     });
+    //     print("email firestore ");
+    //     print(user!.email);
+    //   }
+    // }catch(e){
+    //   print(e);
+    // }
+  }
+
+   Future<void> getEmployeeName() async {
+    // print("childrenssssssssssss");
+    final EmployeeNamesResponse =
+        await http.get(Uri.parse(ip + "/sanad/getspname"));
+    if (EmployeeNamesResponse.statusCode == 200) {
+      EMP.clear();
+      String EmployeeName;
+      data = jsonDecode(EmployeeNamesResponse.body);
+
+      for (int i = 0; i < data.length; i++) {
+        print(data[i]['Fname'] + " " + data[i]['Lname']);
+        EmployeeName = data[i]['Fname'] + " " + data[i]['Lname'];
+        setState(() {
+          EMP.add(EmployeeName);
+        });
+      }
+      for (int i = 0; i < EMP.length; i++) {
+        print("ch" + data[i]['id']);
+      }
+    } else {
+      print("errrrrrrrror");
+    }
+  }
+
+  Future<void> getSPImages()async{
+    String path;
+    String id;
+    final images = await http.get(Uri.parse(ip+"/sanad/getAllSPImages"));
+    if(images.statusCode==200){
+      print(images.body);
+    final List<dynamic> image = jsonDecode(images.body);
+      for(int i=0;i<image.length;i++){
+        path=image[i]['path'];
+        id=image[i]['spID'];
+        print(path);
+        print(id);
+        imagePath.add(path);
+        imageID.add(id);
+      }
+      
+    }
+  }
+
+
+  
+
   List<Map<String, String>> Freinds = [
     {
       'date': 'أمس',
-      'name': '   فـطـوم دريـنـي',
+      'name': 'سارة حنو',
       'message': ' اوك',
-      'image': 'images/person4.png'
+      'image': 'images/person1.png'
     },
     {
       'date': 'أمس',
       'name': '   نـغـم دريـنـي',
       'message': ' تـمـام',
-      'image': 'images/person5.png'
+      'image': 'images/person1.png'
     },
     {
       'date': '13/12',
       'name': ' شـام دريـنـي  ',
       'message': ' الجلسة',
-      'image': 'images/person22.png'
+      'image': 'images/person1.png'
     },
     {
       'date': '13/12',
       'name': '   مـيـس دريـنـي',
       'message': ' نفس الموعد',
-      'image': 'images/person11.png'
+      'image': 'images/person1.png'
     },
     {
       'date': '12/12',
       'name': '   لـولـو دريـنـي',
       'message': 'الاحد  ',
-      'image': 'images/person6.png'
+      'image': 'images/person1.png'
     },
     {
       'date': '5/12',
       'name': ' رنـا دريـنـي  ',
       'message': ' مسج',
-      'image': 'images/person8.png'
+      'image': 'images/person1.png'
     },
     {
       'date': 'أمس',
       'name': 'أحـمـد أحـمـد',
       'message': ' بكرا',
-      'image': 'images/person3.png'
+      'image': 'images/person1.png'
     },
+   
   ];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUser();
+    getEmployeeName();
+    getSPImages();
+  }
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-
     return Scaffold(
+      backgroundColor: primaryLightColor,
       appBar: AppBar(
         backgroundColor: Color(0xff6f35a5),
-        title: Text(
-          'الـدردشـات',
-          style: TextStyle(fontFamily: 'myfont'),
-        ),
+        title: Text('الـدردشـات',style: TextStyle(fontFamily: 'myfont'),),
       ),
-      body: Container(
-        width: size.width,
-        height: size.height,
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            children: <Widget>[
-              SizedBox(
-                  height: 20,
-                  child: Container(color: Color.fromARGB(255, 237, 234, 240))),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: Freinds.length,
-                itemBuilder: (context, index) {
+      
+      body: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: 4),
+        scrollDirection: Axis.vertical,
+        child: Column(
+          children: <Widget>[
+           SizedBox(height: 20),
+           
+            ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: EMP.length,
+              itemBuilder: (context, index) {
+                  String employee = EMP[index];
                   return GestureDetector(
-                    onTap: () {
-                      //    Navigate to a new page when card is tapped
-                      // Navigator.push(
-                      //   context,
-<<<<<<< HEAD
-                      //   MaterialPageRoute(
-                      //     builder: (context) => DetailsPage(
-                      //       name: Freinds[index]['name'] ?? '',
-                      //       message: Freinds[index]['message'] ?? '',
-                      //       image: Freinds[index]['image'] ?? '',
-                      //     ),
-                      //   ),
-=======
-                      //   // MaterialPageRoute(
-                      //   //   // builder: (context) => DetailsPage(
-                      //   //   //   name: Freinds[index]['name'] ?? '',
-                      //   //   //   message: Freinds[index]['message'] ?? '',
-                      //   //   //   image: Freinds[index]['image'] ?? '',
-                      //   //   // ),
-                      //   // ),
->>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
-                      // );
-                    },
-                    child: Column(
-                      children: <Widget>[
-                        Card(
-                          color: Color.fromARGB(255, 237, 234, 240),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: <Widget>[
-                              Text(
-                                Freinds[index]['date'] ?? '',
-                                style: TextStyle(),
-                              ),
-                              Spacer(),
-                              Card(
-                                color: Color.fromARGB(255, 237, 234, 240),
-                                child: Column(
-                                  children: <Widget>[
-                                    Text(
-                                      Freinds[index]['name'] ?? '',
-                                      style: TextStyle(
-                                          fontFamily: 'myfont',
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w200),
-                                    ),
-                                    SizedBox(height: 5),
-                                    Text(
-                                      Freinds[index]['message'] ?? '',
-                                      style: TextStyle(
-                                          fontSize: 15, fontFamily: 'myfont'),
-                                    ),
-                                  ],
+                  onTap: () async{
+                    // Navigator.push(
+                    //   context,
+                    //   // MaterialPageRoute(
+                    //   //   builder: (context) => ChatScreen(receiverID: data[index]['id'],receiverName: data[index]['Fname'],)
+                    //   // ),
+                    // );
+                  },
+                child: Column(
+                  children: <Widget>[
+                    Card(
+                      color: Color.fromARGB(255, 237, 234, 240),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          
+                          Spacer(),                           
+                             Column(
+                              children: <Widget>[
+                                Text(
+                                  employee ?? '',
+                                  style: TextStyle(
+                                      fontFamily: 'myfont',
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w200),
                                 ),
-                              ),
-                              //  Spacer(),
-                              Image.asset(
-                                Freinds[index]['image'] ?? '',
-                                width: 100,
-                                height: 100,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Divider(
-                          height: 1.0,
-                          thickness: 1.0,
-                          color: Color(0xff6f35a5),
-                          indent: 0.0, // Set the starting padding
-                          endIndent: 60.0, // Set the ending padding
-                        ),
-                      ],
+                                SizedBox(height: 5),
+                            //     Text(
+                            // Freinds[index]['message'] ?? '',
+                            //       style: TextStyle(
+                            //           fontSize: 15, fontFamily: 'myfont'),
+                            //     ),
+                              ],
+                            ),
+                            SizedBox(width: 30,),
+                            ClipOval(
+                              child: imageID.contains(data[index]['id'])
+                                  ? Image.network(
+                                      'http://192.168.1.19:3000/sanad/getSPImage?id=${imageID[imageID.indexOf(data[index]['id'])]}',
+                                      width: 60,
+                                      height: 60,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Image.asset(
+                                      'images/profileImage.jpg',
+                                      width: 70,
+                                      height: 60,
+                                      fit: BoxFit.cover,
+                                    ),
+                            ),
+                          SizedBox(width: 5,),
+                        ],
+                      ),
                     ),
-                  );
-                },
-              ),
-            ],
-          ),
+                    
+                  ],
+
+                ),
+                  );  
+              },
+            ),
+          ],
         ),
       ),
     );

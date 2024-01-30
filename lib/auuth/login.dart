@@ -2,12 +2,10 @@
 
 import 'dart:convert';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:software/adminPages/addNewChild.dart';
+import 'package:software/adminPages/dailyScheduale.dart';
 import 'package:software/auuth/signup.dart';
-import 'package:software/adminPages/c.dart';
-import 'package:software/adminPages/calender.dart';
 import 'package:software/adminPages/addNewSpecialest.dart';
 import 'package:software/adminPages/adminHomePage.dart';
 import 'package:software/components/rounded_button.dart';
@@ -17,10 +15,6 @@ import 'package:software/specialestPages/homePage.dart';
 import 'package:software/theme.dart';
 import 'package:http/http.dart' as http;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
 class Login extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -29,9 +23,8 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-<<<<<<< HEAD
   String result = "  ";
-  final auth = FirebaseAuth.instance;
+  // final auth=FirebaseAuth.instance;
 
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -51,35 +44,6 @@ class _LoginState extends State<Login> {
       });
     } else {
       final response = await http.post(Uri.parse(ip + "/sanad/login"), body: {
-=======
-
-  String result="  ";
-  final auth=FirebaseAuth.instance;
-  
-
-
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-    bool _obscureText = true;
-
-
-  Future<void> loginfun() async {
-    print("inside login func");
-    if(emailController.text.isEmpty){
-      setState(() {
-        result="يـجــب تـعـبـئـة الإيـمـيـل";
-        return;
-      });
-    }
-    else if(passwordController.text.isEmpty){
-      setState(() {
-        result="يـجــب تـعـبـئـة كـلـمـة الــسـر";
-        return;
-      });
-    } else {
-      final response = await http
-          .post(Uri.parse(ip+"/sanad/login"), body: {
->>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
         'email': emailController.text.trim(),
         'password': passwordController.text.trim()
       });
@@ -87,27 +51,20 @@ class _LoginState extends State<Login> {
         print("flutter loged in");
         print(response.body.toString());
 
-        try {
-          final user = auth.signInWithEmailAndPassword(
-              email: emailController.text, password: passwordController.text);
-          if (user != null) {
-            print(user);
-            // Navigator.push(context, MaterialPageRoute(builder: (context) {
-            // //  return adminHomePage();
-            // }
-            // ));
-          }
-        } catch (e) {
-          print(e);
-        }
-<<<<<<< HEAD
+        // try {
+        //   final user = auth.signInWithEmailAndPassword(
+        //       email: emailController.text, password: passwordController.text);
+        //   if (user != null) {
+        //     print(user);
+        //     // Navigator.push(context, MaterialPageRoute(builder: (context) {
+        //     // //  return adminHomePage();
+        //     // }
+        //     // ));
+        //   }
+        // } catch (e) {
+        //   print(e);
+        // }
       } else {
-=======
-
-      } 
-      else {
-
->>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
         print("flutter nooooooooo");
         print(emailController.text);
         print(passwordController.text);
@@ -133,7 +90,6 @@ class _LoginState extends State<Login> {
           child: Stack(
             alignment: Alignment.center,
             children: [
-<<<<<<< HEAD
               // Positioned(
               //     top: 0,
               //     right: 0,
@@ -148,22 +104,6 @@ class _LoginState extends State<Login> {
               //       "images/login_bottom_left.png",
               //       width: size.width,
               //     )),
-=======
-              Positioned(
-                  top: 0,
-                  right: 0,
-                  child: Image.asset(
-                    "images/login_top_right.png",
-                    width: size.width * 0.42,
-                  )),
-              Positioned(
-                  bottom: 0,
-                  left: 0,
-                  child: Image.asset(
-                    "images/login_bottom_left.png",
-                    width: size.width,
-                  )),
->>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
               Container(
                 width: double.infinity,
                 height: size.height,
@@ -171,27 +111,16 @@ class _LoginState extends State<Login> {
                     child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-<<<<<<< HEAD
                     SizedBox(height: 20),
-=======
-                    SizedBox(height: 70),
->>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
                     Text(
                       "تـسـجـيـل الــدخــول",
                       style: TextStyle(
                           fontFamily: 'myFont',
                           fontSize: 24,
-<<<<<<< HEAD
                           fontWeight: FontWeight.bold,
                           color: primaryColor),
                     ),
-                    // SizedBox(
-                    //   height: 35,
-                    // ),
                     Image.asset("images/down.png", width: size.width * 0.3),
-                    // SizedBox(
-                    //   height: 40,
-                    // ),
                     Text(
                       result,
                       style: TextStyle(
@@ -200,7 +129,7 @@ class _LoginState extends State<Login> {
                           fontSize: 18),
                     ),
                     Container(
-                      width: 600,
+                      width: 500,
                       child: RoundedTextField(
                           child: TextField(
                         textAlign: TextAlign.right,
@@ -222,7 +151,7 @@ class _LoginState extends State<Login> {
                       )),
                     ),
                     Container(
-                      width: 600,
+                      width: 500,
                       child: RoundedTextField(
                           child: TextField(
                         obscureText: _obscureText,
@@ -262,122 +191,36 @@ class _LoginState extends State<Login> {
                         ),
                       )),
                     ),
-
-=======
-                          fontWeight: FontWeight.bold,color:primaryColor),
-                    ),
-                    SizedBox(
-                      height: 35,
-                    ),
-                    Image.asset("images/down.png",
-                        width: size.width * 0.8),
-                    SizedBox(
-                      height: 40,
-                    ),
-                    Text(result,style: TextStyle(fontFamily: 'myFont',color: Colors.red,fontSize: 18),),
-                    RoundedTextField(
-                        child: TextField(
-                      textAlign: TextAlign.right,
-                      controller: emailController,
-                      onChanged: (value) {
-                        setState(() {
-                          result=" ";
-                        });
-                      },
-                      decoration: InputDecoration(
-                        hintText: "الـبريد الالـكترونـي أو هـويـة الـطفـل",
-                        hintStyle: TextStyle(fontFamily: 'myFont'),
-                        suffixIcon: Icon(
-                          Icons.person_2,
-                          color: primaryColor,
-                        ),
-                        border: InputBorder.none,
-                      ),
-                    )),
-                    RoundedTextField(
-                        child: TextField(
-                      obscureText: _obscureText,
-                      textAlign: TextAlign.right,
-                      controller: passwordController,
-                      onChanged: (value){
-                        setState(() {
-                          result=" ";
-                        });
-                      },
-                      decoration: InputDecoration(
-                        hintText: "كــلـمـة الــسـر",
-                        hintStyle: TextStyle(fontFamily: 'myFont',),
-                        suffixIcon: Icon(
-                          Icons.lock,
-                          color: primaryColor,
-                        ),
-                        icon: Material(
-                                type: MaterialType.transparency,
-                                child: IconButton(
-                                  icon: Icon(
-                                    _obscureText
-                                        ? Icons.visibility
-                                        : Icons.visibility_off,
-                                        color: Colors.grey,
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      _obscureText = !_obscureText;
-                                    });
-                                  },
-                                ),
-                              ),
-                        border: InputBorder.none,
-                      ),
-                    )),
->>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
                     SizedBox(
                       height: 10,
                     ),
-                    GestureDetector(
-                      onTap: () {
-<<<<<<< HEAD
-                        //   Navigator.push(context, MaterialPageRoute(builder: (context){return calendar();}));
-                      },
-                      child: Align(
-                          //    alignment: Alignment.centerRight,
-                          child: Row(children: [
-                        Spacer(),
-                        Text(
-                          "هـل نـســيـت كـلمـة الـسـر؟",
-                          style: TextStyle(
-                              fontFamily: 'myFont',
-                              fontSize: 18,
-                              color: primaryColor,
-                              decoration: TextDecoration.underline),
-                        ),
-                        Spacer()
-                      ])),
-=======
-                      //   Navigator.push(context, MaterialPageRoute(builder: (context){return calendar();}));
-                      },
-                      child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Row(children: [
-                            SizedBox(
-                              width: 50,
-                            ),
-                            Text(
-                              "هـل نـســيـت كـلمـة الـسـر؟",
-                              style: TextStyle(
-                                  fontFamily: 'myFont',
-                                  fontSize: 18,
-                                  color: primaryColor,
-                                  decoration: TextDecoration.underline
-                                  ),
-                            )
-                          ])),
->>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
+                    Container(
+                      padding: EdgeInsets.fromLTRB(170, 10, 100, 10),
+                      width: 600,
+                      child: GestureDetector(
+                        onTap: () {
+                          //   Navigator.push(context, MaterialPageRoute(builder: (context){return calendar();}));
+                        },
+                        child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Row(children: [
+                              SizedBox(
+                                width: 50,
+                              ),
+                              Text(
+                                "هـل نـســيـت كـلمـة الـسـر؟",
+                                style: TextStyle(
+                                    fontFamily: 'myFont',
+                                    fontSize: 18,
+                                    color: primaryColor,
+                                    decoration: TextDecoration.underline),
+                              )
+                            ])),
+                      ),
                     ),
                     SizedBox(
                       height: 25,
                     ),
-<<<<<<< HEAD
                     Container(
                       width: 300,
                       child: RoundedButton(
@@ -388,17 +231,6 @@ class _LoginState extends State<Login> {
                                 //  Navigator.push(context, MaterialPageRoute(builder: (context){return adminHomePage();}))
                               }),
                     ),
-
-=======
-                    RoundedButton(
-                      text: "تـسـجـيـل الــدخــول",
-                      press:  ()=>{
-                        loginfun(),
-                        
-                      //  Navigator.push(context, MaterialPageRoute(builder: (context){return adminHomePage();}))
-
-                      }),
->>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
                     SizedBox(
                       height: 20,
                     ),
@@ -407,14 +239,10 @@ class _LoginState extends State<Login> {
                       children: [
                         GestureDetector(
                             onTap: () {
-<<<<<<< HEAD
                               Navigator.push(context,
                                   MaterialPageRoute(builder: (context) {
                                 return signup();
                               }));
-=======
-                              Navigator.push(context, MaterialPageRoute(builder: (context){return signup();}));
->>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
                             },
                             child: Text(
                               "أنـشـئ حـسـاب",
@@ -431,67 +259,19 @@ class _LoginState extends State<Login> {
                                 color: primaryColor)),
                       ],
                     ),
-<<<<<<< HEAD
                     ElevatedButton(
                         onPressed: () {
-                          // try{
-                          //   final user=auth.signInWithEmailAndPassword(email: emailController.text, password: passwordController.text);
-                          //   if(user!=null){
-                          //     print(user);
-                          //     Navigator.push(context, MaterialPageRoute(builder: (context){return calenderr();}));
-                          //   }
-                          // }catch(e){
-                          //   print(e);
-                          // }
-                          //      Navigator.push(context, MaterialPageRoute(builder: (context){return spHomeDrawer();}));
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return dailySchedual();
+                          }));
                         },
                         child: Text("ggg")),
-=======
-                    ElevatedButton(onPressed:() {
-                      // try{
-                      //   final user=auth.signInWithEmailAndPassword(email: emailController.text, password: passwordController.text);
-                      //   if(user!=null){
-                      //     print(user);
-                      //     Navigator.push(context, MaterialPageRoute(builder: (context){return calenderr();}));
-                      //   }
-                      // }catch(e){
-                      //   print(e);
-                      // }
-              //      Navigator.push(context, MaterialPageRoute(builder: (context){return spHomeDrawer();}));
-
-                    }, child: Text("ggg")),
->>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
-                    // ElevatedButton(onPressed:()async {
-                    //   //Navigator.push(context, MaterialPageRoute(builder: (context){return adminHomePage();}));
-                    //   try{
-                    //     final newUser=await auth.createUserWithEmailAndPassword(
-                    //     email: emailController.text, password: passwordController.text);
-                    //    final user=auth.signInWithEmailAndPassword(email: emailController.text, password: passwordController.text);
-                    //     if(user!=null){
-                    //       print(user);
-                    //       Navigator.push(context, MaterialPageRoute(builder: (context){return calenderr();}));
-                    //     }
-                    //     Navigator.push(context, MaterialPageRoute(builder: (context){return adminHomePage();}));
-                    //   }
-                    //   catch(e){
-                    //     print(e);
-                    //   }
-
-                    // }, child: Text("newChild"))
-<<<<<<< HEAD
                   ],
-=======
-                   ],
-                   
->>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
                 )),
               )
             ],
           )),
     );
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2

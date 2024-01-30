@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_interpolation_to_compose_strings
 
 import 'dart:convert';
 
@@ -7,29 +7,35 @@ import 'package:flutter/material.dart';
 import 'package:software/adminPages/addNewChild.dart';
 import 'package:software/adminPages/addNewSpecialest.dart';
 import 'package:software/adminPages/adminHome.dart';
-import 'package:software/adminPages/adminPosts.dart';
 import 'package:software/adminPages/c.dart';
 import 'package:software/adminPages/chat.dart';
-import 'package:software/adminPages/dailyScheduale.dart';
-//import 'package:software/adminPages/notifScreen.dart';
 import 'package:software/adminPages/showAllChildren.dart';
 import 'package:software/adminPages/showAllEmployee.dart';
-import 'package:software/adminPages/viewemployeeToChat.dart';
+import 'package:software/parentPages/homePageParent.dart';
+import 'package:software/parentPages/ChildrenPersInfo.dart';
+import 'package:software/specialestPages/empPersonalInformation.dart';
+import 'package:software/specialestPages/empVications.dart';
+import 'package:software/specialestPages/homePage.dart';
+import 'package:software/specialestPages/viewChildren.dart';
 import 'package:software/theme.dart';
 //import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:http/http.dart' as http;
 
 
-class adminHomePage extends StatefulWidget{
+class parentHomeDrawer extends StatefulWidget{
+  final String id;
 
+  const parentHomeDrawer({super.key, required this.id});
   @override
   State<StatefulWidget> createState() {
-    return _adminHomePageState();
+    return _parentHomeDrawerState();
   }
 }
 
-class _adminHomePageState extends State<adminHomePage> {
- // final auth=FirebaseAuth.instance;
+class _parentHomeDrawerState extends State<parentHomeDrawer> {
+   String id="";
+   String name="";
+  //final auth=FirebaseAuth.instance;
   void getUser(){
     // try{
     //   final user=auth.currentUser;
@@ -44,11 +50,54 @@ class _adminHomePageState extends State<adminHomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    id=widget.id;
+    print("home drawer id "+id);
     getUser();
+    getImageUrl();
+    getSPname();
   }
 
   Color hoveredColor = primaryLightColor;
-   Widget container=adminHome();
+   late Widget container=childSchdule(id: id);
+
+    String imageUrl = '';
+
+
+  Future<void> getImageUrl() async {
+    print(id);
+    final String serverUrl = '$ip/sanad/getImage?id=$id';
+
+    try {
+      final response = await http.get(Uri.parse(serverUrl));
+      print(response.body);
+      if (response.statusCode == 200) {
+        setState(() {
+          imageUrl = serverUrl;
+          print(imageUrl);
+        });
+      } else {
+        print('Failed to get image. Status code: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error getting image: $error');
+    }
+  }
+
+Future<void> getSPname()async{
+  final spName = await http.get(Uri.parse("$ip/sanad/getChildname?id=$id"));
+  if(spName.statusCode==200){
+    print("body "+spName.body.toString());
+    final spNameBody=jsonDecode(spName.body);
+      name=spNameBody['Fname']+" "+spNameBody['Lname'];
+    
+    print("name"+name);
+  }
+  else{
+    print("error"+spName.body);
+  }
+}
+
+
   @override
   Widget build(BuildContext context) {
    Size size=MediaQuery.of(context).size;               
@@ -71,15 +120,13 @@ class _adminHomePageState extends State<adminHomePage> {
                   Container(
                     margin: EdgeInsets.only(bottom: 10),
                     height: 100,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image: AssetImage('images/admin.png'),
-                      ),
+                    child: ClipOval(
+                      child: imageUrl.isNotEmpty? (Image.network(imageUrl, height: 120.0,width: 150.0,fit: BoxFit.cover,)): 
+                                Image.asset('assets/images/nurse.png', width: 120, height: 200,fit: BoxFit.cover,) ,
                     ),
                   ),
                   Text(
-                    "الـإدارة",
+                    name,
                     style: TextStyle(color: Colors.white, fontSize: 24,fontFamily: 'myFont'),
                   ),
                   Text(
@@ -94,10 +141,11 @@ class _adminHomePageState extends State<adminHomePage> {
             ),
             Container(
                 width: size.width,
+                height: size.width * 0.2,
                   child: TextButton(
                     onPressed: () {
                       setState(() {
-                        container=adminHome();
+                        container=childSchdule(id: "");
                       });
                     },
                     style: TextButton.styleFrom(
@@ -128,48 +176,13 @@ class _adminHomePageState extends State<adminHomePage> {
                   ),
                 ),
                 SizedBox(height: 5,),
-                  Container(
-                width: size.width,
-                  child: TextButton(
-                    onPressed: () {
-                      setState(() {
-                        container=dailySchedual();
-                      });
-                    },
-                    style: TextButton.styleFrom(
-                      foregroundColor: primaryColor,
-                        padding: EdgeInsets.all(10),
-                        backgroundColor: hoveredColor,
-                        elevation: 3,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          " الـجـدول الـيـومي",
-                          style: TextStyle(
-                            color: primaryColor,
-                            fontFamily: 'myFont',
-                            fontSize: 20,
-                          ),
-                        ),SizedBox(
-                            width: 8),
-                        Icon(
-                          Icons.home, // Replace with the desired icon
-                          color: primaryColor, // Set the color of the icon
-                        ),
-                        SizedBox(width: 30,),
-                      ],
-                    ),
-                  ),
-                ),                SizedBox(height: 5,),
-
                 Container(
                 width: size.width,
+                height: size.width * 0.2,
                   child: TextButton(
                     onPressed: () {
                       setState(() {
-                  //      container=calenderr();
+                        container=myChildren(id: id,);
                       });
                     },
                     style: TextButton.styleFrom(
@@ -182,43 +195,7 @@ class _adminHomePageState extends State<adminHomePage> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
-                          "إعـدادالجــدول",
-                          style: TextStyle(
-                            color: primaryColor,
-                            fontFamily: 'myFont',
-                            fontSize: 20,
-                          ),
-                        ),SizedBox(
-                            width: 8),
-                        Icon(
-                          Icons.calendar_month, // Replace with the desired icon
-                          color: primaryColor, // Set the color of the icon
-                        ),
-                        SizedBox(width: 30,),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(height: 5,),
-                Container(
-                width: size.width,
-                  child: TextButton(
-                    onPressed: () {
-                      setState(() {
-                        container=viewChildren();
-                      });
-                    },
-                    style: TextButton.styleFrom(
-                      foregroundColor: primaryColor,
-                        padding: EdgeInsets.all(10),
-                        backgroundColor: hoveredColor,
-                        elevation: 3,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          "الأطـــفـــال",
+                          "جــلسات طــفــلــي",
                           style: TextStyle(
                             color: primaryColor,
                             fontFamily: 'myFont',
@@ -238,10 +215,11 @@ class _adminHomePageState extends State<adminHomePage> {
                 SizedBox(height: 5,),
                 Container(
                 width: size.width,
+                height: size.width * 0.2,
                   child: TextButton(
                     onPressed: () {
                       setState(() {
-                        container=viewSpecialest();
+                        container=profileChild(id: id,);
                       });
                     },
                     style: TextButton.styleFrom(
@@ -254,7 +232,7 @@ class _adminHomePageState extends State<adminHomePage> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
-                          "الأخــصــائــيـيـن",
+                          "الـصـفـحـة الـشـخـصـيـة",
                           style: TextStyle(
                             color: primaryColor,
                             fontFamily: 'myFont',
@@ -263,7 +241,7 @@ class _adminHomePageState extends State<adminHomePage> {
                         ),SizedBox(
                             width: 8),
                         Icon(
-                          Icons.person, // Replace with the desired icon
+                          Icons.child_care, // Replace with the desired icon
                           color: primaryColor, // Set the color of the icon
                         ),
                         SizedBox(width: 30,),
@@ -274,10 +252,11 @@ class _adminHomePageState extends State<adminHomePage> {
                 SizedBox(height: 5,),
                 Container(
                 width: size.width,
+                height: size.width * 0.2,
                   child: TextButton(
                     onPressed: () {
                       setState(() {
-                        container=newChild();
+                        container=vications(id:id);
                       });
                     },
                     style: TextButton.styleFrom(
@@ -290,7 +269,7 @@ class _adminHomePageState extends State<adminHomePage> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
-                          "إضـافـة طــفـل جـديـد",
+                          "الـحسـاب",
                           style: TextStyle(
                             color: primaryColor,
                             fontFamily: 'myFont',
@@ -299,7 +278,7 @@ class _adminHomePageState extends State<adminHomePage> {
                         ),SizedBox(
                             width: 8),
                         Icon(
-                          Icons.face_retouching_natural, // Replace with the desired icon
+                          Icons.monetization_on, // Replace with the desired icon
                           color: primaryColor, // Set the color of the icon
                         ),
                         SizedBox(width: 30,),
@@ -308,115 +287,35 @@ class _adminHomePageState extends State<adminHomePage> {
                   ),
                 ),
                 SizedBox(height: 5,),
-                Container(
-                width: size.width,
-                  child: TextButton(
-                    onPressed: () {
-                      setState(() {
-                        container=newSpecialest();
-                      });
-                    },
-                    style: TextButton.styleFrom(
-                      foregroundColor: primaryColor,
-                        padding: EdgeInsets.all(10),
-                        backgroundColor: hoveredColor,
-                        elevation: 3,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          "إضـافـة أخـصـائـي جـديـد",
-                          style: TextStyle(
-                            color: primaryColor,
-                            fontFamily: 'myFont',
-                            fontSize: 20,
-                          ),
-                        ),SizedBox(
-                            width: 8),
-                        Icon(
-                          Icons.person_add, // Replace with the desired icon
-                          color: primaryColor, // Set the color of the icon
-                        ),
-                        SizedBox(width: 30,),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(height: 5,),
-                Container(
-                width: size.width,
-                  child: TextButton(
-                    onPressed: () {
-                      setState(() {
-                        container=adminPosts();
-                      });
-                    },
-                    style: TextButton.styleFrom(
-                      foregroundColor: primaryColor,
-                        padding: EdgeInsets.all(10),
-                        backgroundColor: hoveredColor,
-                        elevation: 3,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          "إضـافـة",
-                          style: TextStyle(
-                            color: primaryColor,
-                            fontFamily: 'myFont',
-                            fontSize: 20,
-                          ),
-                        ),SizedBox(
-                            width: 8),
-                        Icon(
-                          Icons.person_add, // Replace with the desired icon
-                          color: primaryColor, // Set the color of the icon
-                        ),
-                        SizedBox(width: 30,),
-                      ],
-                    ),
-                  ),
-                ),
+                
             ]),
           ),
         ),
       ),
       appBar: AppBar(
-  backgroundColor: primaryColor,
-  automaticallyImplyLeading: false,
-  actions: [
-    IconButton(
-      icon: Icon(Icons.notifications),
-      onPressed: () {
-        // Navigator.push(context, MaterialPageRoute(builder: (context) {
-        //  // return notificationScreen();
-        // }));
-      },
-    ),
-    IconButton(
-      icon: Icon(Icons.wechat),
-      onPressed: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return chat();
-        }
-        ));
-      },
-    ),
-    Builder(
-      builder: (BuildContext context) {
-        return IconButton(
-          icon: Icon(Icons.list),
-          onPressed: () {
-            Scaffold.of(context).openEndDrawer();
-          },
-        );
-      },
-    ),
-  ],
-),
-       body: container,
+        backgroundColor: primaryColor,
+        automaticallyImplyLeading: false,
+        actions: [
+         Builder(
+          builder: (BuildContext context) {
+           return IconButton(
+              icon: Icon(Icons.list),
+              onPressed: () {
+                Scaffold.of(context).openEndDrawer();
+              },
+            );
+          }
+         ),
+          IconButton(
+            icon: Icon(Icons.message),
+            onPressed: () {
+              // Navigator.push(context, MaterialPageRoute(builder: (context){return ChatScreen();}));
+            },
+          ),
+         ],
+       ),
+       body: container
+       //spHomePage(id: id,name:"فطوم دريني"),
       // Container(
       //   width: size.width,
       //   height: size.height,

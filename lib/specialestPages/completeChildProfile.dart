@@ -16,12 +16,12 @@ import 'package:file_picker/file_picker.dart';
 //   }
 // }
 
-class completeProfilesp extends StatefulWidget {
+class edit extends StatefulWidget {
   @override
-  _completeProfilespState createState() => _completeProfilespState();
+  _TestPageState createState() => _TestPageState();
 }
 
-class _completeProfilespState extends State<completeProfilesp> {
+class _TestPageState extends State<edit> {
   Uint8List? _imageBytes;
   bool isExpanded = false;
 
@@ -31,8 +31,6 @@ class _completeProfilespState extends State<completeProfilesp> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xff6f35a5),
@@ -41,16 +39,18 @@ class _completeProfilespState extends State<completeProfilesp> {
           style: TextStyle(fontFamily: 'myfont'),
         ),
       ),
-      body: Container(
-        width: size.width,
-        height: size.height,
+      body: Padding(
         padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
         child: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               SizedBox(height: 20),
               Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
+                  Spacer(),
+                   SizedBox(width: 150),
                   Container(
                     child: Material(
                       borderRadius: BorderRadius.circular(10),
@@ -87,7 +87,8 @@ class _completeProfilespState extends State<completeProfilesp> {
                         SizedBox(height: 20),
                       ],
                     ),
-                  ),
+                  ),                  Spacer(),
+
                 ],
               ),
               SizedBox(height: 70),
@@ -141,7 +142,7 @@ class _completeProfilespState extends State<completeProfilesp> {
                     Text(
                       'صـورة مـزاولـة الـمـهـنـة ',
                       style: TextStyle(
-                        fontSize: 15,
+                        fontSize: 17,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'myfont',
                       ),
@@ -194,14 +195,15 @@ class _completeProfilespState extends State<completeProfilesp> {
                             : 'إرفـاق',
                       ),
                     ),
-                    SizedBox(width: 80),
+                    SizedBox(width: 50),
                     Text(
                       'إرفـاق الـسـيـرة الـذاتـيـة',
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
                       ),
-                    ),
+                    ),                    SizedBox(width: 20),
+
                   ],
                 ),
               ),
