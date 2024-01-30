@@ -2,9 +2,17 @@
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+<<<<<<< HEAD
 import 'package:software/adminPages/DetailsPageOfEmployee.dart';
 import 'package:software/theme.dart';
 import 'dart:convert';
+=======
+import 'package:software/adminPages/DetailsPageOfChildren.dart';
+import 'package:software/adminPages/DetailsPageOfEmployee.dart';
+import 'dart:convert';
+
+import 'package:software/theme.dart';
+>>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
 
 class Employee {
   final String name;
@@ -19,6 +27,7 @@ class viewSpecialest extends StatefulWidget {
 }
 
 class viewSpecialestState extends State<viewSpecialest> {
+<<<<<<< HEAD
   String selectedValue = options.first;
   static List<String> options = [
     'سنة التوظيف',
@@ -36,6 +45,37 @@ class viewSpecialestState extends State<viewSpecialest> {
   ];
   String svalue = '-----';
   List<String> soptions = [];
+=======
+  String selectedValue = 'تـخـصـص الأخـصـائـي';
+  List<String> options = [
+    'سـنـة دخـول الأخـصائـيـن',
+    'تـخـصـص الأخـصـائـي',
+  ];
+  String selectedValue4 = '-----';
+  List<String> options4 = [
+    '2000',
+    '2001',
+    '2002',
+    '2003',
+    '2004',
+    '2005',
+    '2006',
+    '2007',
+    '2008',
+  ];
+  String selectedValue5 = '-----';
+  List<String> options5 = [
+    'ســلــوكــي',
+    'وظــيــفــي',
+    'تــربـيـة خـاصـة',
+    'عــلاج طــبـيـعي',
+    'الـلغـة و نــطــق',
+  ];
+  String svalue = '-----';
+  List<String> soptions = [
+    '-----',
+  ];
+>>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
   bool visable = false;
   List<String> names = [
     'ٍساره خالد وليد حنو',
@@ -51,6 +91,7 @@ class viewSpecialestState extends State<viewSpecialest> {
 
   List<String> EMP = [];
   String img = 'images/person4.png';
+<<<<<<< HEAD
     List<dynamic> data=[];
   List<String> imagePath = [];
   List<String> imageID = [];
@@ -99,6 +140,11 @@ class viewSpecialestState extends State<viewSpecialest> {
     
   }
 
+=======
+  late final List<dynamic> data;
+  List<String> imagePath = [];
+  List<String> imageID = [];
+>>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
 
   Future<void> getEmployeeName() async {
     // print("childrenssssssssssss");
@@ -177,15 +223,19 @@ class viewSpecialestState extends State<viewSpecialest> {
       body: Column(
         children: <Widget>[
           Container(
+<<<<<<< HEAD
             color: Colors.white,
+=======
+            color: Colors.grey[200],
+>>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
               child: Column(
                 children: <Widget>[
                   SizedBox(height: 20),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
+<<<<<<< HEAD
                       DropdownButton<String>(
                         value: svalue,
                         items: soptions.map((String value) {
@@ -248,10 +298,47 @@ class viewSpecialestState extends State<viewSpecialest> {
                         elevation: 2,
                       ),
                       SizedBox(width: 20),
+=======
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: Center(
+                          child: DropdownButton<String>(
+                            value: selectedValue,
+                            items: options.map((String value) {
+                              return DropdownMenuItem(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                selectedValue = newValue!;
+                                soptions = ['-----'];
+
+                                if (newValue == 'سـنـة دخـول الأخـصائـيـن') {
+                                  soptions = soptions + options4;
+                                } else if (newValue == 'تـخـصـص الأخـصـائـي') {
+                                  soptions = soptions + options5;
+                                }
+                              });
+                            },
+                            style: TextStyle(
+                              color: primaryColor,
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            dropdownColor: Colors.grey[200],
+                            elevation: 2,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10),
+>>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
                       Text(
                         'الـبـحـث حـسـب',
                         style: TextStyle(
                           fontFamily: 'myfont',
+<<<<<<< HEAD
                           fontSize: 17,
                           fontWeight: FontWeight.bold,
                           color: primaryColor,
@@ -290,6 +377,60 @@ class viewSpecialestState extends State<viewSpecialest> {
                   Divider(
                     thickness: 0.8,
                     color: Colors.grey,
+=======
+                          fontSize: 20,
+                          color: primaryColor,
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  Row(
+                    children: <Widget>[
+                      SizedBox(width: 50),
+                      Expanded(
+                        // color: Colors.grey[200],
+                        // width: 150,
+                        child: Center(
+                          child: DropdownButton<String>(
+                            value: svalue,
+                            items: soptions.map((String value) {
+                              return DropdownMenuItem(
+                                value: value,
+                                child: Text(
+                                  value,
+                                  style: TextStyle(
+                                    fontSize: 20.0,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                svalue = newValue!;
+                                visable = true;
+                              });
+                            },
+                            style: TextStyle(
+                              color: primaryColor,
+                              fontSize: 18.0,
+                            ),
+                            dropdownColor: Colors.grey[200],
+                            elevation: 4,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 50),
+                      Icon(
+                        Icons.filter_list,
+                        color: primaryColor,
+                        size: 30,
+                      ),
+                      SizedBox(width: 20),
+                    ],
+>>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
                   ),
                   SizedBox(height: 15),
                 ],
@@ -300,7 +441,11 @@ class viewSpecialestState extends State<viewSpecialest> {
           /////////////////////////////////////////////////
           //show just what i need
           Visibility(
+<<<<<<< HEAD
             visible: true,
+=======
+            visible: visable,
+>>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
             child: Expanded(
               child: ListView.builder(
                 itemCount: EMP.length,
@@ -346,9 +491,15 @@ class viewSpecialestState extends State<viewSpecialest> {
                         ),
                         Spacer(),
                         ClipOval(
+<<<<<<< HEAD
                           child: imageID.contains(idd[index])
                               ? Image.network(
                                   'http://192.168.1.19:3000/sanad/getSPImage?id=${imageID[imageID.indexOf(idd[index])]}',
+=======
+                          child: imageID.contains(data[index]['id'])
+                              ? Image.network(
+                                  'http://192.168.1.19:3000/sanad/getSPImage?id=${imageID[imageID.indexOf(data[index]['id'])]}',
+>>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
                                   width: 70,
                                   height: 60,
                                   fit: BoxFit.cover,
@@ -370,7 +521,11 @@ class viewSpecialestState extends State<viewSpecialest> {
           /////////////////////////////////
           ///// show all employee when the page load
           Visibility(
+<<<<<<< HEAD
             visible: false,
+=======
+            visible: !visable,
+>>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
             child: Expanded(
               child: ListView.builder(
                 itemCount: EMP.length,

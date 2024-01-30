@@ -17,10 +17,17 @@ import 'package:image_picker/image_picker.dart';
 
 class completeProfileCh extends StatefulWidget {
   @override
+<<<<<<< HEAD
   _completeProfileState createState() => _completeProfileState();
 }
 
 class _completeProfileState extends State<completeProfileCh> {
+=======
+  _completeProfileChState createState() => _completeProfileChState();
+}
+
+class _completeProfileChState extends State<completeProfileCh> {
+>>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
   Uint8List? _imageBytes;
   final String defaultImage = 'assets/default_image.png';
   FilePickerResult? result;

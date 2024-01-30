@@ -16,12 +16,21 @@ import 'package:file_picker/file_picker.dart';
 //   }
 // }
 
+<<<<<<< HEAD
 class completeProfileSP extends StatefulWidget {
   @override
   _completeProfileSPState createState() => _completeProfileSPState();
 }
 
 class _completeProfileSPState extends State<completeProfileSP> {
+=======
+class completeProfilesp extends StatefulWidget {
+  @override
+  _completeProfilespState createState() => _completeProfilespState();
+}
+
+class _completeProfilespState extends State<completeProfilesp> {
+>>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
   Uint8List? _imageBytes;
   bool isExpanded = false;
 

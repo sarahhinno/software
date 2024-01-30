@@ -99,6 +99,7 @@ class _adminChatState extends State<adminChat> {
                       //    Navigate to a new page when card is tapped
                       // Navigator.push(
                       //   context,
+<<<<<<< HEAD
                       //   MaterialPageRoute(
                       //     builder: (context) => DetailsPage(
                       //       name: Freinds[index]['name'] ?? '',
@@ -106,6 +107,15 @@ class _adminChatState extends State<adminChat> {
                       //       image: Freinds[index]['image'] ?? '',
                       //     ),
                       //   ),
+=======
+                      //   // MaterialPageRoute(
+                      //   //   // builder: (context) => DetailsPage(
+                      //   //   //   name: Freinds[index]['name'] ?? '',
+                      //   //   //   message: Freinds[index]['message'] ?? '',
+                      //   //   //   image: Freinds[index]['image'] ?? '',
+                      //   //   // ),
+                      //   // ),
+>>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
                       // );
                     },
                     child: Column(

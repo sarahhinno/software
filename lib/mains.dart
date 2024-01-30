@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:software/DetailsPage.dart';
+<<<<<<< HEAD
 import 'package:software/adminPages/DetailsPageOfChildren.dart';
 import 'package:software/adminPages/addNewSpecialest.dart';
 import 'package:software/adminPages/adminHome.dart';
@@ -18,6 +19,15 @@ import 'package:software/specialestPages/completeEmployeeProfile.dart';
 import 'package:software/specialestPages/empPersonalInformation.dart'; // Import the file where SpDetailsPage is defined
 import 'package:software/specialestPages/empVications.dart'; // Import the file where SpDetailsPage is defined
 import 'package:software/specialestPages/homePage.dart';
+=======
+import 'package:software/adminPages/chart1.dart';
+import 'package:software/adminPages/chart3.dart';
+import 'package:software/adminPages/report.dart';
+import 'package:software/adminPages/showAllChildren.dart';
+import 'package:software/adminPages/showAllEmployee.dart';
+import 'package:software/adminPages/view.dart';
+import 'package:software/parentPages/specialistEvaluation.dart';
+// Import the file where SpDetailsPage is defined
 import 'package:software/specialestPages/objectives.dart';
 import 'package:software/specialestPages/objectivesSp.dart';
 import 'package:software/parentPages/weeklySessions.dart'; // Import the file where SpDetailsPage is defined
@@ -124,6 +134,16 @@ class MyHomePage extends StatelessWidget {
                 child: Text('Weekly Sessions'),
               ),
               SizedBox(height: 10),
+=======
+              // ElevatedButton(
+              //   onPressed: () {
+              //     Navigator.push(context, MaterialPageRoute(builder: (context) {
+              //       return charts();
+              //     }));
+              //   },
+              //   child: Text('charts'),
+              // ),
+>>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
               ElevatedButton(
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -132,7 +152,10 @@ class MyHomePage extends StatelessWidget {
                 },
                 child: Text('admin Posts'),
               ),
+<<<<<<< HEAD
               SizedBox(height: 10),
+=======
+>>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
               ElevatedButton(
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -141,7 +164,10 @@ class MyHomePage extends StatelessWidget {
                 },
                 child: Text('view Posts'),
               ),
+<<<<<<< HEAD
               SizedBox(height: 10),
+=======
+>>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
               ElevatedButton(
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
@@ -150,6 +176,7 @@ class MyHomePage extends StatelessWidget {
                 },
                 child: Text('objectives'),
               ),
+<<<<<<< HEAD
               SizedBox(height: 10),
               ElevatedButton(
                 onPressed: () {
@@ -210,10 +237,71 @@ class MyHomePage extends StatelessWidget {
                   }));
                 },
                 child: Text('add'),
+=======
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return view();
+                  }));
+                },
+                child: Text('view'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return viewChildren();
+                  }));
+                },
+                child: Text('showChildren'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return viewSpecialest();
+                  }));
+                },
+                child: Text('showEmp'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return chartOne();
+                  }));
+                },
+                child: Text('chartOne'),
+              ),
+
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return chartThree();
+                  }));
+                },
+                child: Text('chartThree'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return spEvaluation();
+                  }));
+                },
+                child: Text('spEvaluation'),
+              ),
+               ElevatedButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return report();
+                  }));
+                },
+                child: Text('report'),
+>>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
               ),
             ],
           )),
     );
   }
 }
+<<<<<<< HEAD
 // _calenderState
+=======
+>>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2

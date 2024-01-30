@@ -1,11 +1,32 @@
+<<<<<<< HEAD
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+=======
+// ignore_for_file: prefer_const_constructors
+>>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+<<<<<<< HEAD
+=======
+
+import 'package:software/adminPages/DetailsPageOfChildren.dart';
+>>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
 import 'package:software/theme.dart';
 import 'DetailsPageOfChildren.dart';
 
+<<<<<<< HEAD
+=======
+// class Registered_children {
+//   final String name;
+//   final String image;
+//   final String details;
+
+//   Registered_children(
+//       {required this.name, required this.image, required this.details});
+// }
+
+>>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
 class viewChildren extends StatefulWidget {
   @override
   _viewChidrenState createState() => _viewChidrenState();
@@ -14,6 +35,7 @@ class viewChildren extends StatefulWidget {
 class _viewChidrenState extends State<viewChildren> {
   bool visable = false;
 
+<<<<<<< HEAD
   String selectedValue = options.first;
   static List<String> options = [
     'التشخيص',
@@ -23,10 +45,22 @@ class _viewChidrenState extends State<viewChildren> {
   ];
    String selectedValue1 = options1.first;
   static List<String> options1 = [
+=======
+  String selectedValue = 'تـشـخـيـص الـطـفـل';
+  List<String> options = [
+    'تـشـخـيـص الـطـفـل',
+    ' سـنـة دخـول الأطـفـال',
+    'سـنـة مـيلاد الأطـفـال',
+    ' جـلـسـات الأطـفـال',
+  ];
+  String selectedValue1 = '-----';
+  List<String> options1 = [
+>>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
     'مـتلازمـة داون',
     'تـوحـد',
     'صـعوبـة فـي الـتـعلـم',
   ];
+<<<<<<< HEAD
   late String selectedValue2 ;
    List<String> options2 = [];
   late String selectedValue3 ;
@@ -40,18 +74,58 @@ class _viewChidrenState extends State<viewChildren> {
     'اللغة و النطق ',
   ];
   late String svalue;
+=======
+  String selectedValue2 = '-----';
+  List<String> options2 = [
+    '2000',
+    '2001',
+    '2002',
+    '2003',
+    '2004',
+    '2005',
+    '2006',
+    '2007',
+    '2008',
+  ];
+  String selectedValue3 = '-----';
+  List<String> options3 = [
+    '2000',
+    '2001',
+    '2002',
+    '2003',
+    '2004',
+    '2005',
+    '2006',
+    '2007',
+    '2008',
+  ];
+  String selectedValue6 = '-----';
+  List<String> options6 = [
+    'ســلــوكــي',
+    'وظــيــفــي',
+    'تــربـيـة خـاصـة',
+    'عــلاج طــبـيـعي',
+    'الـلغـة و نــطــق',
+  ];
+  String svalue = '-----';
+>>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
   List<String> soptions = [
     '-----',
   ];
   String id = "";
   List<String> children = [];
   // String img = 'assets/images/child1.png';
+<<<<<<< HEAD
    List<dynamic> data=[];
+=======
+  late final List<dynamic> data;
+>>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
   // late final List<dynamic> image ;
   List<String> imagePath = [];
   List<String> imageID = [];
   //List<ImageDetails> imageDetailsList = [];
 
+<<<<<<< HEAD
   String searchBy="";
   String value2="";
 
@@ -97,6 +171,8 @@ class _viewChidrenState extends State<viewChildren> {
     
   }
 
+=======
+>>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
   Future<void> getChildrenImages() async {
     String path;
     String id;
@@ -115,6 +191,21 @@ class _viewChidrenState extends State<viewChildren> {
     }
   }
 
+<<<<<<< HEAD
+=======
+  void zft() {
+    print("==================================");
+    for (int i = 0; i < imagePath.length; i++) {
+      print("11" + data[i]['id']);
+      print("22" + imageID[i]);
+      print("33" + imageID.indexOf(imageID[i]).toString());
+      print("44" + imagePath[i]);
+      print("55" + imagePath[imageID.indexOf(data[i]['id'])]);
+    }
+
+    imageID.contains("112") ? print("yes") : print("no");
+  }
+>>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
 // Future<void> fetchImageDetails() async {
 //     final String serverUrl = 'http://192.168.1.19:3000/sanad/getAllImages';
 
@@ -188,18 +279,26 @@ class _viewChidrenState extends State<viewChildren> {
         ),
         centerTitle: true,
       ),
+<<<<<<< HEAD
       body: Column(
         children: <Widget>[
           Container(
             color: Colors.white,
+=======
+      drawer: Drawer(),
+      body: Column(
+        children: <Widget>[
+          Container(
+            color: Colors.grey[200],
+>>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
               child: Column(
                 children: <Widget>[
                   SizedBox(height: 20),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
+<<<<<<< HEAD
                       DropdownButton<String>(
                             value: svalue,
                             items: soptions.map((String value) {
@@ -211,17 +310,46 @@ class _viewChidrenState extends State<viewChildren> {
                                       fontSize: 16.0, fontFamily: 'myFont'),
                                   textAlign: TextAlign.center,
                                 ),
+=======
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: Center(
+                          child: DropdownButton<String>(
+                            value: selectedValue,
+                            items: options.map((String value) {
+                              return DropdownMenuItem(
+                                value: value,
+                                child: Text(value),
+>>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
                               );
                             }).toList(),
                             onChanged: (String? newValue) {
                               setState(() {
+<<<<<<< HEAD
                                 svalue = newValue!;
                                 visable = true;
                                 value2=newValue!;
+=======
+                                selectedValue = newValue!;
+                                soptions = ['-----'];
+
+                                if (newValue == 'تـشـخـيـص الـطـفـل') {
+                                  soptions = soptions + options1;
+                                } else if (newValue ==
+                                    ' سـنـة دخـول الأطـفـال') {
+                                  soptions = soptions + options2;
+                                } else if (newValue ==
+                                    'سـنـة مـيلاد الأطـفـال') {
+                                  soptions = soptions + options3;
+                                } else if (newValue == ' جـلـسـات الأطـفـال') {
+                                  soptions = soptions + options6;
+                                }
+>>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
                               });
                             },
                             style: TextStyle(
                               color: primaryColor,
+<<<<<<< HEAD
                               fontSize: 19.0,
                             ),
                             dropdownColor: Colors.grey[200],
@@ -264,12 +392,22 @@ class _viewChidrenState extends State<viewChildren> {
                             fontFamily: 'myFont'),
                         dropdownColor: Colors.grey[200],
                         elevation: 2,
+=======
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            dropdownColor: Colors.grey[200],
+                            elevation: 2,
+                          ),
+                        ),
+>>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
                       ),
                       SizedBox(width: 10),
                       Text(
                         'الـبـحـث حـسـب',
                         style: TextStyle(
                           fontFamily: 'myfont',
+<<<<<<< HEAD
                           fontSize: 17,
                           color: primaryColor,
                           fontWeight: FontWeight.bold
@@ -306,6 +444,60 @@ class _viewChidrenState extends State<viewChildren> {
                   Divider(
                     thickness: 0.8,
                     color: Colors.grey,
+=======
+                          fontSize: 20,
+                          color: primaryColor,
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  Row(
+                    children: <Widget>[
+                      SizedBox(width: 50),
+                      Expanded(
+                        // color: Colors.grey[200],
+                        // width: 150,
+                        child: Center(
+                          child: DropdownButton<String>(
+                            value: svalue,
+                            items: soptions.map((String value) {
+                              return DropdownMenuItem(
+                                value: value,
+                                child: Text(
+                                  value,
+                                  style: TextStyle(
+                                    fontSize: 20.0,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                svalue = newValue!;
+                                visable = true;
+                              });
+                            },
+                            style: TextStyle(
+                              color: primaryColor,
+                              fontSize: 18.0,
+                            ),
+                            dropdownColor: Colors.grey[200],
+                            elevation: 4,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 50),
+                      Icon(
+                        Icons.filter_list,
+                        color: primaryColor,
+                        size: 30,
+                      ),
+                      SizedBox(width: 20),
+                    ],
+>>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
                   ),
 
                   SizedBox(height: 15),
@@ -314,6 +506,7 @@ class _viewChidrenState extends State<viewChildren> {
               ),
             ),
           ),
+<<<<<<< HEAD
           SizedBox(height: 10),
           /////////////////////////////////////////////////
           //show just what i need
@@ -391,6 +584,13 @@ class _viewChidrenState extends State<viewChildren> {
           ///// show all employee when the page load
           Visibility(
             visible: false,
+=======
+          SizedBox(height: 30),
+          /////////////////////////////////////////////////
+          //show just what i need
+          Visibility(
+            visible: visable,
+>>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
             child: Expanded(
               child: ListView.builder(
                 itemCount: children.length,
@@ -438,15 +638,97 @@ class _viewChidrenState extends State<viewChildren> {
                         ),
                         Spacer(),
                         ClipOval(
+<<<<<<< HEAD
                           child: imageID.contains(data[index]['idd'])
                               ? Image.network(
                                   'http://192.168.1.19:3000/sanad/getImage?id=${imageID[imageID.indexOf(data[index]['idd'])]}',
+=======
+                          child: imageID.contains(data[index]['id'])
+                              ? Image.network(
+                                  'http://192.168.1.19:3000/sanad/getImage?id=${imageID[imageID.indexOf(data[index]['id'])]}',
+>>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
                                   width: 70,
                                   height: 60,
                                   fit: BoxFit.cover,
                                 )
                               : Image.asset(
+<<<<<<< HEAD
                                   'assets/images/profileImage.jpg',
+=======
+                                  'images/profileImage.jpg',
+                                  width: 70,
+                                  height: 60,
+                                  fit: BoxFit.cover,
+                                ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+          /////////////////////////////////
+          ///// show all employee when the page load
+          Visibility(
+            visible: !visable,
+            child: Expanded(
+              child: ListView.builder(
+                itemCount: children.length,
+                itemBuilder: (context, index) {
+                  String registered_child = children[index];
+                  return Card(
+                    margin: EdgeInsets.all(16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            ElevatedButton(
+                              onPressed: () {
+                                print(imagePath[
+                                    imageID.indexOf(data[index]['id'])]);
+                                id = data[index]['id'];
+                                print(index);
+                                print(id);
+                                _onPressed(context, id);
+                              },
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Color(0xFF6F35A5)),
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(29.0),
+                                  ),
+                                ),
+                              ),
+                              child: Text(
+                                "كـافـة الـتـفـاصـيـل",
+                                style: TextStyle(fontFamily: 'myfont'),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Spacer(),
+                        Text(
+                          registered_child,
+                          style: TextStyle(fontSize: 18, fontFamily: 'myfont'),
+                        ),
+                        Spacer(),
+                        ClipOval(
+                          child: imageID.contains(data[index]['id'])
+                              ? Image.network(
+                                  'http://192.168.1.19:3000/sanad/getImage?id=${imageID[imageID.indexOf(data[index]['id'])]}',
+                                  width: 70,
+                                  height: 60,
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.asset(
+                                  'images/profileImage.jpg',
+>>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
                                   width: 70,
                                   height: 60,
                                   fit: BoxFit.cover,
@@ -527,4 +809,14 @@ class _viewChidrenState extends State<viewChildren> {
       MaterialPageRoute(builder: (context) => DetailsOfChild(name: name)),
     );
   }
+<<<<<<< HEAD
 }
+=======
+}
+// class ImageDetails {
+//   final String id;
+//   final String path;
+
+//   ImageDetails({required this.id, required this.path});
+// / }
+>>>>>>> 591642d12a619d71ab1f8d8fdfcf1d3775d596a2
